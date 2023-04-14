@@ -26,9 +26,10 @@ const HomeScreen = () => {
    const getAllUsses = async() =>{
     try{
           const res = await actions.getAllUsers()
-          console.log(userData)
+          console.log(res.data)
     }
     catch(error){
+      console.log('co loi')
       showError(error.error_message)
     }
      }

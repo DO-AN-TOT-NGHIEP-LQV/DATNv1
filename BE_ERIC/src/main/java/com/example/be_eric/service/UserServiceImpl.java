@@ -4,8 +4,10 @@ import com.example.be_eric.models.Role;
 import com.example.be_eric.models.User;
 import com.example.be_eric.repository.RoleRepository;
 import com.example.be_eric.repository.UserRepository;
+import com.example.be_eric.ultils.Exception.DuplicateValueException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -50,12 +52,17 @@ public class UserServiceImpl implements  UserService, UserDetailsService {
     }
 
     @Override
-    public User saveUser(User user) {
-        log.info("Save new user {} to the database", user.getUsername());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        Role role = roleRepo.findByName("ROLE_USER");
-        user.getRoles().add(role);  // vi role la 1 array list nen get lay [] roi a vao
-        return userRepo.save(user);
+    public User saveUser(User user)  {
+        if( !userRepo.existsByUsername(user.getUsername())){
+            log.info("Save new user {} to the database", user.getUsername());
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            Role role = roleRepo.findByName("ROLE_USER");
+            user.getRoles().add(role);  // vi role la 1 array list nen get lay [] roi a vao
+            return userRepo.save(user);
+        }
+        else {
+            throw new DuplicateValueException("Username already exists.");
+        }
     }
 
     @Override

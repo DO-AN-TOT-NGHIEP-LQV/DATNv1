@@ -4,9 +4,9 @@ import axios from "axios"
 export const getApiUrl = ( endpoint) =>  endpoint
 
 export const LOGIN = getApiUrl('/login')
-export const SIGNUP = getApiUrl('/user/signup')
+export const SIGNUP = getApiUrl('/user/register')
 export const GET_ALL_USERS = getApiUrl('/users')
 
 export const REFRESH_TOKEN = getApiUrl('/token/refresh')
 
-axios.defaults.baseURL = 'http://localhost:8080/api'
+axios.defaults.baseURL = 'http://192.168.1.4:8080/api'

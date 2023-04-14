@@ -2,7 +2,7 @@ import { GET_ALL_USERS, LOGIN, REFRESH_TOKEN, SIGNUP } from "../../config/urls";
 import store from "../store";
 import types from "../types";
 import { apiGet, apiPost } from "../../ultils/utilsApi";
-import { clearUserData , setCredentials} from "../../ultils/utilsApi";
+import { clearUserData , setCredentials} from "../../ultils/credentials";
 
 
 const { dispatch } = store
@@ -56,7 +56,7 @@ export  function refreshToken(refresh_token){
 )}
 
 export function signup(data) {
-    return apiPost(SIGNUP, data)
+    return apiPost(SIGNUP, data, {}, false)
 }
 
 export function logout(){
@@ -76,3 +76,4 @@ export  function getAllUsers(){
             reject(error)
         })
 }
+
