@@ -3,9 +3,11 @@ package com.example.be_eric.models;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -20,14 +22,17 @@ public class User {
     private String name;
 
     @NotBlank
+    @NotNull
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
+
     private String email;
+
     @NotBlank
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles =  new ArrayList<>();
-
 
     public User() {
     }
@@ -37,8 +42,7 @@ public class User {
         this.password = password;
     }
 
-    public User(String name, String username, String email, String password) {
-        this.name = name;
+    public User( String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;

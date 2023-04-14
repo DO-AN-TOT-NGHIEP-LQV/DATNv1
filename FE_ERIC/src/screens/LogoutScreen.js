@@ -4,6 +4,7 @@ import { View, Text, Alert } from 'react-native'
 import React, { useState } from 'react'
 import ButtonWithLoader from '../components/ButtonWithLoader'
 import actions from '../redux/actions'
+import CustomButton from '../components/CustomButton/index.js'
 
 export default function LogoutScreen() {
 
@@ -28,9 +29,9 @@ export default function LogoutScreen() {
   return (
     <View>
 
-    <ButtonWithLoader
+    <CustomButton
             isLoading={isLoading}
-            text="Logout"
+            label="Logout"
             onPress={onLogoutAlert}
         />
 

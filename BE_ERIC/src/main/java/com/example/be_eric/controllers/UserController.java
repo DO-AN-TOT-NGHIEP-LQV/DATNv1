@@ -8,11 +8,13 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.be_eric.models.Role;
 import com.example.be_eric.models.User;
 import com.example.be_eric.service.UserService;
+import com.example.be_eric.ultils.Exception.DuplicateValueException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -35,7 +37,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @Slf4j
-public class UserResource {
+public class UserController {
 
     @Autowired
     private  UserService userService;
@@ -45,17 +47,24 @@ public class UserResource {
         return ResponseEntity.ok().body(userService.getUsers());
     }
 
-    @PostMapping("/user/signup")
-    public ResponseEntity<User> saveUser(@RequestBody User user){
-
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveUser(user));
+    @PostMapping("/user/register")
+    public ResponseEntity<?> saveUser(@RequestBody User user, HttpServletResponse response) {
+        try {
+            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
+            return ResponseEntity.created(uri).body(userService.saveUser(user));
+        } catch (DuplicateValueException e) {
+            Map<String, Object> errorResBody = new HashMap<>();
+            errorResBody.put("error_message", e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(errorResBody);
+        }
     }
 
     @PostMapping("/role/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role){
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
         return ResponseEntity.created(uri).body(userService.saveRole(role));
+
     }
 
     @PostMapping("/role/addtouser")
@@ -98,7 +107,6 @@ public class UserResource {
                 response.setStatus(FORBIDDEN.value());
                 //response.sendError(FORBIDDEN.value()); //403
                 Map<String,String> error = new HashMap<>();
-                System.out.println("loi");
                 error.put("error_message", exception.getMessage());
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
@@ -107,8 +115,6 @@ public class UserResource {
             throw new RuntimeException("Refresh token is missing");
         }
     }
-
-
 }
 
 @Data

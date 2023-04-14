@@ -1,7 +1,6 @@
 //import liraries
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
-
+import React from 'react';
+import {  Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 // create a component
 const ButtonWithLoader = ({
     isLoading,
@@ -9,10 +8,10 @@ const ButtonWithLoader = ({
     onPress
 }) => {
     return (
-        <TouchableOpacity onPress={onPress} style={styles.btnStyle}>
-
+        <TouchableOpacity mode="contained" onPress={onPress} style={styles.btnStyle} >
             {!!isLoading ? <ActivityIndicator size="large" color="white" />
-                : <Text style={styles.textStyle}>{text}</Text>
+                :  
+               <Text style={styles.textStyle}>{text}</Text>
             }
         </TouchableOpacity>
     );
@@ -36,5 +35,4 @@ const styles = StyleSheet.create({
     }
 });
 
-//make this component available to the app
 export default ButtonWithLoader;

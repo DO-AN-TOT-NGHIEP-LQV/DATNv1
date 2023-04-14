@@ -3,12 +3,11 @@ import FlashMessage from 'react-native-flash-message';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
 import { useEffect } from 'react';
+import { getUserData } from './src/ultils/credentials';
 import { saveUserData } from './src/redux/actions/auth';
-import { getUserData } from './src/ultils/utilsApi';
 
 export default function App() {
 
-  
   useEffect(()=>{
     (async()=> {
       const userData = await getUserData();

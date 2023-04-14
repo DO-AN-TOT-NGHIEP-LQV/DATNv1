@@ -31,16 +31,16 @@ export default function (data) {
         }
     }
 
-    // if (email !== undefined) {
-    //     let emptyValidationText = checkEmpty(email, 'Please enter your email')
-    //     if (emptyValidationText !== '') {
-    //         return emptyValidationText;
-    //     } else {
-    //         if (!validator.email(email)) {
-    //             return 'Please enter valid email'
-    //         }
-    //     }
-    // }
+    if (email !== undefined) {
+        let emptyValidationText = checkEmpty(email, 'Please enter your email')
+        if (emptyValidationText !== '') {
+            return emptyValidationText;
+        } else {
+            if (!validator.email(email)) {
+                return 'Please enter valid email'
+            }
+        }
+    }
 
     if (email !== undefined) {
         let emptyValidationText = checkEmpty(email, 'Please enter your email')
