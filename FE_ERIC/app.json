@@ -1,5 +1,5 @@
 {
-  "expo": {
+  "c": {
     "name": "fe_eric",
     "slug": "fe_eric",
     "version": "1.0.0",
@@ -7,9 +7,11 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/restaurants.png",
+      "image": "./assets/splashShoeRong.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "imageResizeMode": "contain",
+      "height": 200,
+      "width": 200
     },
     "assetBundlePatterns": [
       "**/*"

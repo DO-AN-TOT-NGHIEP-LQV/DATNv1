@@ -1,15 +1,17 @@
 package com.example.be_eric.controllers;
 
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.be_eric.models.Post;
 import com.example.be_eric.models.Role;
 import com.example.be_eric.models.User;
+import com.example.be_eric.service.PostService;
 import com.example.be_eric.service.UserService;
 import com.example.be_eric.ultils.Exception.DuplicateValueException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,8 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+import com.google.firebase.FirebaseApp.*;
+
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
@@ -42,6 +46,14 @@ public class UserController {
     @Autowired
     private  UserService userService;
 
+    @Autowired
+    private PostService postService;
+
+    @GetMapping("/user/image")
+    public ResponseEntity<Post> getPosts(){
+        return ResponseEntity.ok().body( postService.getPostById(1L));
+    }
+
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers(){
         return ResponseEntity.ok().body(userService.getUsers());
@@ -50,7 +62,7 @@ public class UserController {
     @PostMapping("/user/register")
     public ResponseEntity<?> saveUser(@RequestBody User user, HttpServletResponse response) {
         try {
-            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/save").toUriString());
+            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/register").toUriString());
             return ResponseEntity.created(uri).body(userService.saveUser(user));
         } catch (DuplicateValueException e) {
             Map<String, Object> errorResBody = new HashMap<>();
@@ -64,7 +76,6 @@ public class UserController {
     public ResponseEntity<Role> saveRole(@RequestBody Role role){
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
         return ResponseEntity.created(uri).body(userService.saveRole(role));
-
     }
 
     @PostMapping("/role/addtouser")
@@ -84,11 +95,11 @@ public class UserController {
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
                 String username = decodedJWT.getSubject();
-                User user = userService.getUser(username);
+                User user = userService.getUserByEmail(username);
 
                 String access_token = JWT.create()
-                        .withSubject(user.getUsername())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 10 *1000))
+                        .withSubject(user.getEmail())
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(algorithm);

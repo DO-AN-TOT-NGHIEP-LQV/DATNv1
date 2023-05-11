@@ -8,12 +8,14 @@ const InputFieldCustom = ({
   onChangeText,
   fieldButtonLabel,
   fieldButtonFunction,
+  styleView,
   isSecure  = false,
   icon,
   ...props }) => {
   return (
-    <View className = 'pb-2 mb-[25px] flex-row border-y-[#ccc]'
-          style = {{borderBottomWidth: 1}}
+    <View 
+        // className = 'pb-1 mb-[25px] flex-row border-y-[#ccc]'
+        style={[  styles.styleView, styleView ]}
     >
       {icon}
       <TextInput
@@ -26,12 +28,26 @@ const InputFieldCustom = ({
                 {...props}
                 
       />
-      
-      <TouchableOpacity onPress={fieldButtonFunction}>
+
+      {!fieldButtonLabel?(
+        <TouchableOpacity onPress={fieldButtonFunction}>
         <Text style={{ color: '#AD40AF', fontWeight: '700' }}>{fieldButtonLabel}</Text>
       </TouchableOpacity>
+      ):
+      null}
     </View>
   );
 }
 
 export default InputFieldCustom;
+
+
+const styles = StyleSheet.create({
+  styleView:{
+    paddingBottom: 4,
+    borderBottomWidth:1,
+    marginBottom: 25,
+    flexDirection: 'row',
+    borderTopColor: '#ccc'
+  }
+})

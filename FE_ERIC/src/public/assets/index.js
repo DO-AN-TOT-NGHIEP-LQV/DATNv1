@@ -5,3 +5,4 @@ export { default as Attractions } from "./attraction.png";
 export { default as Restaurants } from "./restaurants.png";
 export { default as NotFound } from "./NotFound.png";
 export { default as LoginImg } from "./login.png";
+export { default as ShoesFLas } from "./splashShoe.png";
