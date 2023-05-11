@@ -8,20 +8,18 @@ import CustomButton from '../components/CustomButton/index.js';
 import validator from '../ultils/validations';
 import actions from '../redux/actions';
 
-
 export default function SignupScreen({navigation}) {
 
     const [state, setState] = useState({
         isLoading: false,
-        username: '1',
-        email: '123@gmail.com',
+        username: '1@gmail.com',
+        email: '1@gmail.com',
         password: '1',
         confirmPassword: '',
         isSecure: true
     })
     const { isLoading, username, email, password, isSecure, confirmPassword } = state
     const updateState = (data) => setState(() => ({ ...state, ...data }))
-
 
     const isValidData = () => {
         const error = validator({
@@ -79,8 +77,7 @@ export default function SignupScreen({navigation}) {
                 value={email}
                 onChangeText={(email) => updateState({ email })}
                 />
-
-
+                
                 <TextInput
                 label="Password"
                 mode="outlined"
@@ -90,14 +87,6 @@ export default function SignupScreen({navigation}) {
             </View>
 
             <CustomButton label={"Register"} onPress={onSignup} isLoading={isLoading} />
-
-            {/* // <Button
-            //     mode="contained"
-            //     color={'#AD40AF'}
-            //     style={{ marginTop: 20 }}
-            //     >
-            //     Submit
-            // </Button> */}
             </Surface>
         </View>
     </ImageBackground>
@@ -110,7 +99,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 28,
     backgroundColor: '',
-    // alignItems : 'between'
   },
   box: {
     borderRadius: 10,

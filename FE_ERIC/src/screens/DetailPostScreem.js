@@ -11,11 +11,11 @@ const DetailScreem = ( { route} ) => {
   const [isLoading, setLoading] = useState(false)
 
   const navigation = useNavigation();
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown : false,
-    });
-  } , [])
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerShown : false,
+  //   });
+  // } , [])
 
   return (
     <View className=" flex-1 bg-white   relative mt-6">

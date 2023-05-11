@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import { View, Text, StyleSheet, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
 import actions from '../redux/actions';
-import ButtonWithLoader from '../components/ButtonWithLoader';
+import CustomButton from '../components/CustomButton/index.js';
 
 const Profile = () => {
     const userData = useSelector((state) => state.auth.userData)
@@ -19,19 +19,19 @@ const Profile = () => {
     }
     const logout = () => {
         setLoading(true)
-        setTimeout(() => {
+        // setTimeout(() => {
             actions.logout()
             setLoading(false)
-        }, 2000);
+        // }, 2000);
 
     }
     return (
         <View style={styles.container}>
             <Text>{userData.name}</Text>
             <Text style={{ marginBottom: 16 }}>{userData.email}</Text>
-            <ButtonWithLoader
+            <CustomButton
                 isLoading={isLoading}
-                text="Logout"
+                label="Logout"
                 onPress={onLogoutAlert}
             />
         </View>

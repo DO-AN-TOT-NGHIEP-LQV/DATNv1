@@ -1,8 +1,5 @@
-
-
 import { View, Text, Alert } from 'react-native'
 import React, { useState } from 'react'
-import ButtonWithLoader from '../components/ButtonWithLoader'
 import actions from '../redux/actions'
 import CustomButton from '../components/CustomButton/index.js'
 

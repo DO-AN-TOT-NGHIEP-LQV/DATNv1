@@ -28,7 +28,6 @@ export async function apiReq(
 	withAuth = true,
 	requestOptions = {}
 ) {
-
 	return new Promise(async (res, rej) => {
 		if( withAuth === true ){
 			await console.log('check out')
@@ -68,7 +67,6 @@ export async function apiReq(
 				})
 				.catch( async (error) =>  {
 					
-					console.log("coi loi o ultils", error)
 					if (error && error.response &&  401 === error.response.status ) {
 						
 						let a = await AsyncStorage.removeItem('userData');
@@ -83,20 +81,20 @@ export async function apiReq(
 						if( error.response.data ){
 							if (!error.response.data.error_message) {
 								error.response.data.error_message =  "Network Error";
-								console.log("coi loi o 1")
+								console.log("coi loi o 1 co loi nhung khong co messenger")
 								return rej(error.response.data);
 							}
 							console.log(error.response.data.error_message)
 							showError(error.response.data.error_message)
-							return rej(error.response.data);
+							return rej(error.response.data);   // backend co tra ve messenger
 						}
 						else{
-							console.log("coi loi o ultils", error)
-							showError("Loi mang")
+							console.log("coi loi o ultils 2", error)
+							showError("Network Error")
 						}
 
 					}else{ 
-					console.log("coi loi o 3")
+					console.log("coi loi o 3 Khong co phan hoi tu backend")
 					return rej({  error_message: "Network Error" });
 					// error.response.data.error_message = 'Network Error' ;
 					// return rej(error.response.data);
@@ -120,7 +118,6 @@ export function apiGet( endPoint, data, headers = {}, withAuth = true, requestOp
 export function apiPut(endPoint, data, headers = {}, withAuth = true) {
 	return apiReq(endPoint, data, 'put', headers, withAuth);
 }
-
 
 ///////////////////////////////////////////////
 export async function getCredentials() {

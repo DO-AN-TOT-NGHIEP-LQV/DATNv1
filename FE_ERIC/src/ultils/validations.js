@@ -16,7 +16,7 @@ const checkMinLength = (val, minLength, key) => {
     }
 }
 
-export default function (data) {
+export function validatorLogin (data) {
     const { username, email, password } = data
 
     if (username !== undefined) {
@@ -65,5 +65,32 @@ export default function (data) {
             }
         }
     }
+
+}
+
+
+export function validatorCreatePost(data){  // picker file, content, size,type, count
+
+    const { pickedImagePath, content, size, type, count } = data;
+
+    if( pickedImagePath !== undefined ){
+        let emptyImage = checkEmpty(pickedImagePath, 'Image is required')
+        if (emptyImage !== '') {
+            return emptyImage;
+        }
+    }
+
+    if (content !== undefined) {
+        let emptyValidationText = checkEmpty(content, 'Please enter content')
+        if (emptyValidationText !== '') {
+            return emptyValidationText;
+        } else {
+            let minLengthValidation = checkMinLength(content, 0, 'content')
+            if (minLengthValidation !== '') {
+                return minLengthValidation
+            }
+        }
+    }
+
 
 }
