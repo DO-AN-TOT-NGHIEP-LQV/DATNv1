@@ -1,6 +1,5 @@
 import types from "../types";
 
-
 const initialState = {
     userData : {} 
 }

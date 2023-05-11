@@ -12,14 +12,16 @@ const MasanoryContainer = ({data}) => {
             data={data}
             keyExtractor={(item)  => item.id}
             numColumns={2}
+            // spacing={4}
+            imageContainerStyle={{ borderRadius: 8 }}
             showsVerticalScrollIndicator={false}
-            renderItem={({item}) => <CardItem data={item} />}            
+            renderItem={({ item, i }) => <CardItem data={item} i={i} />}            
     />
   );
 };
 
 
-const CardItem = ({data}) => {
+const CardItem = ({data, i}) => {
 
     const nagivation = useNavigation()
 
@@ -35,17 +37,18 @@ const CardItem = ({data}) => {
 
     return (
       <TouchableOpacity 
-        style={{height: Math.round(Math.random() * 100 + 160)}}
+        style={{height: Math.round(200)}}
+        // style={{height: Math.round(Math.random() * 100 + 160)}}
         className="bg-[#111] m-1 rounded-md relative overflow-hidden"
         onPress={handleClick}
         > 
             <Image 
             source={{uri: data.imageUrl}}
+            // source={ require( 'E:/Do_an_nhap/testimg/7631215.1141.jpg') }
             className="w-full h-full object-cover"
             />
       </TouchableOpacity>
-    )
-  
+    )  
 };
 
 export default MasanoryContainer

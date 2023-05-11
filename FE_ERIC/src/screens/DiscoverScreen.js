@@ -4,20 +4,26 @@ import { useNavigation } from '@react-navigation/native';
 import { Avatar, Hotels, Restaurants, Attractions } from '../public/assets';
 import { Image } from 'react-native';
 import MasanoryContainer from '../components/MasanoryContainer';
-
+// import RNFS from 'react-native-fs';
+// import ImagePicker from 'react-native-image-picker';
 
 const Discover = () => {
 
   const navigation = useNavigation();
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown : false,
-    });
-  } , [])
+
+  // useLayoutEffect(() => {
+  //   // getImageList()
+  //   navigation.setOptions({
+  //     headerShown : false,
+  //   }); 
+  // } , [])
 
   const [type,setType] = useState("restaurants")
   const [categories, setCategories] = useState(null)
   const data = [
+    // { id: 1, name : 'Shoes', imageUrl : 'https://cdn.pixabay.com/photo/2016/09/02/11/10/boots-1638873__340.jpg'},
+    // { id: 2, name : 'Shoes', imageUrl : 'https://cdn.pixabay.com/photo/2016/03/27/22/16/fashion-1284496__340.jpg'},
+
     { id: 1, name : 'Shoes', imageUrl : 'https://cdn.pixabay.com/photo/2016/09/02/11/10/boots-1638873__340.jpg'},
     { id: 2, name : 'Shoes', imageUrl : 'https://cdn.pixabay.com/photo/2016/03/27/22/16/fashion-1284496__340.jpg'},
     { id: 4, name : 'Shoes', imageUrl : 'https://cdn.pixabay.com/photo/2016/06/03/17/35/shoes-1433925__340.jpg'},
@@ -31,8 +37,30 @@ const Discover = () => {
   ]
 
 
+  // async function getImageList() {
+  //   // const dirPath = RNFS.DocumentDirectoryPath + '/myImageFolder';
+  //   const dirPath = 'E:/Do_an_nhap/testimg';
+  //   const items = await RNFS.readDir(dirPath);
+  //   const imageList = [];
+
+  //   for (let i = 0; i < items.length; i++) {
+  //     if (items[i].isFile()) {
+  //       const imageMetadata = await ImagePicker.getImageInfo(items[i].path);
+  //       imageList.push({
+  //         imageUrl: `file://${imageMetadata.path}`,
+  //         name: items[i].name,
+  //         width: imageMetadata.width,
+  //         height: imageMetadata.height,
+  //       });
+  //     }
+  //   }
+  //   setdataI(imageList)
+  //   // return imageList;
+  // }
+
+
   return (
-    <SafeAreaView className=" flex-1 bg-white   relative mt-6">
+    <SafeAreaView className=" flex-1 bg-white   relative ">
       <View className=" bg-red-100">
           <View className="flex-row items-center  justify-between px-6">
               <View>
@@ -53,38 +81,9 @@ const Discover = () => {
               <Text>Search</Text>
             </View>
 
-      </View>
+          </View>
 
-      <ScrollView className="w-full h-full px-2 py-1">
-        {/* <View className="flex-row items-center justify-between px-6 mt-6">
-          <MenuContainer 
-          key={"hotels"}
-          title={"Hotels"}
-          imageSrc ={Hotels}
-          type={type}
-          setType={setType}
-          />
-
-        <MenuContainer 
-          key={"attractions"}
-          title={"Attractions"}
-          imageSrc ={Attractions}
-          type={type}
-          setType={setType}
-          />
-
-        <MenuContainer 
-          key={"restaurants"}
-          title={"Restaurants"}
-          imageSrc ={Restaurants}
-          type={type}
-          setType={setType}
-          />
-
-
-        
-
-        </View> */}
+      <ScrollView className="w-full h-full px-1 py-1">
 
 
         { data ? 
@@ -94,20 +93,10 @@ const Discover = () => {
           <ActivityIndicator color={"#ff000"} size={'large'}/> 
             </>)
         }
-
-
       </ScrollView>
-              
-
-
     </SafeAreaView>
-
-
-  
   );
 }
-
-
 
 export default Discover
 

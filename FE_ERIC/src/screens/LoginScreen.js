@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import validator from '../ultils/validations';
+import {validatorLogin} from '../ultils/validations';
 import { showError, showSuccess } from '../ultils/helperFunction';
 import actions from '../redux/actions';
 import { LoginImg } from '../public/assets';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import InputFieldCustom from '../components/InputFieldCustom';
 import CustomButton from '../components/CustomButton/index.js';
-import ButtonWithLoader from '../components/ButtonWithLoader';
 
 const LoginScreen = ({ navigation }) => {
 
     const [state, setState] = useState({
         isLoading: false,
-        username: '1',
+        username: '1@gmail.com',
         password: '1',
         isSecure: true
     });
@@ -22,7 +21,7 @@ const LoginScreen = ({ navigation }) => {
     const updateState = (data) => setState(() => ({ ...state, ...data }))
 
     const isValidData = () => {
-        const error = validator({
+        const error = validatorLogin({
             username,
             password
         })

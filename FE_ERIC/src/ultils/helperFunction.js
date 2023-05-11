@@ -4,7 +4,7 @@ const showError = (message) => {
     showMessage({
         type: 'danger',
         icon: 'danger',
-        duration: 10000,
+        duration: 5000,
         message
     })
 }
@@ -13,10 +13,19 @@ const showSuccess = (message) => {
     showMessage({
         type: 'success',
         icon: 'success',
-        duration: 10000,
+        duration: 5000,
         message,
         backgroundColor: '#8BC34A',
         color: '#FFFFFF',
+    })
+}
+
+const showInfo = (message) => {
+    showMessage({
+        type: 'danger',
+        icon: 'danger',
+        duration: 5000,
+        message
     })
 }
 
