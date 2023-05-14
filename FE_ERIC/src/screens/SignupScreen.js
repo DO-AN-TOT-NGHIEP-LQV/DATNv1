@@ -1,104 +1,106 @@
-import React, { useState } from 'react'
-import { Image, ImageBackground, StyleSheet, View } from 'react-native'
-import { Button, Surface, TextInput, Title, Text } from 'react-native-paper'
-import { LoginImg } from '../public/assets';
-import { showMessage } from 'react-native-flash-message';
-import { showError } from '../ultils/helperFunction';
-import CustomButton from '../components/CustomButton/index.js';
-import validator from '../ultils/validations';
-import actions from '../redux/actions';
+import React, { useState } from "react";
+import { Image, ImageBackground, StyleSheet, View } from "react-native";
+import { Button, Surface, TextInput, Title, Text } from "react-native-paper";
+import { LoginImg } from "../public/assets";
+import { showMessage } from "react-native-flash-message";
+import { showError } from "../ultils/helperFunction";
+import CustomButton from "../components/CustomButton/index.js";
+import validator from "../ultils/validations";
+import actions from "../redux/actions";
 
-export default function SignupScreen({navigation}) {
+export default function SignupScreen({ navigation }) {
+  const [state, setState] = useState({
+    isLoading: false,
+    username: "1@gmail.com",
+    email: "1@gmail.com",
+    password: "1",
+    confirmPassword: "",
+    isSecure: true,
+  });
+  const { isLoading, username, email, password, isSecure, confirmPassword } =
+    state;
+  const updateState = (data) => setState(() => ({ ...state, ...data }));
 
-    const [state, setState] = useState({
-        isLoading: false,
-        username: '1@gmail.com',
-        email: '1@gmail.com',
-        password: '1',
-        confirmPassword: '',
-        isSecure: true
-    })
-    const { isLoading, username, email, password, isSecure, confirmPassword } = state
-    const updateState = (data) => setState(() => ({ ...state, ...data }))
-
-    const isValidData = () => {
-        const error = validator({
-            username,
-            email,
-            password
-        })
-        if (error) {
-            showError(error)
-            return false
-        }
-        return true
+  const isValidData = () => {
+    const error = validator({
+      username,
+      email,
+      password,
+    });
+    if (error) {
+      showError(error);
+      return false;
     }
+    return true;
+  };
 
-    const onSignup = async () => {
-        const checkValid = isValidData()
-        if (checkValid) {
-            updateState({ isLoading: true })
-            try {
-                const res = await actions.signup({
-                    username,
-                    email,
-                    password
-                })
-                console.log("res of signup==>>>>>", res)
-                showMessage("Registered successfully...!!!!")
-                updateState({ isLoading: false })
-                navigation.goBack()
-            } catch (error) {
-                // console.log("error raised")
-                showError(error.error_message)
-                updateState({ isLoading: false })
-            }
-        }
+  const onSignup = async () => {
+    const checkValid = isValidData();
+    if (checkValid) {
+      updateState({ isLoading: true });
+      try {
+        const res = await actions.signup({
+          username,
+          email,
+          password,
+        });
+        console.log("res of signup==>>>>>", res);
+        showMessage("Registered successfully...!!!!");
+        updateState({ isLoading: false });
+        navigation.goBack();
+      } catch (error) {
+        // console.log("error raised")
+        showError(error.error_message);
+        updateState({ isLoading: false });
+      }
     }
+  };
 
   return (
-    <ImageBackground source= {LoginImg} style={styles.image} blurRadius={10} >
-
-        <View style={styles.container}>
+    <ImageBackground source={LoginImg} style={styles.image} blurRadius={10}>
+      <View style={styles.container}>
         <Text style={styles.title}>Register</Text>
-            <Surface style={styles.box}>
-            <View>
-            
-                <TextInput
-                label="Username"
-                mode="outlined"
-                value={username}
-                onChangeText={(username) => updateState({ username })}
-                />
+        <Surface style={styles.box}>
+          <View>
+            <TextInput
+              label="Username"
+              mode="outlined"
+              value={username}
+              onChangeText={(username) => updateState({ username })}
+            />
 
-                <TextInput
-                label="Email"
-                mode="outlined"
-                value={email}
-                onChangeText={(email) => updateState({ email })}
-                />
-                
-                <TextInput
-                label="Password"
-                mode="outlined"
-                value={password}
-                onChangeText={(password) => updateState({ password })}
-                />
-            </View>
+            <TextInput
+              label="Email"
+              mode="outlined"
+              value={email}
+              onChangeText={(email) => updateState({ email })}
+            />
 
-            <CustomButton label={"Register"} onPress={onSignup} isLoading={isLoading} />
-            </Surface>
-        </View>
+            <TextInput
+              label="Password"
+              mode="outlined"
+              value={password}
+              onChangeText={(password) => updateState({ password })}
+            />
+          </View>
+
+          <CustomButton
+            label={"Register"}
+            onPress={onSignup}
+            isLoading={isLoading}
+          />
+        </Surface>
+      </View>
     </ImageBackground>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     padding: 28,
-    backgroundColor: '',
+    backgroundColor: "",
   },
   box: {
     borderRadius: 10,
@@ -108,18 +110,17 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 40,
-    textAlign: 'center',
-    color: '#333',
+    textAlign: "center",
+    color: "#333",
     marginBottom: 20,
-    fontWeight: 'bold'
+    fontWeight: "bold",
   },
   image: {
     flex: 1,
     resizeMode: "cover",
-    justifyContent: "center"
-  }
-})
-
+    justifyContent: "center",
+  },
+});
 
 // import React, { useState } from 'react';
 // import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native';
@@ -134,7 +135,6 @@ const styles = StyleSheet.create({
 // import CustomButton from '../components/CustomButton/index.js';
 // import { LoginImg } from '../public/assets';
 
-
 // const Signup = (navigation) => {
 
 //     const [state, setState] = useState({
@@ -146,7 +146,6 @@ const styles = StyleSheet.create({
 //     })
 //     const { isLoading, username, email, password, isSecure } = state
 //     const updateState = (data) => setState(() => ({ ...state, ...data }))
-
 
 //     const isValidData = () => {
 //         const error = validator({
@@ -181,7 +180,7 @@ const styles = StyleSheet.create({
 //             }
 //         }
 //     }
-//     return (  
+//     return (
 //         // {/* <View style={styles.container}>
 //         //     <TextInputWithLable
 //         //         label="User name"
@@ -217,9 +216,8 @@ const styles = StyleSheet.create({
 //                     />
 //                                     <Text  className="mb-[30] font-lg text-[28px] text-[#333] ">
 //                     Register
-//                 </Text> 
+//                 </Text>
 //                 </View>
-
 
 //                 <InputFieldCustom
 //                     label="Username"
@@ -244,7 +242,7 @@ const styles = StyleSheet.create({
 //                         secureTextEntry={isSecure}
 //                         onChangeText={(password) => updateState({ password })}
 //                         icon={
-//                             <Ionicons 
+//                             <Ionicons
 //                             name="ios-lock-closed-outline"
 //                             size={20}
 //                             color="#666"
@@ -256,7 +254,6 @@ const styles = StyleSheet.create({
 //                 />
 //                 <CustomButton label={"Login"} onPress={onSignup} isLoading={isLoading} />
 
-
 //                 <View className="mb-[60] justify-center flex-row">
 //                     <Text>New to the app?</Text>
 //                     <TouchableOpacity  onPress={() => navigation.navigate('Signup')}>
@@ -264,10 +261,9 @@ const styles = StyleSheet.create({
 //                     </TouchableOpacity>
 //                 </View>
 //             </View>
-//         </View> 
+//         </View>
 //     );
 // };
-
 
 // const styles = StyleSheet.create({
 //     container: {
@@ -276,6 +272,5 @@ const styles = StyleSheet.create({
 //         backgroundColor: 'white'
 //     },
 // });
-
 
 // export default Signup;

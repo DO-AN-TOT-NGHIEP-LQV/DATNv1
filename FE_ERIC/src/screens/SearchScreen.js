@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react";
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity } from "react-native";
+import {
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import { ActivityIndicator, Button } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 
@@ -7,136 +17,133 @@ import COLORS from "../constans/Color";
 import { apiPost } from "../ultils/utilsApi";
 import { SEARCH_POST_B_IMG } from "../config/urls";
 // import { listImage } from "../constans/raw";
-const width = Dimensions.get('window').width / 2 - 30;
+const width = Dimensions.get("window").width / 2 - 30;
 
-export default function SearchScreen  () {
+export default function SearchScreen() {
+  const [pickedImagePath, setPickedImagePath] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    const [pickedImagePath, setPickedImagePath] = useState("");
-    const [loading, setLoading] = useState(false);
+  const [listPost, setListPost] = useState();
 
-    const [listPost, setListPost] = useState()
+  useEffect(() => {
+    if (pickedImagePath) {
+      var formData = new FormData();
+      formData.append("fileSearchImg", {
+        uri: pickedImagePath,
+        type: "image/jpeg",
+        name: "fileSearchImg",
+      });
 
-    useEffect(() => {
-          if (pickedImagePath) {
-
-
-            var formData = new FormData();
-            formData.append('fileSearchImg', {
-              uri: pickedImagePath  , 
-              type: 'image/jpeg', 
-              name: "fileSearchImg" 
-            }); 
-
-            var headers = {
-              "Content-type": "multipart/form-data"
-            }
-            
-            apiPost(SEARCH_POST_B_IMG, formData, headers, true)
-              .then((res) => { 
-                    console.log(res.data)
-                    setListPost(res.data)
-                    setLoading( false )
-
-              })
-              .catch((error) => {
-                showError(error)
-                setLoading( false )
-            });
-          }
-        }, [pickedImagePath]
-    );
-
-    const showImagePicker = async () => {
-        // Ask the user for the permission to access the media library
-        const permissionResult =
-          await ImagePicker.requestMediaLibraryPermissionsAsync();
-    
-        if (permissionResult.granted === false) {
-          alert("You've refused to allow this app to access your photos!");
-          return;
-        }
-    
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-    
-        if (!result.canceled) {
-            console.log( result.assets )
-            setPickedImagePath(result.assets[0].uri);
-            setLoading(true)
-        }
+      var headers = {
+        "Content-type": "multipart/form-data",
       };
 
-      // This function is triggered when the "Open camera" button pressed
-      const openCamera = async () => {
-        // Ask the user for the permission to access the camera
-        const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
-    
-        if (permissionResult.granted === false) {
-          alert("You've refused to allow this app to access your camera!");
-          return;
-        }
-    
-        const result = await ImagePicker.launchCameraAsync({
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,        
+      apiPost(SEARCH_POST_B_IMG, formData, headers, true)
+        .then((res) => {
+          console.log(res.data);
+          setListPost(res.data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          showError(error);
+          setLoading(false);
         });
-        if (!result.canceled) {
-            setPickedImagePath(result.assets[0].uri)
-            setLoading(true)
-          }
-    };
+    }
+  }, [pickedImagePath]);
 
+  const showImagePicker = async () => {
+    // Ask the user for the permission to access the media library
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this app to access your photos!");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      console.log(result.assets);
+      setPickedImagePath(result.assets[0].uri);
+      setLoading(true);
+    }
+  };
+
+  // This function is triggered when the "Open camera" button pressed
+  const openCamera = async () => {
+    // Ask the user for the permission to access the camera
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+
+    if (permissionResult.granted === false) {
+      alert("You've refused to allow this app to access your camera!");
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setPickedImagePath(result.assets[0].uri);
+      setLoading(true);
+    }
+  };
 
   const Card = ({ shoe }) => {
     return (
       <TouchableOpacity
         activeOpacity={0.8}
         // onPress={() => navigation.navigate('Details', shoe)}
-        >
+      >
         <View style={style.card}>
           <View
             style={{
               // display: 'flex',
               // alignItems: 'center',
-              alignItems: 'center',
-              justifyContent: 'center',
+              alignItems: "center",
+              justifyContent: "center",
               paddingHorizontal: 5,
               paddingVertical: 5,
               marginRight: 15,
-              borderRadius: 15
-            }}>
+              borderRadius: 15,
+            }}
+          >
             <Image
               // style={{ width: null, height: null, resizeMode: 'contain',  alignItems: 'center',
               //   justifyContent: 'center',
               //   paddingHorizontal: 5,
               //   paddingVertical: 5,
               //   marginRight: 15 }}
-                
-              source={{ uri: shoe.postImages[0].url }}
-              resizeMode='contain'
-              style={{ resizeMode: 'contain',
-              width: 100,
-              height: 80,
-              borderRadius: 5}}
 
+              source={{ uri: shoe.postImages[0].url }}
+              resizeMode="contain"
+              style={{
+                resizeMode: "contain",
+                width: 100,
+                height: 80,
+                borderRadius: 5,
+              }}
             />
           </View>
 
-          <Text style={{ fontWeight: 'bold', fontSize: 17, marginTop: 10 }}>
+          <Text style={{ fontWeight: "bold", fontSize: 17, marginTop: 10 }}>
             {`${shoe.content}`.slice(0, 19)} ...
           </Text>
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
+              flexDirection: "row",
+              justifyContent: "space-between",
               marginTop: 5,
-            }}>
-            <Text style={{ fontSize: 19, fontWeight: 'bold' }}>
+            }}
+          >
+            <Text style={{ fontSize: 19, fontWeight: "bold" }}>
               {shoe.postImages[0].no} Đ
             </Text>
             <View
@@ -144,15 +151,13 @@ export default function SearchScreen  () {
                 height: 25,
                 width: 25,
                 backgroundColor: COLORS.green,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 5
-              }}>
-              <Text
-                style={{ color: COLORS.white, fontWeight: 'bold' }}>
-                +
-              </Text>
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 5,
+              }}
+            >
+              <Text style={{ color: COLORS.white, fontWeight: "bold" }}>+</Text>
             </View>
           </View>
         </View>
@@ -162,14 +167,20 @@ export default function SearchScreen  () {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.backGround }}>
-        <View style={style.container}>
-          <View style={style.image_ai}>
+      <View style={style.container}>
+        <View style={style.image_ai}>
           {!pickedImagePath ? (
-              <Image source={require("../public/assets/splashShoe.png")} style={{ width: 200, height: 200 }} />
+            <Image
+              source={require("../public/assets/splashShoe.png")}
+              style={{ width: 200, height: 200 }}
+            />
           ) : (
-            <Image source={{uri: pickedImagePath}} style={{ width: 200, height: 200 }} />
+            <Image
+              source={{ uri: pickedImagePath }}
+              style={{ width: 200, height: 200 }}
+            />
           )}
-          </View>
+        </View>
 
         <View style={style.buttonContainer}>
           <Button
@@ -183,7 +194,7 @@ export default function SearchScreen  () {
           <Button
             icon="image-multiple"
             mode="outlined"
-            onPress={() => showImagePicker()}  
+            onPress={() => showImagePicker()}
             style={{ backgroundColor: "white" }}
           >
             Gallery
@@ -197,7 +208,7 @@ export default function SearchScreen  () {
         ) : (
           <SafeAreaView>
             <FlatList
-              columnWrapperStyle={{ justifyContent: 'space-between' }}
+              columnWrapperStyle={{ justifyContent: "space-between" }}
               showsVerticalScrollIndicator={false}
               contentContainerStyle={{
                 marginTop: 10,
@@ -214,7 +225,7 @@ export default function SearchScreen  () {
       </View>
     </SafeAreaView>
   );
-};
+}
 
 const style = StyleSheet.create({
   container: {
@@ -232,17 +243,16 @@ const style = StyleSheet.create({
 
   image_ai: {
     marginTop: 10,
-
   },
   buttonContainer: { flexDirection: "row" },
   mRight20: { marginRight: 20 },
   categoryContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginTop: 10,
     marginBottom: 10,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
   },
-  categoryText: { fontSize: 16, color: 'grey', fontWeight: 'bold' },
+  categoryText: { fontSize: 16, color: "grey", fontWeight: "bold" },
   categoryTextSelected: {
     color: COLORS.green,
     paddingBottom: 5,
@@ -260,20 +270,20 @@ const style = StyleSheet.create({
   },
   header: {
     marginTop: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   searchContainer: {
     height: 50,
     backgroundColor: COLORS.light,
     borderRadius: 10,
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   input: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     flex: 1,
     color: COLORS.dark,
   },
@@ -283,15 +293,15 @@ const style = StyleSheet.create({
     width: 50,
     borderRadius: 10,
     backgroundColor: COLORS.green,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   sliderContainer: {
     height: 200,
-    width: '100%',
+    width: "100%",
     marginTop: 10,
-    justifyContent: 'center',
-    alignSelf: 'center',
+    justifyContent: "center",
+    alignSelf: "center",
     borderRadius: 8,
   },
 
@@ -299,22 +309,17 @@ const style = StyleSheet.create({
 
   slide: {
     flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
+    justifyContent: "center",
+    backgroundColor: "transparent",
     borderRadius: 8,
   },
   sliderImage: {
-    height: '100%',
-    width: '100%',
-    alignSelf: 'center',
+    height: "100%",
+    width: "100%",
+    alignSelf: "center",
     borderRadius: 8,
   },
 });
-
-
-
-
-
 
 // import { useEffect, useState } from "react";
 // import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View, FlatList, Dimensions, TouchableOpacity } from "react-native";
@@ -395,7 +400,6 @@ const style = StyleSheet.create({
 //   }
 
 //   console.log(typ)
-
 
 //   const Card = ({ shoe }) => {
 

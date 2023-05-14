@@ -1,84 +1,110 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {HomeScreen, DiscoverScreen, DetailPostScreem, Feeds, CreatePostScreen, SearchScreen} from '../screens/index'
-import Profile from '../screens/Profile';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AntDesign, Feather , Ionicons , MaterialCommunityIcons   } from '@expo/vector-icons';
-import CustomTabBarIcon from '../components/CustomTabBarIcon';
-import Color from '../constans/Color';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  HomeScreen,
+  DiscoverScreen,
+  DetailPostScreem,
+  Feeds,
+  CreatePostScreen,
+  SearchScreen,
+} from "../screens/index";
+import Profile from "../screens/Profile";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  AntDesign,
+  Feather,
+  Ionicons,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
+import CustomTabBarIcon from "../components/CustomTabBarIcon";
+import Color from "../constans/Color";
 
-export default function (Stack){
-    return (
-    <Stack.Screen name="MainTab" component={MainTabs}/>
-  )
+export default function (Stack) {
+  return <Stack.Screen name="MainTab" component={MainTabs} />;
 }
 
 const BottomTab = createBottomTabNavigator();
 const MainTabs = () => {
-    return( 
-        <BottomTab.Navigator      
-               
-            screenOptions={{
-              headerShown: false,
-              tabBarShowLabel: false,
+  return (
+    <BottomTab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
 
-              tabBarHideOnKeyboard: true,
-              tabBarStyle : 
-              [
-                  {
-                  ...styles.tabBarStyle,
-                  // ...styles.shadow,
-                    display: 'flex',
-                  },
-                  null,
-              ]
-              
-            
-            }}
-            >
-            <BottomTab.Screen name="HomeTab" component={HomeStackNavigator}
-              options={{
-                tabBarIcon: ({color, size, focused }) => (
-                    <CustomTabBarIcon nameIcon={'home'} textLabel={'HOME'} color={color} size={size} focused={focused}/>
-                )
-              }}
+        tabBarHideOnKeyboard: true,
+        tabBarStyle: [
+          {
+            ...styles.tabBarStyle,
+            // ...styles.shadow,
+            display: "flex",
+          },
+          null,
+        ],
+      }}
+    >
+      <BottomTab.Screen
+        name="HomeTab"
+        component={HomeStackNavigator}
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            <CustomTabBarIcon
+              nameIcon={"home"}
+              textLabel={"HOME"}
+              color={color}
+              size={size}
+              focused={focused}
             />
+          ),
+        }}
+      />
 
+      <BottomTab.Screen
+        name="SearchTab"
+        component={SearchStackNavigator}
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            // <View className=" items-center justify-center " >
+            //     <AntDesign name="search1" size={size}  color={ focused ?'#AD40AF' : color } />
+            //     <Text style={{ color: focused ?'#AD40AF' : color,  fontSize: 12 }} >
+            //       SEARCH
+            //     </Text>
+            // </View>
 
-            <BottomTab.Screen name="SearchTab" component={SearchStackNavigator}
-              options={{
-                tabBarIcon: ({color, size, focused }) => (
-                    // <View className=" items-center justify-center " >
-                    //     <AntDesign name="search1" size={size}  color={ focused ?'#AD40AF' : color } />
-                    //     <Text style={{ color: focused ?'#AD40AF' : color,  fontSize: 12 }} >
-                    //       SEARCH
-                    //     </Text>
-                    // </View>
-
-                    <CustomTabBarIcon nameIcon={'search1'} textLabel={'SEARCH'} color={color} size={size} focused={focused}/>
-
-                )
-              }}
+            <CustomTabBarIcon
+              nameIcon={"search1"}
+              textLabel={"SEARCH"}
+              color={color}
+              size={size}
+              focused={focused}
             />
+          ),
+        }}
+      />
 
+      <BottomTab.Screen
+        name="PostTab"
+        component={CreatePostStackNavigator}
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            // <View className=" items-center justify-center " >
+            //     <AntDesign name="search1" size={size}  color={ focused ?'#AD40AF' : color } />
+            //     <Text style={{ color: focused ?'#AD40AF' : color,  fontSize: 12 }} >
+            //       SEARCH
+            //     </Text>
+            // </View>
 
-           <BottomTab.Screen name="PostTab" component={CreatePostStackNavigator}
-              options={{
-                tabBarIcon: ({color, size, focused }) => (
-                    // <View className=" items-center justify-center " >
-                    //     <AntDesign name="search1" size={size}  color={ focused ?'#AD40AF' : color } />
-                    //     <Text style={{ color: focused ?'#AD40AF' : color,  fontSize: 12 }} >
-                    //       SEARCH
-                    //     </Text>
-                    // </View>
-
-                    <CustomTabBarIcon nameIcon={'search1'} textLabel={'POST'} color={color} size={size} focused={focused}/>
-
-                )
-              }}
+            <CustomTabBarIcon
+              nameIcon={"search1"}
+              textLabel={"POST"}
+              color={color}
+              size={size}
+              focused={focused}
             />
-{/* 
+          ),
+        }}
+      />
+      {/* 
             <BottomTab.Screen name="PostTab" 
              component={CreatePostStackNavigator}
               options={{
@@ -91,50 +117,58 @@ const MainTabs = () => {
               }}
             /> */}
 
-            <BottomTab.Screen name="DiscoverTab" component={DiscoverStackNavigator}
-              options={{
-                tabBarIcon: ({color, size, focused }) => (
-                    // <View className=" items-center justify-center " >
-                    //       <AntDesign name="find" size={size}  color={ focused ?'#AD40AF' : color } />
-                    //       <Text style={{ color: focused ?'#AD40AF' : color,  fontSize: 12 }} >
-                            
-                    //       </Text>
-                    // </View>
+      <BottomTab.Screen
+        name="DiscoverTab"
+        component={DiscoverStackNavigator}
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            // <View className=" items-center justify-center " >
+            //       <AntDesign name="find" size={size}  color={ focused ?'#AD40AF' : color } />
+            //       <Text style={{ color: focused ?'#AD40AF' : color,  fontSize: 12 }} >
 
-                    <CustomTabBarIcon nameIcon={'find'} textLabel={'DISCOVER'} color={color} size={size} focused={focused}/>
+            //       </Text>
+            // </View>
 
-                    
+            <CustomTabBarIcon
+              nameIcon={"find"}
+              textLabel={"DISCOVER"}
+              color={color}
+              size={size}
+              focused={focused}
+            />
+          ),
+        }}
+      />
 
-                    
-                )
-              }}
+      <BottomTab.Screen
+        name="SettingTab"
+        component={SettingStackNavigator}
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            <CustomTabBarIcon
+              nameIcon={"setting"}
+              textLabel={"SETTING"}
+              color={color}
+              size={size}
+              focused={focused}
             />
 
-            <BottomTab.Screen name="SettingTab" component={SettingStackNavigator}
-              options={{
-                tabBarIcon: ({color, size, focused }) => (
+            // {/* <View className=" items-center justify-center " >
+            //     <AntDesign name="setting" size={size}  color={ focused ?'#AD40AF' : color } />
+            //     <Text style={{ color: focused ?'#AD40AF' : color,  fontSize: 12 }} >
 
-                  <CustomTabBarIcon nameIcon={'setting'} textLabel={'SETTING'} color={color} size={size} focused={focused}/>
-
-                    // {/* <View className=" items-center justify-center " >
-                    //     <AntDesign name="setting" size={size}  color={ focused ?'#AD40AF' : color } />
-                    //     <Text style={{ color: focused ?'#AD40AF' : color,  fontSize: 12 }} >
-                          
-                    //     </Text>
-                    // </View> */}
-                )
-              }}
-              
-            />
-
-        </BottomTab.Navigator>
-    )
-}
-
+            //     </Text>
+            // </View> */}
+          ),
+        }}
+      />
+    </BottomTab.Navigator>
+  );
+};
 
 // const CustomTabBarButton = ({children, onPress}) => {
 //   return (
-    
+
 //     <TouchableOpacity
 //       style={{
 //           // top: 20,
@@ -144,7 +178,7 @@ const MainTabs = () => {
 //       }}
 //       onPress={onPress}
 //     >
-//         <View 
+//         <View
 //           style={styles.customTabBarButton}
 //         >
 //           {children}
@@ -157,31 +191,31 @@ const MainTabs = () => {
 const HomeNavigator = createNativeStackNavigator();
 const HomeStackNavigator = () => {
   return (
-    <HomeNavigator.Navigator screenOptions={{ headerShown: false,}}>
-      <HomeNavigator.Screen name="Home" component={HomeScreen}/>
-      <HomeNavigator.Screen name="Feed" component={Feeds}/>
+    <HomeNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <HomeNavigator.Screen name="Home" component={HomeScreen} />
+      <HomeNavigator.Screen name="Feed" component={Feeds} />
     </HomeNavigator.Navigator>
   );
 };
 
-
 const SearchNavigator = createNativeStackNavigator();
 const SearchStackNavigator = () => {
   return (
-    <SearchNavigator.Navigator screenOptions={{ headerShown: false}}>
-      <HomeNavigator.Screen name="Search" component={SearchScreen}/>
+    <SearchNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <HomeNavigator.Screen name="Search" component={SearchScreen} />
     </SearchNavigator.Navigator>
   );
 };
 
-
-
 const DiscoverNavigator = createNativeStackNavigator();
 const DiscoverStackNavigator = () => {
   return (
-    <DiscoverNavigator.Navigator screenOptions={{headerShown: false}}>
-      <DiscoverNavigator.Screen name="Discover"  component={DiscoverScreen} />
-      <DiscoverNavigator.Screen name="DetailPost" component={DetailPostScreem} />
+    <DiscoverNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <DiscoverNavigator.Screen name="Discover" component={DiscoverScreen} />
+      <DiscoverNavigator.Screen
+        name="DetailPost"
+        component={DetailPostScreem}
+      />
     </DiscoverNavigator.Navigator>
   );
 };
@@ -189,8 +223,11 @@ const DiscoverStackNavigator = () => {
 const CreatePostNavigator = createNativeStackNavigator();
 const CreatePostStackNavigator = () => {
   return (
-    <DiscoverNavigator.Navigator screenOptions={{ headerShown: false}}>
-      <DiscoverNavigator.Screen name="CreatePost"  component={CreatePostScreen} />
+    <DiscoverNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <DiscoverNavigator.Screen
+        name="CreatePost"
+        component={CreatePostScreen}
+      />
       {/* <DiscoverNavigator.Screen name="DetailPost" component={DetailPostScreem} /> */}
     </DiscoverNavigator.Navigator>
   );
@@ -199,47 +236,44 @@ const CreatePostStackNavigator = () => {
 const SettingNavigator = createNativeStackNavigator();
 const SettingStackNavigator = () => {
   return (
-    <SettingNavigator.Navigator screenOptions={{headerShown: false}} >
+    <SettingNavigator.Navigator screenOptions={{ headerShown: false }}>
       <SettingNavigator.Screen name="Profile" component={Profile} />
     </SettingNavigator.Navigator>
   );
 };
 
-
 const styles = StyleSheet.create({
   shadow: {
-    shadowColor: '#7F5DF0',
+    shadowColor: "#7F5DF0",
     shadowOffset: {
       width: 20,
       height: 20,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.5,
-    elevation: 5
+    elevation: 5,
   },
-  tabBarStyle : {
-    position : 'absolute',
+  tabBarStyle: {
+    position: "absolute",
     // left: 0,
     // right: 0,
     // bottom: 0,
-    borderTopColor: '#3333',
+    borderTopColor: "#3333",
     borderTopWidth: 2,
     elevation: 0,
     backgroundColor: "#ffffff",
     // borderRadius: 15,
-    // height: 60 
+    // height: 60
   },
-  customTabBarButton : {
-
-  bottom:-10,
-  backgroundColor : '#ffffff',
-  width: 100,
-  height: 100,
-  borderRadius: 50,
-  borderWidth: 2,
-  borderColor:  "#ffffff",
-  borderTopColor: '#3333',
-
+  customTabBarButton: {
+    bottom: -10,
+    backgroundColor: "#ffffff",
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: "#ffffff",
+    borderTopColor: "#3333",
   },
-})
+});
 // navigation.navigate('CommunityTab', { screen: 'CommunityReply',  params: {key: 'value'}});
