@@ -6,4 +6,8 @@ public interface ImageService {
     Image saveImage(Image image);
     Image getImage(Long id);
 
+    void  deleteImage(Image image);
+
+
+
 }

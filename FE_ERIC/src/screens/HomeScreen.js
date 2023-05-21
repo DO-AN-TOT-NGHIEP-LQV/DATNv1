@@ -7,6 +7,7 @@ import * as Animatable from "react-native-animatable";
 import actions from "../redux/actions";
 import { useSelector } from "react-redux";
 import { showError } from "../ultils/helperFunction";
+import Color from "../constans/Color";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -48,7 +49,10 @@ const HomeScreen = () => {
         <View className="w-16 h-16 bg-black rounded-full items-center justify-center">
           <Text className="text-[#00BCC9] text-2xl font-semibold">Go</Text>
         </View>
-        <Text className="text-[#2A2B4B] text-2xl font-semibold">
+        <Text
+          className="text-[#2A2B4B] text-2xl font-semibold"
+          style={{ color: Color.blueMain }}
+        >
           {" "}
           Shoes ERIC
         </Text>

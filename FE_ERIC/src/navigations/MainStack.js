@@ -44,22 +44,6 @@ const MainTabs = () => {
       }}
     >
       <BottomTab.Screen
-        name="HomeTab"
-        component={HomeStackNavigator}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => (
-            <CustomTabBarIcon
-              nameIcon={"home"}
-              textLabel={"HOME"}
-              color={color}
-              size={size}
-              focused={focused}
-            />
-          ),
-        }}
-      />
-
-      <BottomTab.Screen
         name="SearchTab"
         component={SearchStackNavigator}
         options={{
@@ -81,6 +65,21 @@ const MainTabs = () => {
           ),
         }}
       />
+      <BottomTab.Screen
+        name="HomeTab"
+        component={HomeStackNavigator}
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            <CustomTabBarIcon
+              nameIcon={"home"}
+              textLabel={"HOME"}
+              color={color}
+              size={size}
+              focused={focused}
+            />
+          ),
+        }}
+      />
 
       <BottomTab.Screen
         name="PostTab"
@@ -95,7 +94,7 @@ const MainTabs = () => {
             // </View>
 
             <CustomTabBarIcon
-              nameIcon={"search1"}
+              nameIcon={"pluscircleo"}
               textLabel={"POST"}
               color={color}
               size={size}
