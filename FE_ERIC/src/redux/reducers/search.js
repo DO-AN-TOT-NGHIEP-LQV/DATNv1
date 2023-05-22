@@ -6,6 +6,8 @@ const initialState = {
 
   listSearch: null,
   page: 0,
+  pageProduct: 0,
+  pagePost: 0,
   searchText: "",
   isMainViewVisible: true,
   isLoading: false,
@@ -31,18 +33,26 @@ export default function (state = initialState, action) {
         showAllCategories: data,
       };
     }
-    case types.PAGE: {
-      const data = action.payload;
-      return {
-        ...state,
-        page: data,
-      };
-    }
     case types.SEARCH_TEXT: {
       const data = action.payload;
       return {
         ...state,
         searchText: data,
+      };
+    }
+
+    case types.PAGE_PRODUCT: {
+      const data = action.payload;
+      return {
+        ...state,
+        pageProduct: data,
+      };
+    }
+    case types.PAGE_POST: {
+      const data = action.payload;
+      return {
+        ...state,
+        pagePost: data,
       };
     }
     case types.IS_MAIN_VIEW_DISPLAY: {

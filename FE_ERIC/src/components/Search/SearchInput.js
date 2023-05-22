@@ -9,6 +9,7 @@ import { showError } from "../../ultils/helperFunction";
 import { useSelector } from "react-redux";
 import Color from "../../constans/Color";
 import { updateIsMainViewDisplay } from "../../redux/actions/search";
+import { SEARCH_ALL_BY_TEXT } from "../../config/urls";
 
 const SearchInput = () => {
   const [searchText, setSearch] = useState("");
@@ -27,17 +28,26 @@ const SearchInput = () => {
     if (true) {
       // if (!checkStringEmpty(searchText)) {
       try {
+        actions.updateIsLoading(true);
+
+        if (categoryIndex == 0) actions.updateCategoryIndex(1);
+
         actions.saveListSearch(null);
+
         const res = await actions.fetchDataForSearchText(
           searchText,
           0,
-          categoryIndex
+          SEARCH_ALL_BY_TEXT
         );
         actions.saveListSearch(res.data);
         actions.updateShowAllCategories(false);
         actions.updateIsMainViewDisplay(false);
+        actions.updateIsLoading(false);
 
-        actions.updatePage(0);
+        // actions.updatePage(0);
+
+        actions.updatePagePost(0);
+        actions.updatePageProduct(0);
         actions.updateSearchText(searchText);
       } catch (error) {
         console.log("Có lỗi xảy ra");

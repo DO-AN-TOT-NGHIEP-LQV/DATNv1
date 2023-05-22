@@ -1,7 +1,6 @@
 package com.example.be_eric.service;
 
 import com.example.be_eric.models.Image;
-import com.example.be_eric.models.Post;
 import com.example.be_eric.models.Product;
 import com.example.be_eric.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +47,5 @@ public class ProductServiceImpl implements  ProductService{
     public List<Product> searchByTextNotPageable(String searchText) {
         return productRepo.findProductsByNameContainingOrDescriptionContaining(searchText,  searchText);
     }
-
 
 }

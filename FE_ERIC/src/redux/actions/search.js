@@ -1,9 +1,4 @@
-import {
-  SEARCH_ALL_BY_TEXT,
-  SEARCH_ALL_B_IMG,
-  SEARCH_POST_B_TEXT,
-  SEARCH_PRODUCT_B_TEXT,
-} from "../../config/urls";
+import { SEARCH_ALL_BY_TEXT, SEARCH_ALL_B_IMG } from "../../config/urls";
 import { apiGet, apiPost } from "../../ultils/utilsApi";
 import store from "../store";
 import types from "../types";
@@ -24,6 +19,19 @@ export const updatePage = (data) => {
   });
 };
 
+export const updatePagePost = (data) => {
+  dispatch({
+    type: types.PAGE_POST,
+    payload: data,
+  });
+};
+
+export const updatePageProduct = (data) => {
+  dispatch({
+    type: types.PAGE_PRODUCT,
+    payload: data,
+  });
+};
 export const updateSearchText = (data) => {
   dispatch({
     type: types.SEARCH_TEXT,
@@ -84,7 +92,11 @@ export const searchWithImage = (pickedImagePath) => {
   });
 };
 
-export const fetchDataForSearchText = (searchText, page, categoryIndex) => {
+export const fetchDataForSearchText = (
+  searchText,
+  page,
+  endPoint = SEARCH_ALL_BY_TEXT
+) => {
   return new Promise(async (resolve, reject) => {
     var headers = {
       "Content-Type": "application/json",
@@ -93,17 +105,17 @@ export const fetchDataForSearchText = (searchText, page, categoryIndex) => {
     var data = {
       params: {
         searchText: searchText,
-        page: 0,
+        page: page,
       },
     };
 
     // var endPoit =
     //   categoryIndex == 1 ? SEARCH_PRODUCT_B_TEXT : SEARCH_POST_B_TEXT;
 
-    var endPoint = SEARCH_ALL_BY_TEXT;
+    // var endPoint = SEARCH_ALL_BY_TEXT;
 
-    if (categoryIndex == 1) endPoint = SEARCH_PRODUCT_B_TEXT;
-    else if (categoryIndex == 2) endPoint = SEARCH_POST_B_TEXT;
+    // if (categoryIndex == 1) endPoint = SEARCH_PRODUCT_B_TEXT;
+    // else if (categoryIndex == 2) endPoint = SEARCH_POST_B_TEXT;
 
     await apiGet(endPoint, data, headers, true)
       .then((res) => {

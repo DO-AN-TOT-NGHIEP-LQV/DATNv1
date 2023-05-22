@@ -26,6 +26,7 @@ import MasonryListPosts from "../components/Search/MasonryListPosts";
 import { useSelector } from "react-redux";
 import { showError } from "../ultils/helperFunction";
 import { updateCategoryIndex, updateIsLoading } from "../redux/actions/search";
+import { SEARCH_POST_B_TEXT, SEARCH_PRODUCT_B_TEXT } from "../config/urls";
 
 const width = Dimensions.get("window").width / 2 - 30;
 const windowWidth = Dimensions.get("window").width;
@@ -37,9 +38,15 @@ export default function SearchScreen() {
     (state) => state.search.showAllCategories
   );
 
+  // const page = useSelector((state) => state.search.page);
+  const pagePost = useSelector((state) => state.search.pagePost);
+  const pageProduct = useSelector((state) => state.search.pageProduct);
+
   const isMainViewVisible = useSelector(
     (state) => state.search.isMainViewVisible
   );
+
+  const searchText = useSelector((state) => state.search.searchText);
 
   const loading = useSelector((state) => state.search.isLoading);
 
@@ -48,9 +55,7 @@ export default function SearchScreen() {
   const [isLoading, setIsLoading] = useState(false);
 
   const [pickedImagePath, setPickedImagePath] = useState("");
-  // const [loading, setLoading] = useState(false);
-
-  // const [categoryIndex, setCategoryIndex] = useState(0);
+  const [loadingEndScroll, setLoadingEndScroll] = useState(false);
 
   const translateYAnim = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(1)).current;
@@ -71,7 +76,8 @@ export default function SearchScreen() {
         contentOffset.y + layoutMeasurement.height >= contentSize.height;
 
       if (isEndReached && !isLoading) {
-        // fetchData2(); // la ham goi cong them
+        console.log("cuoou");
+        fetchDataSearch();
       }
     } else {
       if (offsetY < 200) {
@@ -108,29 +114,26 @@ export default function SearchScreen() {
     }
   };
 
-  const handleScrollLoadData = (event) => {
-    const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
-    const isEndReached =
-      contentOffset.y + layoutMeasurement.height >= contentSize.height;
+  // const handleScrollLoadData = (event) => {
+  //   const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
+  //   const isEndReached =
+  //     contentOffset.y + layoutMeasurement.height >= contentSize.height;
 
-    if (isEndReached && !isLoading) {
-    }
-  };
+  //   if (isEndReached && !isLoading) {
+  //   }
+  // };
 
   useEffect(() => {
     const fetchData = async () => {
       if (pickedImagePath) {
         try {
           const res = await actions.searchWithImage(pickedImagePath);
-          // console.log(res.data);
           const a = actions.updateShowAllCategories(true);
           console.log(showAllCategories);
-          // setLoading(false);
           actions.updateIsLoading(false);
         } catch (error) {
           console.log("Có lỗi xảy ra");
           showError(error.error_message);
-          // setLoading(false);
           actions.updateIsLoading(false);
         }
       }
@@ -188,8 +191,32 @@ export default function SearchScreen() {
     }
   };
 
-  const fetchDataSearch = async () => {};
+  const fetchDataSearch = async () => {
+    if (true) {
+      try {
+        // actions.updateIsLoading(true);
+        setLoadingEndScroll(true);
 
+        const res = await actions.fetchDataForSearchText(
+          searchText,
+          categoryIndex == 1 ? pageProduct + 1 : pagePost + 1,
+          categoryIndex == 1 ? SEARCH_PRODUCT_B_TEXT : SEARCH_POST_B_TEXT
+        );
+        actions.saveListSearch([...listAll, ...res.data]);
+
+        (await categoryIndex) == 1
+          ? actions.updatePageProduct(pageProduct + 1)
+          : actions.updatePagePost(pagePost + 1);
+        // actions.updateIsLoading(false);
+
+        console.log("Post:_", pagePost, "/Product_", pageProduct);
+        setLoadingEndScroll(false);
+      } catch (error) {
+        console.log("Có lỗi xảy ra");
+        showError(error.error_message);
+      }
+    }
+  };
   return (
     <View style={style.container}>
       {/* Search Bar */}
@@ -200,7 +227,7 @@ export default function SearchScreen() {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            zIndex: -1,
+            zIndex: 100,
             opacity: fadeAnim,
             // transform: [{ translateY: translateYAnim }],
             borderBottomColor: COLORS.backGround,
@@ -264,12 +291,16 @@ export default function SearchScreen() {
         </Animated.View>
       )}
 
-      <View
-        style={{
-          paddingVertical: 3,
-        }}
-      >
-        {categoryIndex ? (
+      {loading == true ? (
+        <ActivityIndicator color="#01c6b2" size="large"></ActivityIndicator>
+      ) : (
+        <>
+          <View
+            style={{
+              paddingVertical: 3,
+            }}
+          >
+            {/* {true ? (
           <FlatList
             data={CATEGORIES}
             horizontal={true}
@@ -282,10 +313,12 @@ export default function SearchScreen() {
             }}
             renderItem={({ item, index }) => {
               const isSelected = categoryIndex === index;
+              // const shouldDisplay = !showAllCategories && index === 0;
+              const shouldDisplay = showAllCategories || index !== 0;
+
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    // setCategoryIndex(index);
                     updateCategoryIndex(index);
                   }}
                   style={{
@@ -293,7 +326,7 @@ export default function SearchScreen() {
                     paddingVertical: 6,
                     borderBottomColor: isSelected ? Color.blueMain : null,
                     borderBottomWidth: isSelected ? 1 : 0,
-                    // display: shouldDisplay ? "flex" : "none",
+                    display: shouldDisplay ? "flex" : "none",
                   }}
                 >
                   <Text
@@ -351,15 +384,52 @@ export default function SearchScreen() {
               );
             }}
           />
-        )}
-      </View>
+        )} */}
 
-      {loading == true ? (
-        <ActivityIndicator color="#01c6b2" size="large"></ActivityIndicator>
-      ) : (
-        <>
+            {
+              <FlatList
+                data={CATEGORIES}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{
+                  gap: 12,
+                  flexGrow: 1,
+                  justifyContent: "flex-end",
+                  alignItems: "flex-end",
+                }}
+                renderItem={({ item, index }) => {
+                  const isSelected = categoryIndex === index;
+                  const shouldDisplay = showAllCategories || index !== 0;
+
+                  return (
+                    <TouchableOpacity
+                      onPress={() => {
+                        updateCategoryIndex(index);
+                      }}
+                      style={{
+                        paddingHorizontal: 15,
+                        paddingVertical: 6,
+                        borderBottomColor: isSelected ? Color.blueMain : null,
+                        borderBottomWidth: isSelected ? 1 : 0,
+                        display: shouldDisplay ? "flex" : "none",
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontWeight: "600",
+                          fontSize: 14,
+                          opacity: isSelected ? 1 : 0.5,
+                        }}
+                      >
+                        {item}
+                      </Text>
+                    </TouchableOpacity>
+                  );
+                }}
+              />
+            }
+          </View>
           <ScrollView
-            // style={{ flex: 1 }}
             onScroll={handleScroll}
             scrollEventThrottle={16}
             contentContainerStyle={{}}
@@ -381,6 +451,12 @@ export default function SearchScreen() {
                 )}
               />
             ) : null}
+
+            {loadingEndScroll && (
+              <View>
+                <ActivityIndicator />
+              </View>
+            )}
           </ScrollView>
         </>
       )}
