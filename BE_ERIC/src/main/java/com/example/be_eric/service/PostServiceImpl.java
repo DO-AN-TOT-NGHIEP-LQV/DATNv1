@@ -5,6 +5,8 @@ import com.example.be_eric.models.Image;
 import com.example.be_eric.models.Post;
 import com.example.be_eric.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,11 +30,6 @@ public class PostServiceImpl  implements  PostService{
         return postRepo.findById( id).orElse(null);
     }
 
-//    @Override
-//    public Post exitest(Long id) {
-//        return  postRepo.exists( )
-//    }
-
     @Override
     public void addImageToPost(Post post, Image image) {
         image.setIsProductImage(false);
@@ -50,4 +47,16 @@ public class PostServiceImpl  implements  PostService{
     public List<Post> getAll() {
         return postRepo.findAll();
     }
+
+    @Override
+    public Page<Post> searchByText(String searchText, Pageable pageable) {
+        return postRepo.findPostsByContentContainingOrTitleContaining(searchText, searchText, pageable);
+    }
+
+    @Override
+    public List<Post> searchByTextNotPageable(String searchText) {
+        return postRepo.findPostsByContentContainingOrTitleContaining(searchText, searchText);
+    }
+
+
 }

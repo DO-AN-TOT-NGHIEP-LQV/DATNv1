@@ -8,17 +8,18 @@ import {
   SearchScreen,
 } from "../screens/index";
 import Profile from "../screens/Profile";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Dimensions,
+} from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import {
-  AntDesign,
-  Feather,
-  Ionicons,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
 import CustomTabBarIcon from "../components/CustomTabBarIcon";
-import Color from "../constans/Color";
 
 export default function (Stack) {
   return <Stack.Screen name="MainTab" component={MainTabs} />;
@@ -27,17 +28,24 @@ export default function (Stack) {
 const BottomTab = createBottomTabNavigator();
 const MainTabs = () => {
   return (
+    // <KeyboardAvoidingView
+    //   style={{ flex: 1 }}
+    //   // behavior="height"
+    //   behavior="padding"
+    //   keyboardVerticalOffset={Dimensions.get("window").height - 50}
+    // >
     <BottomTab.Navigator
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
 
-        tabBarHideOnKeyboard: true,
+        // tabBarHideOnKeyboard: true,
         tabBarStyle: [
           {
             ...styles.tabBarStyle,
-            // ...styles.shadow,
-            display: "flex",
+            ...styles.shadow,
+            // display: "flex",
+            // height: 50,
           },
           null,
         ],
@@ -48,13 +56,6 @@ const MainTabs = () => {
         component={SearchStackNavigator}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            // <View className=" items-center justify-center " >
-            //     <AntDesign name="search1" size={size}  color={ focused ?'#AD40AF' : color } />
-            //     <Text style={{ color: focused ?'#AD40AF' : color,  fontSize: 12 }} >
-            //       SEARCH
-            //     </Text>
-            // </View>
-
             <CustomTabBarIcon
               nameIcon={"search1"}
               textLabel={"SEARCH"}
@@ -162,6 +163,7 @@ const MainTabs = () => {
         }}
       />
     </BottomTab.Navigator>
+    // {/* </KeyboardAvoidingView> */}
   );
 };
 
@@ -253,10 +255,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   tabBarStyle: {
-    position: "absolute",
+    // position: "absolute",
     // left: 0,
     // right: 0,
-    // bottom: 0,
+    bottom: 0,
+    position: "relative",
     borderTopColor: "#3333",
     borderTopWidth: 2,
     elevation: 0,

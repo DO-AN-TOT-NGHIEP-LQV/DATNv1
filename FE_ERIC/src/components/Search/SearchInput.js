@@ -4,17 +4,51 @@ import { spacing } from "../../constans/Theme";
 import colors from "../../constans/Color";
 import Icons, { icons } from "../Icons";
 import { Feather } from "@expo/vector-icons";
+import actions from "../../redux/actions";
+import { showError } from "../../ultils/helperFunction";
+import { useSelector } from "react-redux";
+import Color from "../../constans/Color";
+import { updateIsMainViewDisplay } from "../../redux/actions/search";
 
 const SearchInput = () => {
-  const [search, setSearch] = useState("");
+  const [searchText, setSearch] = useState("");
+  const categoryIndex = useSelector((state) => state.search.categoryIndex);
+  const isMainViewVisible = useSelector(
+    (state) => state.search.isMainViewVisible
+  );
 
-  const onSearch = () => {
-    console.log("asdasd");
+  const onSearch = async () => {
+    // actions.updateShowAllCategories(false);
+    // Co cac bien nhu la danh sach search, neu ma bam vo cai nut ni thi hien thi che do showALl tuc la search text.
+    // CO nghia phai check dieu ch cho sroll view luot toi cuoi trang. Neu luot toi cuoi trang ma la show all thi khoi can load,
+    // Con khong thi phai load moi. load moi co nghia la cap nhat cai cu va load ththem cai moi
+    // con sheach by img thi load laij moi het
+
+    if (true) {
+      // if (!checkStringEmpty(searchText)) {
+      try {
+        actions.saveListSearch(null);
+        const res = await actions.fetchDataForSearchText(
+          searchText,
+          0,
+          categoryIndex
+        );
+        actions.saveListSearch(res.data);
+        actions.updateShowAllCategories(false);
+        actions.updateIsMainViewDisplay(false);
+
+        actions.updatePage(0);
+        actions.updateSearchText(searchText);
+      } catch (error) {
+        console.log("Có lỗi xảy ra");
+        showError(error.error_message);
+      }
+    }
   };
 
   return (
     <View style={{ backgroundColor: "#F2F1FD" }}>
-      <View style={[styles.headerWrapper]}>
+      <View style={[styles.headerWrapperHeader]}>
         <TouchableOpacity>
           <View style={styles.headerLeft}>
             <Feather name="chevron-left" size={12} color={colors.black} />
@@ -24,7 +58,7 @@ const SearchInput = () => {
         <View style={styles.headerRight}>
           <View
             style={{
-              borderWidth: 2,
+              borderWidth: 1,
               borderColor: colors.blueMain,
               height: 40,
               borderRadius: 10,
@@ -34,13 +68,33 @@ const SearchInput = () => {
               <TextInput
                 style={styles.field}
                 placeholder="Search"
-                value={search}
+                value={searchText}
                 onChangeText={setSearch}
               />
 
+              <TouchableOpacity
+                style={styles.cameraButton}
+                onPress={() => {
+                  updateIsMainViewDisplay(!isMainViewVisible);
+                }}
+              >
+                <View>
+                  <Icons
+                    icon={icons.Ionicons}
+                    size={20}
+                    name="camera-outline"
+                    // {/* <Ionicons name="camera-outline" size={24} color="black" /> */}
+                  />
+                </View>
+              </TouchableOpacity>
+
               <TouchableOpacity style={styles.filter} onPress={onSearch}>
                 <View>
-                  <Icons icon={icons.AntDesign} name="search1" />
+                  <Icons
+                    icon={icons.AntDesign}
+                    name="search1"
+                    color={Color.white}
+                  />
                 </View>
               </TouchableOpacity>
             </View>
@@ -52,14 +106,6 @@ const SearchInput = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 5,
-    paddingTop: 5,
-    paddingBottom: 5,
-    backgroundColor: "#F2F1FD",
-    // flex: 1,
-    flexDirection: "row",
-  },
   headerLeft: {
     borderColor: colors.textLight,
     borderWidth: 2,
@@ -73,7 +119,7 @@ const styles = StyleSheet.create({
     // borderRadius: 16,
   },
 
-  headerWrapper: {
+  headerWrapperHeader: {
     flexDirection: "row",
 
     justifyContent: "space-between",
@@ -124,6 +170,19 @@ const styles = StyleSheet.create({
     // borderTopLeftRadius:16,
     // borderTopStartRadius: 16,
     borderTopRightRadius: 8,
+    // borderTopLeftRadius:16
+  },
+  cameraButton: {
+    // borderWidth: 2,
+    // borderColor: colors.blueMain,
+    width: 40,
+    // backgroundColor: colors.blueMain,
+    justifyContent: "center",
+    alignItems: "center",
+    // borderBottomEndRadius: 8,
+    // borderTopLeftRadius:16,
+    // borderTopStartRadius: 16,
+    // borderTopRightRadius: 8,
     // borderTopLeftRadius:16
   },
 });

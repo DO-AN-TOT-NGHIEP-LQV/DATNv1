@@ -74,6 +74,31 @@ public class BeEricApplication {
             postService.savePost(new Post(18L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
             postService.savePost(new Post(19L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
             postService.savePost(new Post(20L, "sdasd", "asdasd", userService.getUserByEmail("1@gmail.com")));
+
+
+
+            postService.savePost(new Post(21L, "Sadds", "adasd", userService.getUserByEmail("1@gmail.com")));
+            postService.savePost(new Post(22L, "sdasd", "3223423", userService.getUserByEmail("3@gmail.com")));
+            postService.savePost(new Post(23L, "ewr", "dsd", userService.getUserByEmail("1@gmail.com")));
+            postService.savePost(new Post(24L, "ẻ", "ưer", userService.getUserByEmail("3@gmail.com")));
+            postService.savePost(new Post(25L, "sdasd", "df", userService.getUserByEmail("3@gmail.com")));
+            postService.savePost(new Post(26L, "sdasd", "asdasd", userService.getUserByEmail("1@gmail.com")));
+            postService.savePost(new Post(27L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+            postService.savePost(new Post(28L, "ưe435", "sde", userService.getUserByEmail("2@gmail.com")));
+            postService.savePost(new Post(29L, "sdasd", "dsf", userService.getUserByEmail("3@gmail.com")));
+            postService.savePost(new Post(30L, "345fd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+            postService.savePost(new Post(31L, "sdasd", "asdasd", userService.getUserByEmail("2@gmail.com")));
+            postService.savePost(new Post(32L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+            postService.savePost(new Post(33L, "sdasd", "dưe", userService.getUserByEmail("3@gmail.com")));
+            postService.savePost(new Post(34L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+            postService.savePost(new Post(35L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+            postService.savePost(new Post(36L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+            postService.savePost(new Post(37L, "sdasd", "asdasd", userService.getUserByEmail("1@gmail.com")));
+            postService.savePost(new Post(38L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+            postService.savePost(new Post(39L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+            postService.savePost(new Post(40L, "sdasd", "asdasd", userService.getUserByEmail("1@gmail.com")));
+
+
 //            postService.savePost(new Post(25L, "sdasd", "asdasd", userService.getUserByEmail("1@gmail.com")));
 
             productService.save(new Product(21L,"pro1", "gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd", 5, 6, shopService.getById(1)));
@@ -145,6 +170,31 @@ public class BeEricApplication {
             postService.addImageToPost(postService.getPostById(18L), imageService.getImage(18L)  );
             postService.addImageToPost(postService.getPostById(19L), imageService.getImage(19L)  );
             postService.addImageToPost(postService.getPostById(20L), imageService.getImage(20L)  );
+
+
+
+
+            postService.addImageToPost(postService.getPostById(21L), imageService.getImage(1L)  );
+            postService.addImageToPost(postService.getPostById(22L), imageService.getImage(2L)  );
+            postService.addImageToPost(postService.getPostById(23L), imageService.getImage(3L)  );
+            postService.addImageToPost(postService.getPostById(24L), imageService.getImage(4L)  );
+            postService.addImageToPost(postService.getPostById(25L), imageService.getImage(5L)  );
+            postService.addImageToPost(postService.getPostById(26L), imageService.getImage(6L)  );
+            postService.addImageToPost(postService.getPostById(27L), imageService.getImage(7L)  );
+            postService.addImageToPost(postService.getPostById(28L), imageService.getImage(8L)  );
+            postService.addImageToPost(postService.getPostById(29L), imageService.getImage(9L)  );
+            postService.addImageToPost(postService.getPostById(30L), imageService.getImage(10L)  );
+            postService.addImageToPost(postService.getPostById(31L), imageService.getImage(11L)  );
+            postService.addImageToPost(postService.getPostById(32L), imageService.getImage(12L)  );
+            postService.addImageToPost(postService.getPostById(33L), imageService.getImage(13L)  );
+            postService.addImageToPost(postService.getPostById(34L), imageService.getImage(14L)  );
+            postService.addImageToPost(postService.getPostById(35L), imageService.getImage(15L)  );
+            postService.addImageToPost(postService.getPostById(36L), imageService.getImage(16L)  );
+            postService.addImageToPost(postService.getPostById(37L), imageService.getImage(17L)  );
+            postService.addImageToPost(postService.getPostById(38L), imageService.getImage(18L)  );
+            postService.addImageToPost(postService.getPostById(39L), imageService.getImage(19L)  );
+            postService.addImageToPost(postService.getPostById(40L), imageService.getImage(20L)  );
+
 
             productService.addImageToProduct( productService.getById(1L), imageService.getImage(21L) );
             productService.addImageToProduct( productService.getById(2L), imageService.getImage(22L) );

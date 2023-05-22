@@ -16,6 +16,14 @@ const checkMinLength = (val, minLength, key) => {
   }
 };
 
+export function checkStringEmpty(val) {
+  //true la rong, false la khong rong
+  if (val !== undefined) {
+    return validator.empty(val.trim());
+  }
+  return false;
+}
+
 export function validatorLogin(data) {
   const { username, email, password } = data;
 

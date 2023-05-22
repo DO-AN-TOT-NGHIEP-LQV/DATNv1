@@ -8,15 +8,15 @@ import {
 } from "react-native";
 import MasonryList from "@react-native-seoul/masonry-list";
 import React from "react";
-import Icons, { icons } from "../Icons";
 import Color from "../../constans/Color";
-const windowWidth = Dimensions.get("window").width;
+import { v4 as uuidv4 } from "uuid";
 
+const windowWidth = Dimensions.get("window").width;
 const MasonryListPosts = ({ data }) => {
   return (
     <MasonryList
       data={data}
-      keyExtractor={(item) => item.id + item.images[0].id}
+      keyExtractor={(item) => uuidv4()}
       numColumns={2}
       // spacing={2}
       imageContainerStyle={{ borderRadius: 8 }}

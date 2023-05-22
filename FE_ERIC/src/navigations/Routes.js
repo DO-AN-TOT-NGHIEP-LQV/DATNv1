@@ -15,11 +15,6 @@ const Routes = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* <Stack.Screen
-          name="HomeTab"
-          component={CreatePostScreen}
-        ></Stack.Screen> */}
-        {/* {MainStack(Stack)} */}
         {!!userData && userData?.access_token
           ? MainStack(Stack)
           : AuthStack(Stack)}
