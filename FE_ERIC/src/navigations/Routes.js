@@ -6,7 +6,6 @@ import MainStack from "./MainStack";
 import AuthStack from "./AuthStack";
 import { useSelector } from "react-redux";
 import FlashMessage from "react-native-flash-message";
-import { CreatePostScreen } from "../screens";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,11 +15,6 @@ const Routes = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* <Stack.Screen
-          name="HomeTab"
-          component={CreatePostScreen}
-        ></Stack.Screen> */}
-
         {!!userData && userData?.access_token
           ? MainStack(Stack)
           : AuthStack(Stack)}

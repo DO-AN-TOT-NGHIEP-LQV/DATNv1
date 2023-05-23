@@ -4,31 +4,17 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
+  TouchableOpacity,
+  Image,
 } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { Avatar, Hotels, Restaurants, Attractions } from "../public/assets";
-import { Image } from "react-native";
-import MasanoryContainer from "../components/MasanoryContainer";
-// import RNFS from 'react-native-fs';
-// import ImagePicker from 'react-native-image-picker';
+// import MasanoryContainer from "../components/MasanoryContainer";
+import MasonryList from "@react-native-seoul/masonry-list";
+import { useNavigation } from "@react-navigation/native";
 
 const Discover = () => {
-  const navigation = useNavigation();
-
-  // useLayoutEffect(() => {
-  //   // getImageList()
-  //   navigation.setOptions({
-  //     headerShown : false,
-  //   });
-  // } , [])
-
-  const [type, setType] = useState("restaurants");
-  const [categories, setCategories] = useState(null);
   const data = [
-    // { id: 1, name : 'Shoes', imageUrl : 'https://cdn.pixabay.com/photo/2016/09/02/11/10/boots-1638873__340.jpg'},
-    // { id: 2, name : 'Shoes', imageUrl : 'https://cdn.pixabay.com/photo/2016/03/27/22/16/fashion-1284496__340.jpg'},
-
     {
       id: 1,
       name: "Shoes",
@@ -91,26 +77,41 @@ const Discover = () => {
     },
   ];
 
-  // async function getImageList() {
-  //   // const dirPath = RNFS.DocumentDirectoryPath + '/myImageFolder';
-  //   const dirPath = 'E:/Do_an_nhap/testimg';
-  //   const items = await RNFS.readDir(dirPath);
-  //   const imageList = [];
+  const MasanoryContainer = ({ data }) => {
+    return (
+      <MasonryList
+        data={data}
+        keyExtractor={(item) => item.id}
+        numColumns={2}
+        // spacing={4}
+        imageContainerStyle={{ borderRadius: 8 }}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item, i }) => <CardItem data={item} i={i} />}
+      />
+    );
+  };
 
-  //   for (let i = 0; i < items.length; i++) {
-  //     if (items[i].isFile()) {
-  //       const imageMetadata = await ImagePicker.getImageInfo(items[i].path);
-  //       imageList.push({
-  //         imageUrl: `file://${imageMetadata.path}`,
-  //         name: items[i].name,
-  //         width: imageMetadata.width,
-  //         height: imageMetadata.height,
-  //       });
-  //     }
-  //   }
-  //   setdataI(imageList)
-  //   // return imageList;
-  // }
+  const CardItem = ({ data, i }) => {
+    const nagivation = useNavigation();
+
+    const handleClick = () => {
+      nagivation.navigate("DetailPost", { param: data.id });
+    };
+
+    return (
+      <TouchableOpacity
+        style={{ height: Math.round(200) }}
+        // style={{height: Math.round(Math.random() * 100 + 160)}}
+        className="bg-[#111] m-1 rounded-md relative overflow-hidden"
+        onPress={handleClick}
+      >
+        <Image
+          source={{ uri: data.imageUrl }}
+          className="w-full h-full object-cover"
+        />
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <SafeAreaView className=" flex-1 bg-white   relative ">

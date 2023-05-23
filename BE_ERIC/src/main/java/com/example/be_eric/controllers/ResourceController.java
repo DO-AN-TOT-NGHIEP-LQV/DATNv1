@@ -1,5 +1,6 @@
 package com.example.be_eric.controllers;
 
+import com.example.be_eric.models.Image;
 import com.example.be_eric.models.Post;
 import com.example.be_eric.models.User;
 import com.example.be_eric.service.FirebaseFileService;
@@ -8,8 +9,10 @@ import com.example.be_eric.service.UserService;
 import com.example.be_eric.ultils.Exception.UploadImageException;
 import com.example.be_eric.ultils.Messenger.ErrorResponse;
 import com.example.be_eric.ultils.Messenger.UploadImageResponse;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.web.JsonPath;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ResourceController {
@@ -37,18 +42,27 @@ public class ResourceController {
     @PostMapping(value = "/api/post/create", name = "POST",
             consumes = {MediaType.APPLICATION_JSON_VALUE,
                         MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity create( @RequestPart("post") String post, @RequestPart("fileImage") MultipartFile fileImage)
+    public ResponseEntity create(@RequestPart("post") String post , @RequestPart("fileImage") MultipartFile fileImage)
     {
         Post newPost = new Post();
         try {
+
+            System.out.println("tai 1");
             ObjectMapper objectMapper = new ObjectMapper();
-            newPost = objectMapper.readValue(post, Post.class);
+            Map<String, Object> postMap = objectMapper.readValue(post, new TypeReference<Map<String, Object>>() {});
+
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            newPost = objectMapper.readValue(post, Post.class);
+            newPost.setContent(  (String) postMap.get("content") );
+            newPost.setTitle(  (String) postMap.get("title") );
+            System.out.println("tai 2");
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             User u = userService.getUserByEmail( authentication.getName());
-            newPost.setUser( u );
-            System.out.println(newPost.getUser().getEmail());
 
+            newPost.setUser( u );
+
+            System.out.println(newPost.getUser().getEmail());
             String fileName = firebaseFileService.uploadImage_saveVector(fileImage, newPost  );
             return ResponseEntity.ok().build();
 
@@ -87,6 +101,34 @@ public class ResourceController {
         }
         catch (Exception e) {
             // Neu ma co loi thi phai xoa het dong trantraction nay
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    // De xoa 1 post can
+    // Tao 1 transtract tion
+    // Xoa san pham
+    // Xoa nhung id
+    // Xoa nhung id hinh anh da train trong firebase
+    // Xoa nhung id hinh anh
+    @PostMapping(value = "/api/post/delete")
+    public ResponseEntity delete(@RequestParam("IdDelete") Long IdDelete)
+    {
+        Post post = postService.getPostById(IdDelete);
+
+        try {
+
+            if (post == null){
+                throw  new Exception( "Id sản phẩm không còn tồn tại");
+            }
+
+            firebaseFileService.deletePost_removeVector(post);
+            return ResponseEntity.ok().build();
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.badRequest()
                     .body(new ErrorResponse(e.getMessage()));
         }

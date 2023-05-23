@@ -3,7 +3,12 @@ package com.example.be_eric.service;
 import com.example.be_eric.models.Image;
 import com.example.be_eric.models.Post;
 import com.example.be_eric.ultils.Exception.UploadImageException;
+import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.WriteBatch;
+import com.google.cloud.firestore.WriteResult;
 import com.google.cloud.storage.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,8 +40,12 @@ public class FirebaseFileService {
     @Autowired
     private  ImageService imageService;
 
+    @Autowired
+    private Firestore firestore;
+
     @EventListener
     public void init(ApplicationReadyEvent event) {
+        System.out.println("33333333333333");
         try {
             FileInputStream serviceAccounts =
                 new FileInputStream("src/main/resources/serviceFirebaseKey.json");
@@ -49,14 +59,18 @@ public class FirebaseFileService {
         }
     }
 
-   @Transactional(rollbackOn = UploadImageException.class)
+    @Transactional(rollbackOn = UploadImageException.class)
     public String uploadImage_saveVector(MultipartFile fileImage, Post post) throws  UploadImageException {
 
         try {
+
+            postService.savePost(post);
+
             String imageName = "u_" + post.getUser().getId() + "_p_" + post.getId() + "_name_" + generateFileName(fileImage.getOriginalFilename());
             String folderName = "ImageTest";
             String filePath = folderName + "/" + imageName;
             System.out.println(imageName);
+            System.out.println("555555555555");
 
             BlobId blobId = BlobId.of("datnv1-34493.appspot.com", filePath);
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
@@ -66,8 +80,7 @@ public class FirebaseFileService {
 
             String fileUrl = "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/" + URLEncoder.encode(filePath, "UTF-8") + "?alt=media";
 
-            postService.savePost(post);
-            Image image = imageService.saveImage(new Image(null, imageName, fileUrl));
+            Image image = imageService.saveImage(new Image(null, imageName, fileUrl, false));
             postService.addImageToPost(post, image);
 
             RestTemplate restTemplate = new RestTemplate();
@@ -83,6 +96,7 @@ public class FirebaseFileService {
             };
             body.add("fileImage", resource);
             body.add("post_id", post.getId());
+            System.out.println("66666666666666666");
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
             String url = "http://127.0.0.1:5000/ai/api/post/addNewImg";
@@ -100,6 +114,44 @@ public class FirebaseFileService {
             System.out.println(e);
             throw new UploadImageException();
         }
+    }
+
+    @Transactional
+    public  boolean deletePost_removeVector(Post post) throws Exception {
+
+        try {
+            WriteBatch batch = firestore.batch();
+            for ( int i = 0 ; i < 10 ; i++){
+
+                DocumentReference docRef = firestore.collection("Image_Feature_Vector").document("post_" +  post.getId() + "_" + i);
+                batch.delete(docRef);
+                System.out.println("Xoa anh thanh cong anh " + i);
+            }
+
+            List<Image> images = post.getImages();
+            String folderName = "ImageTest";
+
+            for (Image image : images) {
+                String filePath = folderName + "/" + image.getNo();
+                BlobId blobId = BlobId.of("datnv1-34493.appspot.com", filePath);
+                boolean deleted = storage.delete(blobId);
+                if (deleted) {
+                    System.out.println("File đã được xóa thành công");
+                    imageService.deleteImage(image);
+                } else {
+                    System.out.println("Không thể xóa file");
+                    throw new  Exception("Lối trong quá trình xóa ảnh");
+                }
+            };
+
+            postService.deleteAPost(post);
+            ApiFuture<List<WriteResult>> future = batch.commit();
+            future.get();
+            return  true;
+        }catch (Exception e){
+            throw e;
+        }
+
     }
 
     private String generateFileName(String originalFileName) {

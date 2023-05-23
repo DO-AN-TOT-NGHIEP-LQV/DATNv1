@@ -13,51 +13,54 @@ import Icons, { icons } from "../components/Icons";
 import { useRef } from "react";
 import { useState } from "react";
 import { data } from "../constans/raw";
+import CustomGradient from "../components/CustomGradient";
 
 const RenderItem = ({ item, navigation }) => {
   return (
-    <Surface style={styles.item}>
-      <View style={styles.content}>
-        {/* <SharedElement id={`item.${item.avatar}.avatar`}>
+    <CustomGradient>
+      <Surface style={styles.item}>
+        <View style={styles.content}>
+          {/* <SharedElement id={`item.${item.avatar}.avatar`}>
           <Image style={styles.avatar} source={{ uri: item.avatar }} resizeMode="cover" />
         </SharedElement> */}
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.caption}>{item.caption}</Text>
+          <View style={styles.textContainer}>
+            <Text style={styles.title}>{item.title}</Text>
+            <Text style={styles.caption}>{item.caption}</Text>
+          </View>
+          <View style={{ position: "absolute", top: 16, right: 0 }}>
+            <Icons icon={icons.Entypo} name="dots-three-vertical" size={18} />
+          </View>
         </View>
-        <View style={{ position: "absolute", top: 16, right: 0 }}>
-          <Icons icon={icons.Entypo} name="dots-three-vertical" size={18} />
-        </View>
-      </View>
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => navigation.navigate("Detail", { item })}
-      >
-        {/* <SharedElement id={`item.${item.image}.image`}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate("Detail", { item })}
+        >
+          {/* <SharedElement id={`item.${item.image}.image`}>
           <Pinchable>
             <Image style={styles.image} source={{ uri: item.image }} resizeMode="cover" />
           </Pinchable>
         </SharedElement> */}
-        {/* <Pinchable> */}
-        <Image
-          style={styles.image}
-          source={{ uri: item.image }}
-          resizeMode="cover"
-        />
-        {/* </Pinchable> */}
-      </TouchableOpacity>
-      <View style={styles.bottomView}>
-        <View style={styles.icon}>
-          <Icons icon={icons.AntDesign} name="heart" color={Colors.heard} />
+          {/* <Pinchable> */}
+          <Image
+            style={styles.image}
+            source={{ uri: item.image }}
+            resizeMode="cover"
+          />
+          {/* </Pinchable> */}
+        </TouchableOpacity>
+        <View style={styles.bottomView}>
+          <View style={styles.icon}>
+            <Icons icon={icons.AntDesign} name="heart" color={Colors.heard} />
+          </View>
+          <View style={styles.icon}>
+            <Icons icon={icons.Ionicons} name="chatbubble-outline" />
+          </View>
+          <View style={styles.icon}>
+            <Icons icon={icons.Feather} name="send" />
+          </View>
         </View>
-        <View style={styles.icon}>
-          <Icons icon={icons.Ionicons} name="chatbubble-outline" />
-        </View>
-        <View style={styles.icon}>
-          <Icons icon={icons.Feather} name="send" />
-        </View>
-      </View>
-    </Surface>
+      </Surface>
+    </CustomGradient>
   );
 };
 

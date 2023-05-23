@@ -2,12 +2,13 @@ import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { Button } from "react-native-paper";
 import { StyleSheet } from "react-native";
+import Color from "../../constans/Color";
 
 const CustomButton = ({ label, onPress, className, isLoading }) => {
   return (
     <Button
       onPress={onPress}
-      className={className ? className : "bg-[#AD40AF]  my-[5px]"}
+      style={className ? className : styles.defaultClassname}
       loading={isLoading}
       loadingProps={{ color: "black" }}
     >
@@ -21,6 +22,11 @@ const CustomButton = ({ label, onPress, className, isLoading }) => {
 };
 
 const styles = StyleSheet.create({
+  defaultClassname: {
+    marginBottom: 5,
+    marginTop: 5,
+    backgroundColor: Color.mainColor,
+  },
   btnStyle: {
     height: 48,
     backgroundColor: "blue",

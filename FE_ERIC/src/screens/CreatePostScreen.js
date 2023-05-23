@@ -12,22 +12,25 @@ import {
   TouchableOpacity,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { createNew, data } from "../constans/raw";
+import { createNew } from "../constans/raw";
 
 import colors from "../constans/Color";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Color from "../constans/Color";
 // import { Avatar, Hotels, Restaurants, Attractions } from '../public/assets';
 import CustomButton from "../components/CustomButton/index.js";
-import { Button } from "react-native-paper";
+import { ActivityIndicator, Button } from "react-native-paper";
 import InputFieldCustom from "../components/InputFieldCustom";
-import { showError } from "../ultils/helperFunction";
+import { showError, showSuccess } from "../ultils/helperFunction";
 import { validatorCreatePost } from "../ultils/validations";
 import { apiGet, apiPost } from "../ultils/utilsApi";
 import { CREATE_POST } from "../config/urls";
+import CustomGradient from "../components/CustomGradient";
+import { ImageBackground } from "react-native";
+import * as Progress from "react-native-progress";
 
-const width = Dimensions.get("window").width / 2 - 30;
+// const width = Dimensions.get("window").width / 2 - 30;
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -162,6 +165,8 @@ const CreatePostScreen = () => {
       apiPost(CREATE_POST, formData, headers, true)
         .then((res) => {
           console.log(res.data);
+          setLoading(false);
+          showSuccess("Đã tải anh thành công");
         })
         .catch((error) => {
           showError(error.error_message);
@@ -194,111 +199,151 @@ const CreatePostScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* {Header} */}
-      {/* <View style={{ justifyContent: 'space-between' ,alignItems: 'center', width:'100%', height:60, paddingHorizontal:15,  backgroundColor: Color.white }}> */}
-      <View style={styles.headerWrapper}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <View style={styles.headerLeft}>
-            <Feather name="chevron-left" size={12} color={colors.black} />
-          </View>
-        </TouchableOpacity>
-
-        {/* <View style={{width:40, height:40, borderRadius:40/2 }}>
-                <Image source={Avatar}
-                       style={{   width: '100%', height:' 100%', borderRadius:50, backgroundColor: Color.darkGray  }}
-                />
-            </View> */}
-
-        {/* <View style={{ paddingLeft:10}}>
-                  <Text style= {{fontSize:17 , fontWeight:'bold'}}>Name user</Text>
-            </View> */}
-
-        <View
-          style={styles.headerRight}
-          // className=" w-12 h-12 bg-gray-400 rounded-md  "
-        >
-          <CustomButton
-            // isLoading={isLoading}
-            loading={loading}
-            label="Create New"
-            onPress={() => createNewPost()}
-          />
-        </View>
-      </View>
-
-      <ScrollView>
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            marginVertical: 5,
-          }}
-        >
-          {!pickedImagePath ? (
-            <TouchableOpacity
+    <CustomGradient>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: "#F2F1FD",
+        }}
+      >
+        {loading && (
+          <>
+            <Progress.Bar
+              progress={0.9}
+              indeterminate={true}
+              width={windowWidth}
+              borderColor={Color.blueMain}
+              color={Color.blueMain}
+              height={4}
+              style={{ position: "absolute" }}
+              borderRadius={0}
+              borderWidth={0}
+            />
+            <View
               style={{
-                ...styles.shadowTouch,
+                position: "absolute",
+                top: 4,
+                left: 0,
+                right: 0,
+                bottom: 0,
                 justifyContent: "center",
                 alignItems: "center",
-                width: (windowWidth * 4) / 5,
-                height: (windowHeight * 1) / 5,
-                borderRadius: 15,
-                borderColor: Color.darkGray,
-                backgroundColor: Color.white,
-                borderWidth: 1,
+                zIndex: 1,
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
               }}
             >
-              <Text>Add Image</Text>
-            </TouchableOpacity>
-          ) : (
-            <Image
-              source={{ uri: pickedImagePath }}
+              <ActivityIndicator size="large" color="white" />
+            </View>
+            {/* <View
               style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
                 justifyContent: "center",
                 alignItems: "center",
-                width: (windowWidth * 4) / 5,
-                height: (windowHeight * 1) / 5,
-                borderRadius: 15,
-                borderColor: Color.black,
-                backgroundColor: Color.white,
-                borderWidth: 1,
+                backgroundColor: "rgba(0, 0, 0, 0.5)",
               }}
+            >
+              <ActivityIndicator size="large" color="#0000ff" />
+            </View> */}
+          </>
+        )}
+
+        {/* {Header} */}
+        <View style={[styles.headerWrapper, styles.shadowTouch]}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <View style={styles.headerLeft}>
+              <Feather name="chevron-left" size={12} color={colors.black} />
+            </View>
+          </TouchableOpacity>
+
+          <View
+            style={styles.headerRight}
+            // className=" w-12 h-12 bg-gray-400 rounded-md  "
+          >
+            <CustomButton
+              // isLoading={isLoading}
+              loading={loading}
+              label="Create New"
+              onPress={() => createNewPost()}
             />
-          )}
+          </View>
         </View>
 
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <Button
-            icon="camera"
-            mode="contained"
-            onPress={() => openCamera()}
-            style={{ marginRight: 20 }}
+        <ScrollView>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              marginVertical: 5,
+            }}
           >
-            Camera
-          </Button>
-          <Button
-            icon="image-multiple"
-            mode="outlined"
-            onPress={() => showImagePicker()}
-            style={{ backgroundColor: "white" }}
-          >
-            Gallery
-          </Button>
-        </View>
+            {!pickedImagePath ? (
+              <TouchableOpacity
+                style={{
+                  ...styles.shadowTouch,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: (windowWidth * 4) / 5,
+                  height: (windowHeight * 1) / 5,
+                  borderRadius: 15,
+                  borderColor: Color.darkGray,
+                  backgroundColor: Color.white,
+                  borderWidth: 1,
+                }}
+              >
+                <Text>Add Image</Text>
+              </TouchableOpacity>
+            ) : (
+              <Image
+                source={{ uri: pickedImagePath }}
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: (windowWidth * 4) / 5,
+                  height: (windowHeight * 1) / 5,
+                  borderRadius: 15,
+                  borderColor: Color.black,
+                  backgroundColor: Color.white,
+                  borderWidth: 1,
+                }}
+              />
+            )}
+          </View>
 
-        <TextInput
-          style={styles.textInput}
-          placeholder="Content"
-          multiline={true}
-          numberOfLines={4}
-          autoCorrect={true}
-          onChangeText={(content) => updatePost({ content })}
-          // onSubmitEditing={}
-          // placeholderTextColor="#657786"
-        />
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <Button
+              icon="camera"
+              mode="contained"
+              onPress={() => openCamera()}
+              style={{ marginRight: 20 }}
+            >
+              Camera
+            </Button>
+            <Button
+              icon="image-multiple"
+              mode="outlined"
+              onPress={() => showImagePicker()}
+              style={{ backgroundColor: "white" }}
+            >
+              Gallery
+            </Button>
+          </View>
 
-        {/* <SafeAreaView>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Content"
+            multiline={true}
+            numberOfLines={4}
+            autoCorrect={true}
+            onChangeText={(content) => updatePost({ content })}
+            // onSubmitEditing={}
+            // placeholderTextColor="#657786"
+          />
+
+          {/* <SafeAreaView>
                   <View style={styles.headerWrapper}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                       <View style={styles.headerLeft}>
@@ -321,71 +366,60 @@ const CreatePostScreen = () => {
                   </View>
             </SafeAreaView> */}
 
-        {/* Titles */}
-        {/* <View style={styles.titlesWrapper}>
-              <Text style={styles.title}>{item.title}</Text>
-            </View> */}
+          {/* Detail info */}
+          <View style={styles.infoWrapper}>
+            {/* <View style={styles.infoLeftWrapper}> */}
+            <View style={styles.infoItemWrapper}>
+              <Text style={styles.infoItemTitle}>Size</Text>
+              <InputFieldCustom
+                label="Size"
+                styleView={{
+                  paddingBottom: 0,
+                  marginBottom: 10,
+                }}
+                // placeholder="enter your username"
+                // value={username}
+                // onChangeText={(username) => updateState({ username })}
+              />
+            </View>
 
-        {/* Price */}
-        {/* <View style={styles.priceWrapper}>
+            <View style={styles.infoItemWrapper}>
+              <Text style={styles.infoItemTitle}>Type</Text>
+              <InputFieldCustom
+                label="Type"
+                styleView={{
+                  paddingBottom: 0,
+                  marginBottom: 10,
+                }}
+              />
+            </View>
 
-              <Text style={styles.priceText}>${item.price}</Text>
-            </View> */}
+            <View style={styles.infoItemWrapper}>
+              <Text style={styles.infoItemTitle}>Count</Text>
+              <InputFieldCustom
+                label="Size"
+                styleView={{
+                  paddingBottom: 0,
+                  marginBottom: 10,
+                }}
+                // placeholder="enter your username"
+                // value={username}
+                // onChangeText={(username) => updateState({ username })}
+              />
+            </View>
 
-        {/* Detail info */}
-        <View style={styles.infoWrapper}>
-          {/* <View style={styles.infoLeftWrapper}> */}
-          <View style={styles.infoItemWrapper}>
-            <Text style={styles.infoItemTitle}>Size</Text>
-            <InputFieldCustom
-              label="Size"
-              styleView={{
-                paddingBottom: 0,
-                marginBottom: 10,
-              }}
-              // placeholder="enter your username"
-              // value={username}
-              // onChangeText={(username) => updateState({ username })}
-            />
-          </View>
+            <View style={styles.infoItemWrapper}>
+              <Text style={styles.infoItemTitle}>Type</Text>
+              <InputFieldCustom
+                label="Type"
+                styleView={{
+                  paddingBottom: 0,
+                  marginBottom: 10,
+                }}
+              />
+            </View>
 
-          <View style={styles.infoItemWrapper}>
-            <Text style={styles.infoItemTitle}>Type</Text>
-            <InputFieldCustom
-              label="Type"
-              styleView={{
-                paddingBottom: 0,
-                marginBottom: 10,
-              }}
-            />
-          </View>
-
-          <View style={styles.infoItemWrapper}>
-            <Text style={styles.infoItemTitle}>Count</Text>
-            <InputFieldCustom
-              label="Size"
-              styleView={{
-                paddingBottom: 0,
-                marginBottom: 10,
-              }}
-              // placeholder="enter your username"
-              // value={username}
-              // onChangeText={(username) => updateState({ username })}
-            />
-          </View>
-
-          <View style={styles.infoItemWrapper}>
-            <Text style={styles.infoItemTitle}>Type</Text>
-            <InputFieldCustom
-              label="Type"
-              styleView={{
-                paddingBottom: 0,
-                marginBottom: 10,
-              }}
-            />
-          </View>
-
-          {/* <View style={styles.infoItemWrapper}>
+            {/* <View style={styles.infoItemWrapper}>
                   <Text style={styles.infoItemTitle}>Type</Text>
                   <Text style={styles.infoItemText}>{item.crust}</Text>
                 </View>
@@ -393,28 +427,28 @@ const CreatePostScreen = () => {
                   <Text style={styles.infoItemTitle}>Const</Text>
                   <Text style={styles.infoItemText}>{item.deliveryTime} min</Text>
                 </View> */}
-        </View>
-        {/* </View> */}
-
-        {/* Ingredients 111111 */}
-        <View style={styles.ingredientsWrapper}>
-          <Text style={styles.ingredientsTitle}>Ingredients</Text>
-          <View style={styles.ingredientsListWrapper}>
-            <FlatList
-              data={imageUris}
-              renderItem={renderIngredientsItem}
-              keyExtractor={(item, index) => `myKey-${index}`}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              ListFooterComponent={
-                imageUris.length < 5 ? renderAddButton : null
-              }
-            />
           </View>
-        </View>
+          {/* </View> */}
 
-        {/* Ingredients 2 */}
-        {/* <View style={styles.ingredientsWrapper}>
+          {/* Ingredients 111111 */}
+          <View style={styles.ingredientsWrapper}>
+            <Text style={styles.ingredientsTitle}>Ingredients</Text>
+            <View style={styles.ingredientsListWrapper}>
+              <FlatList
+                data={imageUris}
+                renderItem={renderIngredientsItem}
+                keyExtractor={(item, index) => `myKey-${index}`}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                ListFooterComponent={
+                  imageUris.length < 5 ? renderAddButton : null
+                }
+              />
+            </View>
+          </View>
+
+          {/* Ingredients 2 */}
+          {/* <View style={styles.ingredientsWrapper}>
               <Text style={styles.ingredientsTitle}>Ingredients</Text>
               <View style={styles.ingredientsListWrapper}>
                 <FlatList
@@ -427,15 +461,16 @@ const CreatePostScreen = () => {
               </View>
             </View> */}
 
-        {/* Place an order */}
-        {/* <TouchableOpacity onPress={() => alert('Your order has been placed!')}>
+          {/* Place an order */}
+          {/* <TouchableOpacity onPress={() => alert('Your order has been placed!')}>
                 <View style={styles.orderWrapper}>
                   <Text style={styles.orderText}>Place an order</Text>
                   <Feather name="chevron-right" size={18} color={colors.black} />
                 </View>
             </TouchableOpacity> */}
-      </ScrollView>
-    </SafeAreaView>
+        </ScrollView>
+      </SafeAreaView>
+    </CustomGradient>
   );
 };
 export default CreatePostScreen;
@@ -465,17 +500,17 @@ const renderIngredientsItem = ({ item }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.backGround,
   },
   headerWrapper: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 10,
-    // paddingTop: 10,
-    // paddingBottom: 10,
+    borderRadius: 16,
     backgroundColor: "#ffffff", // colors.white,
-    height: 60,
+    height: 55,
+    marginHorizontal: 5,
+    marginTop: 5,
   },
   headerLeft: {
     borderColor: colors.textLight,
@@ -484,11 +519,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   headerRight: {
-    // backgroundColor: colors.primary,
-    // padding: 12,
     borderRadius: 10,
-    // borderColor: colors.primary,
-    // borderWidth: 2,
   },
   titleScreen: {
     textAlign: "center",
@@ -516,17 +547,13 @@ const styles = StyleSheet.create({
   infoWrapper: {
     marginTop: 0,
     flexDirection: "row",
-    // justifyContent: 'space-between',
-    // alignItems: 'center',
     flexWrap: "wrap",
   },
   infoLeftWrapper: {
     paddingLeft: 20,
   },
   infoItemWrapper: {
-    // marginBottom: 5,
     width: "50%",
-    // marginHorizontal:20,
     paddingHorizontal: "5%",
   },
   infoItemTitle: {
@@ -591,14 +618,14 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   shadowTouch: {
-    borderRadius: 15,
+    borderRadius: 16,
     shadowColor: colors.black,
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
+    shadowOpacity: 0.5,
+    shadowRadius: 16,
     elevation: 2,
   },
   textInput: {

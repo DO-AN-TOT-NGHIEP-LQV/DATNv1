@@ -1,5 +1,5 @@
 export default {
-  mainColor: "#AD40AF",
+  mainColor: "#7179f7", // #AD40AF
   backGround: "#FEE2E2",
   heard: "#f54",
   heardDark: "#f54",
@@ -18,6 +18,7 @@ export default {
   primary: "#F5CA48",
   blueMain: "#7179f7",
   blueSd: "#819ff2",
+  blueTheme: "#bfd9f0",
   greenTheme: "#EDFFEF",
   pinkTheme: "#ffeded",
 };

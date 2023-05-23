@@ -26,8 +26,6 @@ class_names = ['Boots - Ankle',
 # import matplotlib.pyplot as plt
 
 
-
-
 app = Flask(__name__)  
     
     

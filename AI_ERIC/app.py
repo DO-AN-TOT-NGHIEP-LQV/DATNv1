@@ -80,7 +80,10 @@ def extract_feature():
     for doc in docs:
         data = doc.to_dict()
         vector = np.array(data['feature_vector'])
-        doc_id = doc.id.split('_')[0]
+        doc_id = doc.id
+        # doc_id = doc_id.split('_')[0]
+        
+        doc_id = doc_id[:doc_id.rindex("_")]
         distance = np.linalg.norm(vector - search_vector)
         results.append((doc_id, distance))
     
@@ -154,7 +157,7 @@ def saveImageToFirestore():
         for batch in dataGenerator.flow(x, batch_size=1, shuffle=False):
             
             features = model.predict(batch)[0].flatten()    
-            doc_ref = db.collection("Image_Feature_Vector").document(post_id +"_"+ str(i))
+            doc_ref = db.collection("Image_Feature_Vector").document(  "post_" + post_id +"_"+ str(i))
             doc_ref.set({
                     "feature_vector": features.tolist()
                 })
