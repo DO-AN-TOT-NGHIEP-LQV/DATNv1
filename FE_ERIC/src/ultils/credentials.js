@@ -1,9 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import store from "../redux/store";
-
-const { dispatch, getState } = store;
-
 export async function getUserData() {
   return new Promise((resolve, reject) => {
     AsyncStorage.getItem("userData").then((data) => {

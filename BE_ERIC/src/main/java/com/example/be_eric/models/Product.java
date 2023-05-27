@@ -27,6 +27,8 @@ public class Product {
     private Long id;
 
     private String name;
+    @Column(columnDefinition = "TEXT")
+
     private String description;
 
     private int quantity;
@@ -34,7 +36,7 @@ public class Product {
     private double  price = 0;
     private String status;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "product_images",
             joinColumns = @JoinColumn(name = "product_id"),

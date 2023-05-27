@@ -37,7 +37,7 @@ const DetailScreem = ({ route }) => {
           <SafeAreaView className="absolute z-10 inset-0 flex items-center justify-start">
             <TouchableOpacity
               className="w-full flex px-4"
-              onPress={() => navigation.navigate("Discover")}
+              onPress={navigation.navigate("Discover")}
             >
               <AntDesign name="caretleft" size={24} color="white" />
             </TouchableOpacity>

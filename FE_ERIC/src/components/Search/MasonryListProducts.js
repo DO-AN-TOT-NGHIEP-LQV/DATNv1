@@ -4,6 +4,7 @@ import MasonryList from "@react-native-seoul/masonry-list";
 import Color from "../../constans/Color";
 import Icons, { icons } from "../Icons";
 import { v4 as uuidv4 } from "uuid";
+import { useNavigation } from "@react-navigation/core";
 
 const MasonryListProducts = ({ data }) => {
   return (
@@ -20,22 +21,36 @@ const MasonryListProducts = ({ data }) => {
 };
 
 const CardItem = ({ data, i }) => {
+  const navigation = useNavigation();
+  //
   return (
     <View
       className="bg-[#111] rounded-md"
       style={style.cardItemView}
-      // onPress={() => navigation.navigate('Details', shoe)}
+      onPress={() =>
+        navigation.navigate("SearchTab", {
+          screen: "DetailProduct",
+          params: { dataProduct: data },
+        })
+      }
     >
       <View style={style.card}>
         <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("SearchTab", {
+              screen: "DetailProduct",
+              params: { dataProduct: data },
+            })
+          }
           style={{
-            // borderWidth: 1,
-            // paddingHorizontal: 2,
             borderRadius: 3,
-            // position: "relative",
             width: "100%",
-            height: 110,
-            paddingVertical: 5,
+            height: 100,
+            // paddingVertical: 5,
+            paddingTop: 5,
+            paddingBottom: 0,
+            // borderColor: Color.black,
+            // borderWidth: 1,
           }}
         >
           <Image
@@ -58,7 +73,7 @@ const CardItem = ({ data, i }) => {
             className="w-full h-full object-cover"
             resizeMode="contain"
             style={{
-              // borderWidth: 1,
+              borderWidth: 1,
               borderRadius: 3,
               borderColor: Color.textLight,
             }}
@@ -66,12 +81,23 @@ const CardItem = ({ data, i }) => {
         </TouchableOpacity>
 
         {/* Content || Name */}
-        <View style={{ height: 30 }}>
+        <View style={{ height: 45 }}>
+          <Text
+            numberOfLines={1}
+            style={{
+              fontWeight: "normal",
+              fontSize: 14,
+              marginLeft: 0,
+              lineHeight: 15,
+            }}
+          >
+            {`${data.name}`}
+          </Text>
           <Text
             numberOfLines={2}
             style={{
               fontWeight: "normal",
-              fontSize: 14,
+              fontSize: 12,
               marginLeft: 0,
               lineHeight: 15,
             }}
@@ -84,7 +110,6 @@ const CardItem = ({ data, i }) => {
         <View
           style={{
             flexDirection: "row",
-            // flex: 1,
           }}
         >
           <Text numberOfLines={1}>
@@ -122,7 +147,7 @@ const CardItem = ({ data, i }) => {
             <Text
               numberOfLines={1}
               style={{
-                fontSize: 9,
+                fontSize: 8,
                 fontWeight: "300",
               }}
             >
@@ -167,19 +192,19 @@ const style = StyleSheet.create({
     flex: 1,
   },
   priceSmall: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "300",
     color: Color.red,
   },
   priceBig: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "normal",
     color: Color.red,
   },
   originalPrice: {
     fontWeight: "300",
     color: Color.textLight,
-    fontSize: 11,
+    fontSize: 10,
     textDecorationLine: "line-through",
   },
   detailView: {

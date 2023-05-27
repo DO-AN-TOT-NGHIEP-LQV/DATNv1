@@ -10,6 +10,7 @@ import com.example.be_eric.models.User;
 import com.example.be_eric.service.PostService;
 import com.example.be_eric.service.UserService;
 import com.example.be_eric.ultils.Exception.DuplicateValueException;
+import com.example.be_eric.ultils.Messenger.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Data;
@@ -49,9 +50,33 @@ public class UserController {
     @Autowired
     private PostService postService;
 
-    @GetMapping("/user/image")
-    public ResponseEntity<Post> getPosts(){
-        return ResponseEntity.ok().body( postService.getPostById(1L));
+    @GetMapping("/user/getDetail")
+    public ResponseEntity<?> getPosts (HttpServletRequest request, HttpServletResponse response) {
+
+        String authorizationHeader = request.getHeader(AUTHORIZATION);
+        if( authorizationHeader != null && authorizationHeader.startsWith("Bearer ") ){
+            try {
+                String refresh_token = authorizationHeader.substring("Bearer ".length());
+                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                JWTVerifier verifier = JWT.require(algorithm).build();
+                DecodedJWT decodedJWT = verifier.verify(refresh_token);
+                String username = decodedJWT.getSubject();   // dung email de dat lam user name
+                User user = userService.getUserByEmail(username);
+
+                return ResponseEntity.ok().body(user);
+
+            }catch (Exception exception){
+//                System.out.println(exception.getMessage());
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new ErrorResponse(exception.getMessage()));
+
+            }
+        }else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("Lỗi xác thực"));
+        }
+
+
     }
 
     @GetMapping("/users")

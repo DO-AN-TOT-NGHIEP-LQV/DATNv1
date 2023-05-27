@@ -10,6 +10,10 @@ export default function (state = initialState, action) {
       const data = action.payload;
       return { userData: data };
     }
+    case types.GET_DETAIL_USERS: {
+      const data = action.payload;
+      return { ...userData, ...data};
+    }
     default:
       return { ...state };
   }

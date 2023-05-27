@@ -25,7 +25,6 @@ import java.util.List;
 @Slf4j
 public class ShopController {
 
-
     @Autowired
     private PostService postService;
     @Autowired
@@ -89,6 +88,22 @@ public class ShopController {
             consumes = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> getPost()
+    {
+        try {
+
+            Post responeList = postService.getPostById(1L);
+            return ResponseEntity.ok().body(responeList);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.badRequest().body(e);
+        }
+    }
+
+
+    @GetMapping(value = "/sale/shop/getCountProductOfShop",
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> getCountProductOfShop()
     {
         try {
 

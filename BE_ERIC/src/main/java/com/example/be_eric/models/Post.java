@@ -27,6 +27,8 @@ public class Post {
     private Long id;
 
     private String title;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private float price;
@@ -39,7 +41,7 @@ public class Post {
 //    @JsonBackReference
     private User user;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinTable(
             name = "post_images",
@@ -66,11 +68,8 @@ public class Post {
         this.title = title;
     }
 
-    // Thêm thuộc tính created_at và chú thích @CreationTimestamp
     @CreationTimestamp
     private LocalDateTime created_at;
-
-    // Thêm thuộc tính updated_at và chú thích @UpdateTimestamp
     @UpdateTimestamp
     private LocalDateTime updated_at;
 }

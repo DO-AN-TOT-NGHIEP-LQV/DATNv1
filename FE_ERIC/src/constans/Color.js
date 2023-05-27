@@ -21,4 +21,5 @@ export default {
   blueTheme: "#bfd9f0",
   greenTheme: "#EDFFEF",
   pinkTheme: "#ffeded",
+  transparent: "transparent",
 };

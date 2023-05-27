@@ -46,7 +46,7 @@ public class SearchController {
     // Nhan file anh tu UI
     // Dua file anh len python de trich xuat dac trung va tra ve id cua anh
     // tu danh sach ten anh lay ra id or name coi va tra ve id
-//    @PostMapping(value = "/post/searchByImage",
+//    @PostMapping(value = "/search/searchByImage",
 //              consumes = {MediaType.APPLICATION_JSON_VALUE,
 //                         MediaType.MULTIPART_FORM_DATA_VALUE })
 //    public ResponseEntity<?> searchPostByImage(@RequestPart("fileSearchImg") MultipartFile fileSearchImg)
@@ -91,7 +91,7 @@ public class SearchController {
 //            return ResponseEntity.badRequest().body(e);
 //        }
 //    }
-
+//
     @PostMapping(value = "/search/searchByImage",
             consumes = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -138,7 +138,6 @@ public class SearchController {
 
         Page<Post> postListPage = postService.searchByText(searchText, pageable);
         List<Post> postList = postListPage.getContent();
-
 
         List<Object> responeList = new ArrayList<>();
         responeList.addAll(productsList);

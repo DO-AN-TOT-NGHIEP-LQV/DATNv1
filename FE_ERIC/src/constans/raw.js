@@ -133,3 +133,117 @@ export const listImage = [
     user_id: 3,
   },
 ];
+
+export const product_tabs = [
+  { id: 0, name: "Chi tiết" },
+  { id: 1, name: "Cửa hàng" },
+  { id: 2, name: "Bình luận" },
+];
+
+
+export const newListProduct = [
+    {
+      id: 1,
+      name: "pro1",
+      description:
+        "gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd, gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd",
+      quantity: 5,
+      originalPrice: 0.0,
+      price: 6.0,
+      status: null,
+      images: [
+        {
+          id: 21,
+          no: "21.jpg",
+          url: "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ImageTest%2F21.jpg?alt=media",
+          isProductImage: true,
+        },
+      ],
+      shop: {
+        id: 1,
+        sName: "Shop2",
+        sNumber: "3853",
+        sStatus: null,
+        sLogo:
+          "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop1.png?alt=media",
+        sAddress1:
+          " Thon 2 thai son dien tien dien ban quan nam Thon 2 thai son dien tien dien ban quan nam n ban quan nam",
+        sAddress2: "434",
+        sFax: null,
+        created_at: "2023-05-24T16:40:04",
+        updated_at: "2023-05-24T16:40:04",
+        user_id: 2,
+      },
+      created_at: "2023-05-24T16:40:05",
+      updated_at: "2023-05-24T16:40:05",
+    },
+    {
+      id: 2,
+      name: "pro2",
+      description: "gdegrh asdasd asdasd",
+      quantity: 50,
+      originalPrice: 100000.0,
+      price: 66000.0,
+      status: null,
+      images: [
+        {
+          id: 22,
+          no: "22.jpg",
+          url: "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ImageTest%2F22.jpg?alt=media",
+          isProductImage: true,
+        },
+      ],
+      shop: {
+        id: 2,
+        sName: "Shop5",
+        sNumber: "0384",
+        sStatus: null,
+        sLogo:
+          "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop2.png?alt=media",
+        sAddress1: "Quang Binh",
+        sAddress2: null,
+        sFax: null,
+        created_at: "2023-05-24T16:40:04",
+        updated_at: "2023-05-24T16:40:04",
+        user_id: 5,
+      },
+      created_at: "2023-05-24T16:40:05",
+      updated_at: "2023-05-24T16:40:05",
+    },
+    {
+      id: 3,
+      name: "pro3",
+      description: "gdegrh asdasd asdasd",
+      quantity: 55,
+      originalPrice: 10000.0,
+      price: 100000.0,
+      status: null,
+      images: [
+        {
+          id: 23,
+          no: "23.jpg",
+          url: "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ImageTest%2F23.jpg?alt=media",
+          isProductImage: true,
+        },
+      ],
+      shop: {
+        id: 1,
+        sName: "Shop2",
+        sNumber: "3853",
+        sStatus: null,
+        sLogo:
+          "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop1.png?alt=media",
+        sAddress1: "",
+        sAddress2: null,
+        sFax: null,
+        created_at: "2023-05-24T16:40:04",
+        updated_at: "2023-05-24T16:40:04",
+        user_id: 2,
+      },
+      created_at: "2023-05-24T16:40:05",
+      updated_at: "2023-05-24T16:40:05",
+    },
+  ]
+
+
+

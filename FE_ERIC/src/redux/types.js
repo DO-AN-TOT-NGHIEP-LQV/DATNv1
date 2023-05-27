@@ -2,6 +2,7 @@ export default {
   //Auth
   LOGIN: "LOGIN",
   SIGNUP: "SIGNUP",
+  UPDATE_LOGIN: "UPDATE_LOGIN",
   CLEAR_REDUX_STATE: "CLEAR_REDUX_STATE",
 
   //Search Screen

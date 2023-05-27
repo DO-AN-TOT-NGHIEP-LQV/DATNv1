@@ -1,9 +1,14 @@
 import React, { useState } from "react";
-import { TextInput, View, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  TextInput,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { spacing } from "../../constans/Theme";
 import colors from "../../constans/Color";
 import Icons, { icons } from "../Icons";
-import { Feather } from "@expo/vector-icons";
 import actions from "../../redux/actions";
 import { showError } from "../../ultils/helperFunction";
 import { useSelector } from "react-redux";
@@ -58,10 +63,15 @@ const SearchInput = () => {
 
   return (
     <View style={{ backgroundColor: "#F2F1FD" }}>
-      <View style={[styles.headerWrapperHeader]}>
+      <View style={[styles.headerWrapperHeader, styles.shadowTouch]}>
         <TouchableOpacity>
           <View style={styles.headerLeft}>
-            <Feather name="chevron-left" size={12} color={colors.black} />
+            <Icons
+              icon={icons.Feather}
+              size={12}
+              color={colors.black}
+              name={"chevron-left"}
+            />
           </View>
         </TouchableOpacity>
 
@@ -70,8 +80,10 @@ const SearchInput = () => {
             style={{
               borderWidth: 1,
               borderColor: colors.blueMain,
-              height: 40,
+              // height: "100%",
               borderRadius: 10,
+              // marginVertical: 5,
+              // paddingVertical:5
             }}
           >
             <View style={styles.inner}>
@@ -116,37 +128,45 @@ const SearchInput = () => {
 };
 
 const styles = StyleSheet.create({
+  headerWrapperHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 16,
+    backgroundColor: "#ffffff",
+    height: Dimensions.get("window").height / 15,
+    marginHorizontal: 5,
+    marginTop: 5,
+    zIndex: 10,
+  },
   headerLeft: {
     borderColor: colors.textLight,
     borderWidth: 2,
     padding: 12,
     borderRadius: 10,
+    // backgroundColor: "#ffffff",
   },
   headerRight: {
+    height: "90%",
     flexGrow: 1,
     marginLeft: 8,
-    backgroundColor: "#ffffff", // colors.white,
+    // marginVertical: 10,
+    backgroundColor: "#ffffff",
     // borderRadius: 16,
   },
 
-  headerWrapperHeader: {
-    flexDirection: "row",
-
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 10,
+  shadowTouch: {
     borderRadius: 16,
-    backgroundColor: "#ffffff", // colors.white,
-    height: 55,
-    marginHorizontal: 5,
-    marginTop: 5,
-    // position: "absolute",
-    //  transform: [{ translateY }],
-    zIndex: 10,
-    // position: "absolute",
-    // top: 0,
-    // left: 0,
-    // right: 0,
+    shadowColor: colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 16,
+    elevation: 2,
   },
 
   inner: {
@@ -158,7 +178,6 @@ const styles = StyleSheet.create({
     paddingRight: spacing.m, // spacing.m,
     paddingVertical: 10,
     borderRadius: 16,
-    // height: 55,
     flex: 1,
     shadowColor: colors.black,
     shadowRadius: 4,
@@ -169,7 +188,6 @@ const styles = StyleSheet.create({
     },
   },
   filter: {
-    // borderLeftColor: 16,
     borderWidth: 2,
     borderColor: colors.blueMain,
     width: 40,
@@ -177,23 +195,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderBottomEndRadius: 8,
-    // borderTopLeftRadius:16,
-    // borderTopStartRadius: 16,
     borderTopRightRadius: 8,
-    // borderTopLeftRadius:16
   },
   cameraButton: {
-    // borderWidth: 2,
-    // borderColor: colors.blueMain,
     width: 40,
-    // backgroundColor: colors.blueMain,
     justifyContent: "center",
     alignItems: "center",
-    // borderBottomEndRadius: 8,
-    // borderTopLeftRadius:16,
-    // borderTopStartRadius: 16,
-    // borderTopRightRadius: 8,
-    // borderTopLeftRadius:16
   },
 });
 

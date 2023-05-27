@@ -69,8 +69,6 @@ public class Shop {
         this.sLogo = sLogo;
     }
 
-
-
     public Long getId() {
         return id;
     }

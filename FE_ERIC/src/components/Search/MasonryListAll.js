@@ -13,8 +13,6 @@ import { useNavigation } from "@react-navigation/native";
 import Color from "../../constans/Color";
 import MasonryList from "@react-native-seoul/masonry-list";
 import { v4 as uuidv4 } from "uuid";
-import { forwardRef } from "react";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const MasonryListAll = ({ data }) => {
   return (
