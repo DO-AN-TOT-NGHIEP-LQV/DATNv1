@@ -5,12 +5,15 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.be_eric.DTO.MainDiscussionDTO;
+import com.example.be_eric.DTO.SubDiscussionDTO;
 import com.example.be_eric.models.Comment.ProductMainDiscussion;
+import com.example.be_eric.models.Comment.ProductSubDiscussion;
 import com.example.be_eric.models.Product;
 import com.example.be_eric.models.User;
 import com.example.be_eric.service.DiscussionService;
 import com.example.be_eric.service.ProductService;
 import com.example.be_eric.service.UserService;
+import com.example.be_eric.ultils.Exception.DontExistException;
 import com.example.be_eric.ultils.Messenger.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,6 +72,7 @@ public class ProductController {
         return  ResponseEntity.ok(responeList);
     }
 
+
     @PostMapping(value = "/user/product/newDiscussion")
     public ResponseEntity saveMainDiscussion( @RequestBody MainDiscussionDTO mainDiscussion, HttpServletRequest request){
 
@@ -82,21 +86,56 @@ public class ProductController {
             User user = userService.getUserByEmail(username);
 
             Product product = productService.getById(mainDiscussion.getProductId());
+            if (product == null)
+                throw new DontExistException("Sản phẩm này không còn tồn tại");
 
             ProductMainDiscussion newDiscussion = new ProductMainDiscussion( mainDiscussion.getMainContent(), user, product);
-
 
             return ResponseEntity.ok()
                     .body( discussionService.saveMainDiscussion(newDiscussion));
 
-        }catch (Exception exception){
-//                System.out.println(exception.getMessage());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        }
+        catch (DontExistException e){
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+        catch (Exception exception){
+            return ResponseEntity.badRequest()
                     .body(new ErrorResponse(exception.getMessage()));
 
         }
+    }
 
 
+    @PostMapping(value = "/user/product/newSubDiscussion")
+    public ResponseEntity saveSubDiscussion(@RequestBody SubDiscussionDTO subDiscussionDTO, HttpServletRequest request){
+
+        try {
+            String authorizationHeader = request.getHeader(AUTHORIZATION);
+            String refresh_token = authorizationHeader.substring("Bearer ".length());
+            Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            DecodedJWT decodedJWT = verifier.verify(refresh_token);
+            String username = decodedJWT.getSubject();
+            User user = userService.getUserByEmail(username);
+
+            ProductMainDiscussion mainDiscussion = discussionService.getMainDiscussionById( subDiscussionDTO.getMainDisId());
+            if( mainDiscussion == null)
+                throw  new DontExistException("Đánh giá này không còn tồn tại");
+            ProductSubDiscussion subDiscussion = new ProductSubDiscussion( subDiscussionDTO.getSubContent(),  user, mainDiscussion);
+            discussionService.saveSubDiscussion(subDiscussion);
+
+            return ResponseEntity.ok()
+                    .body( discussionService.saveSubDiscussion(subDiscussion));
+
+        } catch (DontExistException e){
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }catch (Exception exception){
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(exception.getMessage()));
+
+        }
 
     }
 

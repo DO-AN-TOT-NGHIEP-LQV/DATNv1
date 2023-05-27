@@ -36,7 +36,6 @@ public class ProductSubDiscussion {
     @JoinColumn(name = "main_discussion_id")
     private ProductMainDiscussion mainDiscussion;
 
-
     public ProductSubDiscussion(Long id, String subContent, Long userId, Long mainDiscussionId) {
         this.id = id;
         this.subContent = subContent;
@@ -46,6 +45,11 @@ public class ProductSubDiscussion {
         this.mainDiscussion.setId(mainDiscussionId);
     }
 
+    public ProductSubDiscussion(String subContent, User user, ProductMainDiscussion mainDiscussion) {
+        this.subContent = subContent;
+        this.user = user;
+        this.mainDiscussion = mainDiscussion;
+    }
 
     @CreationTimestamp
     private LocalDateTime created_at;

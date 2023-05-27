@@ -72,25 +72,29 @@ export async function apiReq(
             type: types.CLEAR_REDUX_STATE,
             payload: {},
           });
-          return rej(error.response.data.error_message);
+          return rej(
+            error?.response?.data?.error_message || {
+              error_message: "Loi 401",
+            }
+          );
         }
 
         if (error && error.response) {
           if (error.response.data) {
             if (!error.response.data.error_message) {
               error.response.data.error_message = "Network Error";
-              console.log("coi loi o 1 co loi nhung khong co messenger");
+              console.log("Co loi nhung khong co messenger");
               return rej(error.response.data);
             }
             console.log(error.response.data.error_message);
             showError(error.response.data.error_message);
             return rej(error.response.data); // backend co tra ve messenger
           } else {
-            console.log("coi loi o ultils 2", error);
-            showError("Network Error");
+            console.log("Coi loi không co erro data tra ve", error);
+            return rej({ error_message: "Network Error" });
           }
         } else {
-          console.log("coi loi o 3 Khong co phan hoi tu backend");
+          console.log("Khong co phan hoi tu backend");
           return rej({ error_message: "Network Error" });
           // error.response.data.error_message = 'Network Error' ;
           // return rej(error.response.data);

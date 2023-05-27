@@ -1,18 +1,21 @@
 package com.example.be_eric.ultils.Messenger;
 
-public class ErrorResponse {
-    private String error_message;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    public ErrorResponse(String error_message) {
-        this.error_message = error_message;
+public class ErrorResponse {
+
+    @JsonProperty("error_message")
+    private String errorMessage;
+    public ErrorResponse(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
     public String getErrorMessage() {
-        return error_message;
+        return errorMessage;
     }
 
     public void setErrorMessage(String error_message) {
-        this.error_message = error_message;
+        this.errorMessage = errorMessage;
     }
 }
 

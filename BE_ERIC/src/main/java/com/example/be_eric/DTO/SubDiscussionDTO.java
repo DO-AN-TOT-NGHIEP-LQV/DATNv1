@@ -13,7 +13,7 @@ public class SubDiscussionDTO {
     private Long subUserId;
     private String subUserAvatar;
     private LocalDateTime subUpdateAt;
-
+    private Long mainDisId;
 
     public SubDiscussionDTO(Long id, String content, String username, Long userId, String userLogo, LocalDateTime updateAt) {
         this.subId = id;
@@ -23,4 +23,12 @@ public class SubDiscussionDTO {
         this.subUserAvatar = userLogo;
         this.subUpdateAt = updateAt;
     }
+
+    public SubDiscussionDTO( String subDisContent, Long userId, Long mainDisId) {
+        this.subContent = subDisContent;
+        this.subUserId = userId;
+        this.mainDisId = mainDisId;
+    }
+
+    public SubDiscussionDTO() {}
 }

@@ -23,18 +23,6 @@ public class DiscussionServiceImpl implements  DiscussionService{
     @Autowired
     DiscussionSubRepository subDiscussionRepo;
 
-
-    @Override
-    public List<ProductMainDiscussion> getDiscussionsByProductId(Long id) {
-
-        return  null;
-    }
-
-    @Override
-    public Page<ProductMainDiscussion> getDiscussionsByProductId(Long id, Pageable pageable) {
-        return null;
-    }
-
     @Override
     public List<MainDiscussionDTO> getDTOMainDiscussion(Long id) {
         List<Object[]> result = mainDiscussionRepo.findProductMainDiscussionsByProduct(id);
@@ -66,13 +54,11 @@ public class DiscussionServiceImpl implements  DiscussionService{
 //                    isExistingMainDis = true;
 //                    break;
 //                }
-//
 //            }
 //
 //            if (!isExistingMainDis) {
 //                mainDiscussions.add(mainDis);
 //            }
-
 
             MainDiscussionDTO mainDis = new MainDiscussionDTO(mainDisId, mainDisContent, userLastName, userId, userAvatar, mainUpdateAt,  new ArrayList<>());
             SubDiscussionDTO subDis = new SubDiscussionDTO(subDisId, subDisContent, subUserName, subUserId, subUserAvatar, subUpdateAt );
@@ -102,18 +88,18 @@ public class DiscussionServiceImpl implements  DiscussionService{
     }
 
     @Override
-    public List<ProductMainDiscussion> getAllDiscussions() {
-        return mainDiscussionRepo.findAll();
-    }
-
-    @Override
     public ProductMainDiscussion saveMainDiscussion(ProductMainDiscussion productMainDiscussion) {
         return mainDiscussionRepo.save(productMainDiscussion);
     }
 
     @Override
-    public ProductSubDiscussion save(ProductSubDiscussion productSubDiscussion) {
+    public ProductSubDiscussion saveSubDiscussion(ProductSubDiscussion productSubDiscussion) {
         return subDiscussionRepo.save(productSubDiscussion);
+    }
+
+    @Override
+    public ProductMainDiscussion getMainDiscussionById(Long id) {
+        return mainDiscussionRepo.findById(id).orElse(null);
     }
 
     @Override

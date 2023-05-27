@@ -49,19 +49,19 @@ public class DataSeeder implements CommandLineRunner {
         userService.saveRole(new Role(2L, "ROLE_ADMIN"));
         userService.saveRole(new Role(3L, "ROLE_SALER"));
 
-        userService.saveUser(new User(1L, "1",  "1@gmail.com", "1", "https://www.shutterstock.com/image-vector/man-character-face-avatar-glasses-260nw-562077406.jpg", new ArrayList<>()));
-        userService.saveUser(new User(2L, "2",  "2@gmail.com", "2", new ArrayList<>()));
-        userService.saveUser(new User(3L, "3",  "3@gmail.com", "3", new ArrayList<>()));
-        userService.saveUser(new User(4L, "4",  "4@gmail.com", "4","https://img.freepik.com/premium-vector/businessman-avatar-cartoon-character-profile_18591-50581.jpg?w=740", new ArrayList<>()));
-        userService.saveUser(new User(5L, "5",  "5@gmail.com", "5", new ArrayList<>()));
+        userService.saveUser(new User(1L, "Le QViet",  "1@gmail.com", "1", "https://www.shutterstock.com/image-vector/man-character-face-avatar-glasses-260nw-562077406.jpg", new ArrayList<>()));
+        userService.saveUser(new User(2L, "Viet 2",  "2@gmail.com", "2", new ArrayList<>()));
+        userService.saveUser(new User(3L, "$@$Dang Yeu",  "3@gmail.com", "3", new ArrayList<>()));
+        userService.saveUser(new User(4L, "Jame",  "4@gmail.com", "4","https://img.freepik.com/premium-vector/businessman-avatar-cartoon-character-profile_18591-50581.jpg?w=740", new ArrayList<>()));
+        userService.saveUser(new User(5L, "Samiel",  "5@gmail.com", "5", new ArrayList<>()));
 
-        userService.addRoleToUser("1", "ROLE_USER" );
-        userService.addRoleToUser("1", "ROLE_ADMIN" );
-        userService.addRoleToUser("1", "ROLE_SUPER_ADMIN" );
-        userService.addRoleToUser("2", "ROLE_USER" );
-        userService.addRoleToUser("2", "ROLE_SALER" );
-        userService.addRoleToUser("4", "ROLE_ADMIN" );
-        userService.addRoleToUser("5", "ROLE_SALER" );
+        userService.addRoleToUser("Le QViet", "ROLE_USER" );
+        userService.addRoleToUser("Le QViet", "ROLE_ADMIN" );
+        userService.addRoleToUser("Le QViet", "ROLE_SUPER_ADMIN" );
+        userService.addRoleToUser("Viet 2", "ROLE_USER" );
+        userService.addRoleToUser("Viet 2", "ROLE_SALER" );
+        userService.addRoleToUser("Jame", "ROLE_ADMIN" );
+        userService.addRoleToUser("Samiel", "ROLE_SALER" );
 
         shopService.save(new Shop("Shop2", "3853","Quang Nam", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop1.png?alt=media", userService.getUserByEmail("2@gmail.com")));
         shopService.save(new Shop("Shop5", "0384","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop2.png?alt=media", userService.getUserByEmail("5@gmail.com")));
@@ -227,10 +227,10 @@ public class DataSeeder implements CommandLineRunner {
         discussionService.saveMainDiscussion(new ProductMainDiscussion(3L, "Binh luan Main 3", userService.getUserById(3L), productService.getById(1L)));
 //            System.out.println(  postService.getPostById(1L).getPostImages()  );
 
-        discussionService.save(new ProductSubDiscussion(1L, "Sub cmmt 1", 1L, 1L));
-        discussionService.save(new ProductSubDiscussion(2L, "Sub cmmt 1", 3L, 1L));
-        discussionService.save(new ProductSubDiscussion(3L, "Sub cmmt 1", 2L, 2L));
-        discussionService.save(new ProductSubDiscussion(4L, "Sub cmmt 1", 4L, 3L));
+        discussionService.saveSubDiscussion(new ProductSubDiscussion(1L, "Sub cmmt 1", 1L, 1L));
+        discussionService.saveSubDiscussion(new ProductSubDiscussion(2L, "Sub cmmt 1", 3L, 1L));
+        discussionService.saveSubDiscussion(new ProductSubDiscussion(3L, "Sub cmmt 1", 2L, 2L));
+        discussionService.saveSubDiscussion(new ProductSubDiscussion(4L, "Sub cmmt 1", 4L, 3L));
 
         }
 

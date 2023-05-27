@@ -23,6 +23,9 @@ export const GET_PRODUCT_DISCUSSION = getApiUrl(
   "/user/product/getDiscussionsByProductIdPageable"
 );
 export const CREATE_NEW_DISCUSSION = getApiUrl("/user/product/newDiscussion");
+export const CREATE_NEW_SUB_DISCUSSION = getApiUrl(
+  "/user/product/newSubDiscussion"
+);
 
 axios.defaults.baseURL = "http://192.168.1.8:8080/api";
 // axios.defaults.baseURL = 'http://192.168.1.6:8080/api'
