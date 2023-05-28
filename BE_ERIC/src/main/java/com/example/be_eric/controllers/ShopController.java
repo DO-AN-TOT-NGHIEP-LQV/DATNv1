@@ -2,7 +2,7 @@ package com.example.be_eric.controllers;
 
 
 import com.example.be_eric.models.Post;
-import com.example.be_eric.models.Product;
+import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.models.Shop;
 import com.example.be_eric.models.User;
 import com.example.be_eric.service.PostService;
@@ -15,9 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")

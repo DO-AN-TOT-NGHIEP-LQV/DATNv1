@@ -5,21 +5,17 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
+import { Rating } from "react-native-stock-star-rating";
 
 const DetailScreem = ({ route }) => {
   const id = route?.params?.param;
   const [isLoading, setLoading] = useState(false);
 
   const navigation = useNavigation();
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerShown : false,
-  //   });
-  // } , [])
 
   return (
     <View className=" flex-1 bg-white   relative mt-6">

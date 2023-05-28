@@ -16,8 +16,9 @@ public interface DiscussionService {
     ProductSubDiscussion saveSubDiscussion( ProductSubDiscussion productSubDiscussion);
 
     ProductMainDiscussion getMainDiscussionById (Long id);
+    ProductSubDiscussion getSubDiscussionById(Long id) ;
 
-    ProductMainDiscussion delete(ProductMainDiscussion productMainDiscussion);
-    ProductSubDiscussion delete( ProductSubDiscussion productSubDiscussion);
+    void delete(ProductMainDiscussion productMainDiscussion);
+    void delete( ProductSubDiscussion productSubDiscussion);
 
 }

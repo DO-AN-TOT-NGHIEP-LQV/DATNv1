@@ -6,6 +6,7 @@ import {
   Feeds,
   CreatePostScreen,
   SearchScreen,
+  SearchTextScreen,
   DetailProductScreen,
 } from "../screens/index";
 import Profile from "../screens/Profile";
@@ -83,13 +84,6 @@ const MainTabs = () => {
         component={CreatePostStackNavigator}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            // <View className=" items-center justify-center " >
-            //     <AntDesign name="search1" size={size}  color={ focused ?'#AD40AF' : color } />
-            //     <Text style={{ color: focused ?'#AD40AF' : color,  fontSize: 12 }} >
-            //       SEARCH
-            //     </Text>
-            // </View>
-
             <CustomTabBarIcon
               nameIcon={"pluscircleo"}
               textLabel={"POST"}
@@ -204,13 +198,12 @@ const SearchStackNavigator = () => {
   // };
   return (
     <SearchNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <HomeNavigator.Screen name="SearchText" component={SearchTextScreen} />
+
       <HomeNavigator.Screen name="Search" component={SearchScreen} />
       <HomeNavigator.Screen
         name="DetailProduct"
         component={DetailProductScreen}
-        // options={({ route }) => ({
-        //   tabBarVisible: getTabBarVisibility(route), // Add this option to control the TabBar visibility
-        // })}
       />
     </SearchNavigator.Navigator>
   );

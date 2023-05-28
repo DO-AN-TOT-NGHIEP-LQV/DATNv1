@@ -66,10 +66,8 @@ public class UserController {
                 return ResponseEntity.ok().body(user);
 
             }catch (Exception exception){
-//                System.out.println(exception.getMessage());
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body(new ErrorResponse(exception.getMessage()));
-
             }
         }else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)

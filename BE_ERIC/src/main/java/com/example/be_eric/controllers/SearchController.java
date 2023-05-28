@@ -1,27 +1,19 @@
 package com.example.be_eric.controllers;
 
 import com.example.be_eric.models.Post;
-import com.example.be_eric.models.Product;
-import com.example.be_eric.models.Shop;
-import com.example.be_eric.models.User;
+import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.service.PostService;
 import com.example.be_eric.service.ProductService;
 import com.example.be_eric.service.ShopService;
 import com.example.be_eric.service.UserService;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;

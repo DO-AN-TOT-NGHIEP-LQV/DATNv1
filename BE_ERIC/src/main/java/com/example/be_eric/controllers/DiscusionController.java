@@ -8,7 +8,7 @@ import com.example.be_eric.DTO.MainDiscussionDTO;
 import com.example.be_eric.DTO.SubDiscussionDTO;
 import com.example.be_eric.models.Comment.ProductMainDiscussion;
 import com.example.be_eric.models.Comment.ProductSubDiscussion;
-import com.example.be_eric.models.Product;
+import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.models.User;
 import com.example.be_eric.service.DiscussionService;
 import com.example.be_eric.service.ProductService;
@@ -18,25 +18,19 @@ import com.example.be_eric.ultils.Messenger.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user/discussion")
 @RequiredArgsConstructor
 @Slf4j
-public class ProductController {
+public class DiscusionController {
 
     @Autowired
     DiscussionService discussionService;
@@ -46,15 +40,12 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
-
-
 //    @GetMapping(value = "/user/product/getAllDiscussions")
 //    public ResponseEntity getAllDiscussions( ) {
 //        List<ProductMainDiscussion> AllDiscussions = discussionService.getAllDiscussions();
 //
 //        return  ResponseEntity.ok(AllDiscussions);
 //    }
-
 //    @GetMapping(value = "/user/product/getDiscussionsByProductId")
 //    public ResponseEntity getAllDiscussions(@RequestParam("productId") Long productId ) {
 //
@@ -63,17 +54,13 @@ public class ProductController {
 //        return  ResponseEntity.ok(responeList);
 //    }
 
-
-    @GetMapping(value = "/user/product/getDiscussionsByProductIdPageable")
+    @GetMapping(value = "/product/getDiscussionsByProductIdPageable")
     public ResponseEntity getAllDiscussionsPageable(@RequestParam("productId") Long productId ) {
-
         List<MainDiscussionDTO> responeList = discussionService.getDTOMainDiscussion(productId);
-
         return  ResponseEntity.ok(responeList);
     }
 
-
-    @PostMapping(value = "/user/product/newDiscussion")
+    @PostMapping(value = "/product/newDiscussion")
     public ResponseEntity saveMainDiscussion( @RequestBody MainDiscussionDTO mainDiscussion, HttpServletRequest request){
 
         try {
@@ -107,7 +94,7 @@ public class ProductController {
     }
 
 
-    @PostMapping(value = "/user/product/newSubDiscussion")
+    @PostMapping(value = "/product/newSubDiscussion")
     public ResponseEntity saveSubDiscussion(@RequestBody SubDiscussionDTO subDiscussionDTO, HttpServletRequest request){
 
         try {
@@ -138,5 +125,56 @@ public class ProductController {
         }
 
     }
+    
+    @DeleteMapping(value = "/product/deleteMainDiscussion/{deleteMainDisId}")
+    public ResponseEntity<?> saveMainDiscussion( @PathVariable Long deleteMainDisId){
+
+        try {
+            ProductMainDiscussion mainDiscussion = discussionService.getMainDiscussionById(deleteMainDisId);
+            if( mainDiscussion != null ){
+                discussionService.delete(mainDiscussion);
+            }
+            else{
+                throw new DontExistException("Đánh giá này không còn tồn tại");
+            }
+            return ResponseEntity.ok().build();
+        }
+        catch (DontExistException e){
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+        catch (Exception exception){
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(exception.getMessage()));
+
+        }
+    }
+
+
+
+    @DeleteMapping(value = "/product/deleteSubDiscussion/{deleteSubDisId}")
+    public ResponseEntity<?> saveSubDiscussion( @PathVariable Long deleteSubDisId){
+
+        try {
+            ProductSubDiscussion subDiscussion = discussionService.getSubDiscussionById(deleteSubDisId);
+            if( subDiscussion != null ){
+                discussionService.delete(subDiscussion);
+            }
+            else{
+                throw new DontExistException("Phản hồi này không này không còn tồn tại");
+            }
+            return ResponseEntity.ok().build();
+        }
+        catch (DontExistException e){
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+        catch (Exception exception){
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(exception.getMessage()));
+
+        }
+    }
+
 
 }

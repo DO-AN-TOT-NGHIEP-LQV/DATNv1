@@ -1,5 +1,7 @@
-package com.example.be_eric.models;
+package com.example.be_eric.models.Product;
 
+import com.example.be_eric.models.Image;
+import com.example.be_eric.models.Shop;
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,8 +34,11 @@ public class Product {
     private String description;
 
     private int quantity;
+
     private double  originalPrice = 0;
     private double  price = 0;
+    private String type;
+    private String brand;
     private String status;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

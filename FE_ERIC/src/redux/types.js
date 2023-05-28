@@ -2,7 +2,7 @@ export default {
   //Auth
   LOGIN: "LOGIN",
   SIGNUP: "SIGNUP",
-  UPDATE_LOGIN: "UPDATE_LOGIN",
+  GET_DETAIL_USERS: "GET_DETAIL_USERS",
   CLEAR_REDUX_STATE: "CLEAR_REDUX_STATE",
 
   //Search Screen

@@ -6,19 +6,31 @@ import {
   View,
   Image,
   TextInput,
+  Alert,
+  TouchableWithoutFeedback,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import Color from "../../constans/Color";
-import { apiGet, apiPost } from "../../ultils/utilsApi";
+import { apiDelete, apiGet, apiPost } from "../../ultils/utilsApi";
 import {
   CREATE_NEW_DISCUSSION,
   CREATE_NEW_SUB_DISCUSSION,
+  DELETE_MAIN_DISCUSSION,
+  DELETE_SUB_DISCUSSION,
   GET_PRODUCT_DISCUSSION,
 } from "../../config/urls";
-import { showError } from "../../ultils/helperFunction";
+import { showError, showSuccess } from "../../ultils/helperFunction";
 import Icons, { icons } from "../Icons";
 import moment from "moment";
 import { checkStringEmpty } from "../../ultils/validations";
+
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from "react-native-popup-menu";
+import { useSelector } from "react-redux";
 
 const DetailDiscussion = ({ dataProduct }) => {
   const [listDiscussion, setListDiscussion] = useState([]);
@@ -43,7 +55,7 @@ const DetailDiscussion = ({ dataProduct }) => {
       await apiGet(GET_PRODUCT_DISCUSSION, data, headers, true)
         .then((res) => {
           setListDiscussion(res.data);
-          console.log(res.data);
+          // console.log(res.data);
         })
         .catch((error) => {
           showError(error.error_message);
@@ -238,13 +250,35 @@ const DetailDiscussion = ({ dataProduct }) => {
   );
 };
 
-export default DetailDiscussion;
-
 const MainDiscussionSection = ({ mainDisItem, handleEffect }) => {
   const [showSubDisList, setShowSubDisList] = useState(false);
   const onToggle = () => {
     setShowSubDisList(!showSubDisList);
   };
+
+  const detailUser = useSelector((state) => state.auth.detailUser);
+
+  const deleteMainDis = async () => {
+    // await apiDelete(DELETE_MAIN_DISCUSSION, {}, {}, true);
+    console.log("/////////////////////////////////////////");
+    console.log(DELETE_MAIN_DISCUSSION + `/${mainDisItem.mainId}`);
+
+    await apiDelete(
+      DELETE_MAIN_DISCUSSION + `/${mainDisItem.mainId}`,
+      {},
+      {},
+      true
+    )
+      .then((res) => {
+        console.log(res.data);
+        showSuccess("Xóa thành công");
+      })
+      .catch((error) => {
+        showError(error.error_message);
+      });
+    await handleEffect();
+  };
+
   return (
     <View
       style={{
@@ -269,7 +303,7 @@ const MainDiscussionSection = ({ mainDisItem, handleEffect }) => {
         }}
       />
 
-      {/* Name and Main COmment */}
+      {/* Main Dis */}
       <View
         style={{
           flex: 1,
@@ -279,10 +313,64 @@ const MainDiscussionSection = ({ mainDisItem, handleEffect }) => {
           // borderBottomWidth: 2,
         }}
       >
-        {/* Name */}
-        <Text style={{ fontSize: 14, fontWeight: 800 }}>
-          {mainDisItem?.username || "Người dùng"}
-        </Text>
+        <View
+          style={{
+            flexDirection: "row",
+            marginTop: 5,
+            alignItems: "center",
+            flex: 1,
+          }}
+        >
+          {/* Name */}
+          <Text
+            style={{ fontSize: 14, fontWeight: 500, flex: 1 }}
+            numberOfLines={1}
+          >
+            {mainDisItem?.username || "Người dùng"}
+            {/* {"dfsdfdsfkkfksdkfsp;dfspddsadas"} */}
+          </Text>
+
+          {/* Menu Delete Of Sub */}
+          {detailUser.id == mainDisItem.userId && (
+            <Menu>
+              <MenuTrigger>
+                <Icons
+                  size={20}
+                  name={"more-vertical"}
+                  icon={icons.Feather}
+                  style={{ marginRight: 8 }}
+                />
+              </MenuTrigger>
+              <MenuOptions
+                optionsContainerStyle={{ width: 100 }}
+                customStyles={{
+                  optionWrapper: {
+                    paddingTop: 10,
+                    paddingHorizontal: 10,
+                  },
+                }}
+              >
+                <MenuOption
+                  onSelect={() => {
+                    Alert.alert(
+                      "Xóa",
+                      "Bạn có chắc muốn xóa phần bình luận này",
+                      [{ text: "Yes", onPress: deleteMainDis }, { text: "No" }],
+                      { cancelable: true }
+                    );
+                  }}
+                >
+                  <Text style={{ color: "red" }}>Xóa</Text>
+                </MenuOption>
+                <MenuOption
+                  onSelect={() => alert(`Not called`)}
+                  disabled={true}
+                  text="Sửa //TODO"
+                />
+              </MenuOptions>
+            </Menu>
+          )}
+        </View>
 
         {/* Main Discussion */}
         <Text style={{ fontSize: 14, fontWeight: 400 }}>
@@ -294,13 +382,14 @@ const MainDiscussionSection = ({ mainDisItem, handleEffect }) => {
           style={{
             paddingVertical: 10,
             flexDirection: "row",
-            marginTop: 5,
+            // marginTop: 5,
             borderBottomWidth: 1,
             borderColor: Color.textLight,
           }}
         >
           {/* comment Icon */}
           <IconLabelButton
+            label={mainDisItem?.subComments.length}
             containerStyle={{
               paddingHorizontal: 0,
               paddingVertical: 0,
@@ -309,12 +398,16 @@ const MainDiscussionSection = ({ mainDisItem, handleEffect }) => {
             labelStyle={{
               marginLeft: 3,
               color: Color.black,
-              fontWeight: "400",
+              fontWeight: "200",
               fontSize: 14,
             }}
             onPress={onToggle}
             icon={
-              <Icons size={20} name={"comment-o"} icon={icons.FontAwesome} />
+              <Icons
+                size={20}
+                name={"unfold-more-horizontal"}
+                icon={icons.MaterialCommunityIcons}
+              />
             }
           />
 
@@ -338,7 +431,13 @@ const MainDiscussionSection = ({ mainDisItem, handleEffect }) => {
                 data={mainDisItem?.subComments}
                 keyExtractor={(item) => `keySubDiscusion-replys-${item.subId}`}
                 renderItem={({ item, index }) => {
-                  return <SubDiscussionSection subDisItem={item} />;
+                  return (
+                    <SubDiscussionSection
+                      subDisItem={item}
+                      mainDisId={mainDisItem.mainId}
+                      handleEffect={handleEffect}
+                    />
+                  );
                 }}
               />
             </View>
@@ -364,16 +463,35 @@ const MainDiscussionSection = ({ mainDisItem, handleEffect }) => {
   );
 };
 
-const SubDiscussionSection = ({ subDisItem }) => {
+const SubDiscussionSection = ({ subDisItem, mainDisId, handleEffect }) => {
+  const detailUser = useSelector((state) => state.auth.detailUser);
+
+  const deleteSubDis = async () => {
+    await apiDelete(
+      DELETE_SUB_DISCUSSION + `/${subDisItem.subId}`,
+      {},
+      {},
+      true
+    )
+      .then((res) => {
+        console.log(res.data);
+        showSuccess("Xóa thành công");
+      })
+      .catch((error) => {
+        showError(error.error_message);
+      });
+    await handleEffect();
+  };
+
   return (
     <View
       style={{
         flexDirection: "row",
-        marginTop: 10,
+        paddingTop: 5,
         borderColor: Color.textLight,
-        // borderTopWidth: 1,
+        borderTopWidth: 1,
         // borderBottomWidth: 1,
-        // borderColor: Color.textLight,
+        borderColor: Color.textLight,
       }}
     >
       <Image
@@ -389,13 +507,11 @@ const SubDiscussionSection = ({ subDisItem }) => {
         }}
       />
 
-      {/* Name and Main COmment */}
+      {/*  Sub Dis */}
       <View
         style={{
           flex: 1,
-          // marginTop: 3,
           marginLeft: 5,
-          // borderTopWidth: 1,
           borderColor: Color.textLight,
         }}
       >
@@ -408,12 +524,12 @@ const SubDiscussionSection = ({ subDisItem }) => {
           }}
         >
           <Text
-            style={{ fontSize: 14, fontWeight: 800, flex: 1 }}
+            style={{ fontSize: 14, fontWeight: 500, flex: 1 }}
             numberOfLines={1}
           >
-            {subDisItem?.subUsername || "Người dùn dsfj"}
+            {subDisItem?.subUsername || "Người dùng"}
           </Text>
-
+          {/* 
           <Text
             style={{
               fontWeight: "300",
@@ -423,18 +539,61 @@ const SubDiscussionSection = ({ subDisItem }) => {
             }}
           >
             {moment(subDisItem.subUpdateAt).format("YYYY-MM-DD HH:mm")}
-          </Text>
+          </Text> */}
+
+          {/* Menu Delete Of Sub */}
+          {detailUser.id == subDisItem.subUserId && (
+            <Menu>
+              <MenuTrigger>
+                <Icons
+                  size={20}
+                  name={"more-vertical"}
+                  icon={icons.Feather}
+                  style={{ marginRight: 8 }}
+                />
+              </MenuTrigger>
+              <MenuOptions
+                optionsContainerStyle={{ width: 100 }}
+                customStyles={{
+                  optionWrapper: {
+                    paddingTop: 10,
+                    paddingHorizontal: 10,
+                  },
+                }}
+              >
+                <MenuOption
+                  onSelect={() => {
+                    Alert.alert(
+                      "Xóa",
+                      "Bạn có chắc muốn xóa phần bình luận này",
+                      [{ text: "Yes", onPress: deleteSubDis }, { text: "No" }],
+                      { cancelable: true }
+                    );
+                  }}
+                >
+                  <Text style={{ color: "red" }}>Xóa</Text>
+                </MenuOption>
+                <MenuOption
+                  onSelect={() => alert(`Not called`)}
+                  disabled={true}
+                  text="Sửa //TODO"
+                />
+              </MenuOptions>
+            </Menu>
+          )}
         </View>
 
         {/* Main Discussion */}
         <Text style={{ fontSize: 14, fontWeight: 400 }}>
           {subDisItem?.subContent}
         </Text>
+        {/* <LineDivider /> */}
 
         {/* Discussion  Option*/}
         <View
           style={{
-            paddingVertical: 10,
+            // paddingVertical: 10,
+            // paddingTop:10,
             flexDirection: "row",
             marginTop: 0,
             // borderBottomWidth: 1,
@@ -458,16 +617,16 @@ const SubDiscussionSection = ({ subDisItem }) => {
           /> */}
 
           {/* Date */}
-          {/* <Text
+          <Text
             style={{
               flex: 1,
               textAlign: "right",
               fontWeight: "300",
-              fontSize: 12,
+              fontSize: 11,
             }}
           >
             {moment(subDisItem.subUpdateAt).format("YYYY-MM-DD HH:mm")}
-          </Text> */}
+          </Text>
         </View>
       </View>
     </View>
@@ -543,15 +702,16 @@ const DiscussionTextInput = ({
       }}
     >
       <TextInput
-        style={{ flex: 1, marginRight: 5 }}
+        style={{ flex: 1 }}
         multiline
         placeholder={placeholder}
         placeholderTextColor={Color.mainColor}
         value={discussionValue}
         onChangeText={setDiscussionValue}
       ></TextInput>
-
-      <TouchableOpacity
+      {/* TouchableWithoutFeedback */}
+      {/* <TouchableWithoutFeedback */}
+      <TouchableWithoutFeedback
         style={{
           width: 60,
           height: 60,
@@ -559,7 +719,7 @@ const DiscussionTextInput = ({
           alignSelf: "center",
           justifyContent: "center",
           alignItems: "center",
-          marginHorizontal: 10,
+          // marginHorizontal: 10,
         }}
         onPress={() => {
           saveDiscussion();
@@ -570,10 +730,12 @@ const DiscussionTextInput = ({
           color={Color.mainColor}
           name={"ios-send"}
         />
-      </TouchableOpacity>
+      </TouchableWithoutFeedback>
     </View>
   );
 };
+
+export default DetailDiscussion;
 
 const IconLabelButton = ({
   containerStyle,
@@ -610,7 +772,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.white,
     height: 80,
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    // paddingVertical: 5,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     borderTopWidth: 0,

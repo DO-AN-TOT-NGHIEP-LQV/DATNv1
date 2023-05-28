@@ -20,12 +20,21 @@ export const SEARCH_ALL_BY_TEXT = getApiUrl("/search/all/SearchByText");
 
 //Product
 export const GET_PRODUCT_DISCUSSION = getApiUrl(
-  "/user/product/getDiscussionsByProductIdPageable"
+  "/user/discussion/product/getDiscussionsByProductIdPageable"
 );
-export const CREATE_NEW_DISCUSSION = getApiUrl("/user/product/newDiscussion");
+export const CREATE_NEW_DISCUSSION = getApiUrl(
+  "/user/discussion/product/newDiscussion"
+);
 export const CREATE_NEW_SUB_DISCUSSION = getApiUrl(
-  "/user/product/newSubDiscussion"
+  "/user/discussion/product/newSubDiscussion"
+);
+export const DELETE_MAIN_DISCUSSION = getApiUrl(
+  "/user/discussion/product/deleteMainDiscussion"
+);
+export const DELETE_SUB_DISCUSSION = getApiUrl(
+  "/user/discussion/product/deleteSubDiscussion"
 );
 
+// "user/discussion/product/deleteSubDiscussion"
 axios.defaults.baseURL = "http://192.168.1.8:8080/api";
 // axios.defaults.baseURL = 'http://192.168.1.6:8080/api'

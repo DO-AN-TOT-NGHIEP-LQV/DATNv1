@@ -8,15 +8,22 @@ import actions from "../redux/actions";
 import { useSelector } from "react-redux";
 import { showError } from "../ultils/helperFunction";
 import Color from "../constans/Color";
+import { GET_DETAIL_USERS } from "../config/urls";
+import { saveDetailUser, saveUserData } from "../redux/actions/auth";
+import { apiGet } from "../ultils/utilsApi";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const userData = useSelector((state) => state.auth.userData);
+  const tokenData = useSelector((state) => state.auth.tokenData);
+  const detailData = useSelector((state) => state.auth.detailUser);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
+
+    console.log(tokenData);
+    console.log("");
   }, []);
 
   const navigatorToScreen = () => {
@@ -41,6 +48,27 @@ const HomeScreen = () => {
       showError(error.error_message);
     }
   };
+
+  const getDetailUser = async () => {
+    await apiGet(GET_DETAIL_USERS, {}, {}, true)
+      .then((res) => {
+        console.log("GET_DETAIL_USERS");
+        saveDetailUser(res.data);
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  // const refreshToken = async (refresh_token = userData.refresh_token) => {
+  //   try {
+  //     const res = await actions.refreshToken(refresh_token);
+  //     console.log(res.data);
+  //   } catch (error) {
+  //     showError(error.error_message);
+  //   }
+  // };
 
   return (
     <SafeAreaView className="bg-red-100 flex-1 relative ">
@@ -91,7 +119,7 @@ const HomeScreen = () => {
         />
 
         <TouchableOpacity
-          onPress={() => getAllUsses()}
+          onPress={() => getDetailUser()}
           // onPress={() => testAxios()}
           className=" absolute bottom-[100px] w-24 h-24 border-l-2 border-r-2 border-t-4 border-[#00BCC9] rounded-full items-center justify-center"
         >

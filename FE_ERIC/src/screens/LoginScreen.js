@@ -44,7 +44,8 @@ const LoginScreen = ({ navigation }) => {
         showSuccess("Login successfully...!!!!");
         updateState({ isLoading: false });
       } catch (error) {
-        showError(error.error_message);
+        console.log(" co loi ba oi");
+        // showError(error.error_message);
         updateState({ isLoading: false });
       }
     }

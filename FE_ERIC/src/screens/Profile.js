@@ -5,8 +5,7 @@ import actions from "../redux/actions";
 import CustomButton from "../components/CustomButton/index.js";
 
 const Profile = () => {
-  const userData = useSelector((state) => state.auth.userData);
-  // console.log("user data in profile screen", userData)
+  const tokenData = useSelector((state) => state.auth.tokenData);
   const [isLoading, setLoading] = useState(false);
 
   const onLogoutAlert = () => {
@@ -26,8 +25,8 @@ const Profile = () => {
   };
   return (
     <View style={styles.container}>
-      <Text>{userData.name}</Text>
-      <Text style={{ marginBottom: 16 }}>{userData.email}</Text>
+      <Text>{tokenData.name}</Text>
+      <Text style={{ marginBottom: 16 }}>{tokenData.email}</Text>
       <CustomButton
         isLoading={isLoading}
         label="Logout"

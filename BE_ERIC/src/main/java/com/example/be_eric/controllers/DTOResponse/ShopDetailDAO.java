@@ -1,11 +1,10 @@
 package com.example.be_eric.controllers.DTOResponse;
 
 
-import com.example.be_eric.models.Product;
+import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.models.Shop;
 import lombok.Data;
 
-import javax.xml.stream.events.Comment;
 import java.util.List;
 
 @Data

@@ -74,7 +74,7 @@ export default function SearchScreen() {
         contentOffset.y + layoutMeasurement.height >= contentSize.height;
 
       if (isEndReached && !isLoading) {
-        console.log("cuoou");
+        console.log("Cuối");
         fetchDataSearch();
       }
     } else {

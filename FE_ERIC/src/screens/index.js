@@ -7,4 +7,5 @@ export { default as LogoutScreen } from "./LogoutScreen";
 export { default as CreatePostScreen } from "./CreatePostScreen";
 export { default as SearchScreen } from "./SearchScreen";
 export { default as DetailProductScreen } from "./DetailProductScreen";
+export { default as SearchTextScreen } from "./SearchTextScreen";
 export { default as Feeds } from "./Feeds";

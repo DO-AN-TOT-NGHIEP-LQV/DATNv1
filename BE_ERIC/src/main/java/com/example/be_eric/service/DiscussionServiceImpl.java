@@ -7,8 +7,6 @@ import com.example.be_eric.models.Comment.ProductSubDiscussion;
 import com.example.be_eric.repository.DiscussionMainRepository;
 import com.example.be_eric.repository.DiscussionSubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -103,12 +101,17 @@ public class DiscussionServiceImpl implements  DiscussionService{
     }
 
     @Override
-    public ProductMainDiscussion delete(ProductMainDiscussion productMainDiscussion) {
-        return null;
+    public ProductSubDiscussion getSubDiscussionById(Long id) {
+        return subDiscussionRepo.findById(id).orElse(null);
     }
 
     @Override
-    public ProductSubDiscussion delete(ProductSubDiscussion productSubDiscussion) {
-        return null;
+    public void delete(ProductMainDiscussion productMainDiscussion) {
+         mainDiscussionRepo.delete(productMainDiscussion);
+    }
+
+    @Override
+    public void delete(ProductSubDiscussion productSubDiscussion) {
+         subDiscussionRepo.delete(productSubDiscussion);
     }
 }

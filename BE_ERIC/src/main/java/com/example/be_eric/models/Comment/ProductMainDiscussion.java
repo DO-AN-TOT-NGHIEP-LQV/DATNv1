@@ -1,7 +1,7 @@
 package com.example.be_eric.models.Comment;
 
 
-import com.example.be_eric.models.Product;
+import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.models.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -33,10 +33,12 @@ public class ProductMainDiscussion {
     private String mainContent;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "product_id")
     private Product product;
 
@@ -45,6 +47,7 @@ public class ProductMainDiscussion {
     @JsonManagedReference
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<ProductSubDiscussion> subDiscussions = new ArrayList<>();
+
 
     public ProductMainDiscussion(Long id, String mainContent, User user, Product product) {
         this.id = id;

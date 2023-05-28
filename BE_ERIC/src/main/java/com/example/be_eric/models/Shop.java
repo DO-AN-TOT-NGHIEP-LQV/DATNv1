@@ -1,11 +1,10 @@
 package com.example.be_eric.models;
 
 
+import com.example.be_eric.models.Product.Product;
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
