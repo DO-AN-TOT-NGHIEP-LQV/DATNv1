@@ -137,4 +137,21 @@ public class SearchController {
 
         return ResponseEntity.ok().body(responeList);
     }
+
+
+//    @GetMapping(value = "/search/GetAllShop")
+//    public ResponseEntity searchGetAllShop() {
+//        Pageable pageable = PageRequest.of(page, 10);
+//        Page<Product> productsListPage = productService.searchByText(searchText, pageable);
+//        List<Product> productsList = productsListPage.getContent();
+//
+//        Page<Post> postListPage = postService.searchByText(searchText, pageable);
+//        List<Post> postList = postListPage.getContent();
+//
+//        List<Object> responeList = new ArrayList<>();
+//        responeList.addAll(productsList);
+//        responeList.addAll(postList);
+//
+//        return ResponseEntity.ok().body(responeList);
+//    }
 }

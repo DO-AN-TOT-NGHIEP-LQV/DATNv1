@@ -23,6 +23,8 @@ const SearchInput = () => {
     (state) => state.search.isMainViewVisible
   );
 
+  const showFilterModel = useSelector((state) => state.filter.showFilterModel);
+
   const onSearch = async () => {
     // actions.updateShowAllCategories(false);
     // Co cac bien nhu la danh sach search, neu ma bam vo cai nut ni thi hien thi che do showALl tuc la search text.
@@ -80,7 +82,6 @@ const SearchInput = () => {
             style={{
               borderWidth: 1,
               borderColor: colors.blueMain,
-              // height: "100%",
               borderRadius: 10,
               // marginVertical: 5,
               // paddingVertical:5
@@ -94,8 +95,11 @@ const SearchInput = () => {
                 onChangeText={setSearch}
               />
 
+              {/* Camera icon */}
               <TouchableOpacity
-                style={styles.cameraButton}
+                style={{
+                  ...styles.cameraButton,
+                }}
                 onPress={() => {
                   updateIsMainViewDisplay(!isMainViewVisible);
                 }}
@@ -105,11 +109,27 @@ const SearchInput = () => {
                     icon={icons.Ionicons}
                     size={20}
                     name="camera-outline"
-                    // {/* <Ionicons name="camera-outline" size={24} color="black" /> */}
                   />
                 </View>
               </TouchableOpacity>
 
+              {/* Filter icon */}
+              <TouchableOpacity
+                style={{
+                  ...styles.cameraButton,
+                }}
+                onPress={() => actions.updateShowFilterModel(true)}
+              >
+                <View>
+                  <Icons
+                    icon={icons.Ionicons}
+                    size={20}
+                    name="md-filter-outline"
+                  />
+                </View>
+              </TouchableOpacity>
+
+              {/* Search Button */}
               <TouchableOpacity style={styles.filter} onPress={onSearch}>
                 <View>
                   <Icons
@@ -175,9 +195,11 @@ const styles = StyleSheet.create({
   field: {
     backgroundColor: colors.white,
     paddingLeft: spacing.s, // spacing.xl + spacing.s,
-    paddingRight: spacing.m, // spacing.m,
+    // paddingRight: spacing.m, // spacing.m,
     paddingVertical: 10,
     borderRadius: 16,
+    marginRight: 3,
+
     flex: 1,
     shadowColor: colors.black,
     shadowRadius: 4,
@@ -198,9 +220,16 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 8,
   },
   cameraButton: {
-    width: 40,
+    // width: 40,
+    // justifyContent: "center",
+    // alignItems: "center"
+
     justifyContent: "center",
-    alignItems: "center",
+    // alignItems: "flex-start",
+    // borderWidth: 1,
+    // paddingHorizontal: 5
+    // marginHorizontal: 3,
+    marginRight: 3,
   },
 });
 

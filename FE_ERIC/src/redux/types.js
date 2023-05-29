@@ -15,4 +15,11 @@ export default {
   SEARCH_TEXT: "SEARCH_TEXT",
   IS_MAIN_VIEW_DISPLAY: "IS_MAIN_VIEW_DISPLAY",
   IS_LOADING: "IS_LOADING",
+  SHOW_FILTER_MODEL: "SHOW_FILTER_MODEL",
+
+  //Fileter
+  nowRangeMinMaxPrice: "nowRangeMinMaxPrice",
+  nowValueMinMaxPrice: "nowValueMinMaxPrice",
+  saveRangeMinMaxPrice: "saveRangeMinMaxPrice",
+  saveValueMinMaxPrice: "saveValueMinMaxPrice",
 };

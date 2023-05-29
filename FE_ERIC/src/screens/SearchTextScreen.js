@@ -41,7 +41,7 @@ const SearchTextScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const searchText = useSelector((state) => state.search.searchText);
 
-  const [showFilterModel, setShowFilterModel] = useState();
+  const showFilterModel = useSelector((state) => state.filter.showFilterModel);
 
   return (
     <View style={style.container}>
@@ -52,7 +52,7 @@ const SearchTextScreen = () => {
       {showFilterModel && (
         <FilterModal
           isVisible={showFilterModel}
-          onClose={() => setShowFilterModel(false)}
+          onClose={() => actions.updateShowFilterModel(false)}
         />
       )}
     </View>
