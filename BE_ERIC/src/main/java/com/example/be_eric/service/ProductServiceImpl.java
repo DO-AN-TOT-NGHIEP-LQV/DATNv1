@@ -3,6 +3,7 @@ package com.example.be_eric.service;
 import com.example.be_eric.models.Image;
 import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.repository.ProductRepository;
+import com.example.be_eric.repository.ProductSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -57,6 +58,18 @@ public class ProductServiceImpl implements  ProductService{
     @Override
     public List<Product> searchByTextNotPageable(String searchText) {
         return productRepo.findProductsByNameContainingOrDescriptionContaining(searchText,  searchText);
+    }
+
+    @Override
+    public Page<Product> searchAndFilterProducts(String keyword, String[] types, String[] brands, Double minPrice, Double maxPrice, Pageable pageable) {
+        return productRepo.findAll(ProductSpecifications.searchAndFilter(keyword, types, brands, minPrice, maxPrice),pageable);
+
+    }
+
+    @Override
+    public List<Product> searchAndFilterProducts(String keyword, String[] types, String[] brands, Double minPrice, Double maxPrice) {
+        return productRepo.findAll(ProductSpecifications.searchAndFilter(keyword, types, brands, minPrice, maxPrice));
+
     }
 
 }

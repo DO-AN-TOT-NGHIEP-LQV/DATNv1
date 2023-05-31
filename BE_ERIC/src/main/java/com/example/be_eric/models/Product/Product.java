@@ -66,7 +66,17 @@ public class Product {
         this.shop = shop;
     }
 
-    public Product(Long id, String name, String description, int quantity, double  originalPrice ,  double  price, Shop shop) {
+    public Product(Long id, String name, String description, int quantity, String type, String brand, Shop shop) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.quantity = quantity;
+        this.type = type;
+        this.brand = brand;
+        this.shop = shop;
+    }
+
+    public Product(Long id, String name, String description, int quantity, double  originalPrice , double  price, Shop shop) {
         this.id = id;
         this.name = name;
         this.description = description;

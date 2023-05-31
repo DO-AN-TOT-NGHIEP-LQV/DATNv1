@@ -11,13 +11,11 @@ import {
   TextInput,
   SafeAreaView,
   FlatList,
-  VirtualizedList,
-  Button,
-  KeyboardAvoidingView,
-  Keyboard,
   Pressable,
+  Switch,
 } from "react-native";
 
+import MultiSlider from "@ptomasroos/react-native-multi-slider";
 import React, { useState } from "react";
 import Color from "../../constans/Color";
 import actions from "../../redux/actions";
@@ -25,49 +23,20 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useRef } from "react";
 import Icons, { icons } from "../Icons";
-import TwoPointSlider from "./TwoPointSlider";
+import CustomButton from "../CustomButton/index.js";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const dataType = [
-  { key: "Thigh-high", value: "Thigh-high" },
-  { key: "Knee-high", value: "Knee-high" },
-  { key: "Sneaker", value: "Sneaker" },
-  { key: "Sandal", value: "Sandal" },
-  { key: "Thigh-high", value: "Thigh-high" },
-  { key: "Knee-high", value: "Knee-high" },
-  { key: "Sneaker1", value: "Sneaker1" },
-  { key: "Sandal2", value: "Sandal2" },
-  { key: "Thigh-high3", value: "Thigh-high3" },
-  { key: "Knee-high4", value: "Knee-high4" },
-  { key: "Sneaker5", value: "Sneaker5" },
-  { key: "Sandal6", value: "Sandal6" },
-];
+const FilterModal = ({ isVisible, onClose, firstRenderData, searchText }) => {
+  const isApplyFilter = useSelector((state) => state.filter.isApplyFilter);
 
-import MultipleSelectLists from "./MultipleSelectLists";
-
-const FilterModal = ({ isVisible, onClose }) => {
-  const showFilterModel = useSelector((state) => state.filter.showFilterModel);
-
-  const nowRangeMinMaxPrice = useSelector(
-    (state) => state.filter.nowRangeMinMaxPrice
-  );
-  const nowValueMinMaxPrice = useSelector(
-    (state) => state.filter.nowValueMinMaxPrice
-  );
-
-  const saveRangeMinMaxPrice = useSelector(
-    (state) => state.filter.saveRangeMinMaxPrice
-  );
-  const saveValueMinMaxPrice = useSelector(
-    (state) => state.filter.saveValueMinMaxPrice
-  );
+  const [switchToggle, setSwitchToggle] = useState(isApplyFilter);
 
   const modalAnimatedValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    if (showFilterModel) {
+    if (isVisible) {
       Animated.timing(modalAnimatedValue, {
         toValue: 1,
         duration: 500,
@@ -78,23 +47,115 @@ const FilterModal = ({ isVisible, onClose }) => {
         toValue: 0,
         duration: 500,
         useNativeDriver: false,
-      }).start(() => onClose());
+      }).start(onClose());
     }
-  }, [showFilterModel]);
+  }, [isVisible]);
 
   const modalY = modalAnimatedValue.interpolate({
     inputRange: [0, 1],
     outputRange: [windowHeight, (windowHeight * 1.2) / 10],
   });
 
-  //  state cua Tpye   // se bien thanh 1 kiểu trong redecer
-  const [selected, setSelected] = useState([]);
+  const saveFilterValue = async () => {
+    // actions.nowRangeMinMaxPrice(sliderValue);
+    // actions.typeSelectedList(selectedTypeTags);
+    // actions.brandSelectedList(selectedBrandTags);
+    // actions.updateApplyFilter(switchToggle);
+
+    // onClose();
+
+    let isAnyVariableChanged = false;
+    if (sliderValue !== nowRangeMinMaxPrice) {
+      await actions.nowRangeMinMaxPrice(sliderValue);
+      isAnyVariableChanged = true;
+    }
+
+    if (selectedTypeTags !== typeSelectedList) {
+      await actions.typeSelectedList(selectedTypeTags);
+      isAnyVariableChanged = true;
+    }
+
+    if (selectedBrandTags !== brandSelectedList) {
+      await actions.brandSelectedList(selectedBrandTags);
+      isAnyVariableChanged = true;
+    }
+
+    if (isApplyFilter !== switchToggle) {
+      await actions.updateApplyFilter(switchToggle);
+      isAnyVariableChanged = true;
+    }
+
+    if (isAnyVariableChanged) await actions.changeFilter();
+
+    onClose();
+  };
+
+  /////////////////////////////////////
+  useEffect(() => {
+    handleSliderChange(nowRangeMinMaxPrice);
+    setSelectedTypeTags(typeSelectedList);
+    setSelectedBrandTags(brandSelectedList);
+    setSwitchToggle(isApplyFilter);
+  }, []);
+
+  ///////////// State va funtion Price
+  const nowRangeMinMaxPrice = useSelector(
+    (state) => state.filter.nowRangeMinMaxPrice
+  );
+
+  const [sliderValue, setSliderValue] = useState([0, 0]);
+  const [readValue, setReadValue] = useState([0, 0]);
+  const postfix = "đồng";
+
+  const handleSliderChange = (values) => {
+    setSliderValue(values);
+    let minValue = calculateDisplayValue(values[0]);
+    let maxValue = calculateDisplayValue(values[1]);
+    setReadValue([minValue, maxValue]);
+  };
+  const calculateDisplayValue = (value) => {
+    const min = 0;
+    const max = 100;
+    const threshold = 70;
+
+    const maxPriceValue = 10000000;
+    const minPriceValue = 1000000;
+
+    if (value <= threshold) {
+      // Phần đầu (0 - threshold)
+      const range = minPriceValue - min;
+      const adjustedValue = (value - min) / (threshold - min);
+      return Math.round(min + adjustedValue * range).toLocaleString("vi-VN");
+    } else {
+      // Phần sau (threshold - max)
+      const range = maxPriceValue - minPriceValue;
+      const adjustedValue = (value - threshold) / (max - threshold);
+      return Math.round(minPriceValue + adjustedValue * range).toLocaleString(
+        "vi-VN"
+      );
+    }
+  };
+
+  ////////////State cua Type
+  const typeSelectedList = useSelector(
+    (state) => state.filter.typeSelectedList
+  );
+
+  const tags = [
+    "Sneakers",
+    "Sandals",
+    "Flip flops",
+    "High - Heels",
+    "Oxfords",
+    "Athletics",
+    "Boots - Ankle",
+    "Baby",
+  ];
+  const [selectedTypeTags, setSelectedTypeTags] = useState([]);
 
   // Modal search Brand
-  const [showPopup, setShowPopup] = useState(false);
-
+  const [showBrandPopup, setShowPopup] = useState(false);
   const openPopup = () => {
-    //sẽ đổi thanh 1 biễn check reducer để search
     setShowPopup(true);
   };
 
@@ -102,58 +163,18 @@ const FilterModal = ({ isVisible, onClose }) => {
     setShowPopup(false);
   };
 
-  const [selectedTags, setSelectedTags] = useState(["Adidas", "Nike"]);
-  const [newTag, setNewTag] = useState("");
+  const brandSelectedList = useSelector(
+    (state) => state.filter.brandSelectedList
+  );
 
-  const handleNewTagSubmit = () => {
-    if (newTag && !selectedTags.includes(newTag)) {
-      setSelectedTags([...selectedTags, newTag]);
-      setNewTag("");
-    }
-  };
+  const [selectedBrandTags, setSelectedBrandTags] = useState([]);
 
-  const handleTagPress = (tag) => {
-    const updatedTags = selectedTags.filter(
+  const handleTagBrandPress = (tag) => {
+    const updatedBrandTags = selectedBrandTags.filter(
       (selectedTag) => selectedTag !== tag
     );
-    setSelectedTags(updatedTags);
+    setSelectedBrandTags(updatedBrandTags);
   };
-
-  ///////////////////
-
-  function renderTags() {
-    return (
-      <View style={{ flex: 1 }}>
-        <TextInput
-          style={styles.newTagInput}
-          placeholder="Thêm tag mới"
-          value={newTag}
-          onChangeText={setNewTag}
-          onSubmitEditing={handleNewTagSubmit}
-        />
-
-        <TouchableOpacity style={styles.addButton} onPress={handleNewTagSubmit}>
-          <Text style={styles.addButtonText}>Thêm</Text>
-        </TouchableOpacity>
-
-        <View style={styles.selectedTagsContainer}>
-          {selectedTags.map((tag) => (
-            <TouchableOpacity
-              key={tag}
-              style={styles.selectedTag}
-              onPress={() => handleTagPress(tag)}
-            >
-              <Text
-                style={{ color: Color.blueMain, fontSize: 13, padding: 10 }}
-              >
-                {tag}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-    );
-  }
 
   function renderAutocompleteScreen() {
     const suggestions = [
@@ -180,7 +201,16 @@ const FilterModal = ({ isVisible, onClose }) => {
     ];
     const [data, setData] = useState([]);
 
-    const onChangeText = async (text) => {
+    const [newTag, setNewTag] = useState("");
+
+    const handleNewTagSubmit = () => {
+      if (newTag && !selectedBrandTags.includes(newTag)) {
+        setSelectedBrandTags([...selectedBrandTags, newTag]);
+        setNewTag("");
+      }
+    };
+
+    const onChangeText = (text) => {
       setNewTag(text);
       if (text === "") {
         setData([]);
@@ -189,13 +219,21 @@ const FilterModal = ({ isVisible, onClose }) => {
       setData(suggestions.filter((item) => item.value.match(regex)));
     };
 
+    const selecteSuget = (item) => {
+      if (item && !selectedBrandTags.includes(item.value)) {
+        setSelectedBrandTags([...selectedBrandTags, item.value]);
+        setNewTag("");
+      }
+    };
+
     return (
-      <Modal animationType="fade" transparent={true} visible={showPopup}>
+      <Modal animationType="fade" transparent={true} visible={showBrandPopup}>
         <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }}>
           <Animated.View
             style={{
               ...styles.mainPopup,
               ...styles.sessionPopup,
+              paddingTop: 15,
             }}
           >
             {/* Header */}
@@ -210,7 +248,7 @@ const FilterModal = ({ isVisible, onClose }) => {
               >
                 Nhãn hiệu
               </Text>
-
+              {/* close brand popup */}
               <TouchableOpacity onPress={() => closePopup()}>
                 <View style={styles.closeButton}>
                   <Icons
@@ -224,11 +262,11 @@ const FilterModal = ({ isVisible, onClose }) => {
             </View>
 
             <View style={{ ...styles.selectedTagsContainer }}>
-              {selectedTags.map((tag) => (
+              {selectedBrandTags.map((tag) => (
                 <TouchableOpacity
                   key={tag}
                   style={styles.selectedTag}
-                  onPress={() => handleTagPress(tag)}
+                  onPress={() => handleTagBrandPress(tag)}
                 >
                   <Text
                     style={{
@@ -247,20 +285,47 @@ const FilterModal = ({ isVisible, onClose }) => {
               {/* Input  */}
               <Section title={"_____________"}>
                 <View style={{ paddingTop: 3 }}>
-                  <TextInput
-                    onChangeText={onChangeText}
-                    value={newTag}
+                  <View
                     style={{
-                      // height: 55,
-                      paddingVertical: 10,
-                      borderColor: Color.textLight,
-                      borderWidth: 1,
-                      paddingHorizontal: 10,
-                      borderRadius: 5,
+                      flexDirection: "row",
+                      alignItems: "center",
+                      width: "100%",
                     }}
-                    placeholder="Nhập vào nhãn hiệu bạn muốn tìm"
-                    onSubmitEditing={handleNewTagSubmit}
-                  />
+                  >
+                    <TextInput
+                      onChangeText={onChangeText}
+                      value={newTag}
+                      style={{
+                        paddingVertical: 10,
+                        borderColor: Color.textLight,
+                        borderWidth: 1,
+                        paddingHorizontal: 1,
+                        width: "80%",
+                        borderRadius: 5,
+                        height: 45,
+                      }}
+                      placeholder="Nhập vào nhãn hiệu bạn muốn tìm"
+                      onSubmitEditing={handleNewTagSubmit}
+                    />
+
+                    <CustomButton
+                      onPress={() => {
+                        handleNewTagSubmit();
+                      }}
+                      label={"Thêm"}
+                      textStyle={{ fontSize: 14 }}
+                      styleContainer={{
+                        borderRadius: 10,
+                        height: 45,
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderColor: Color.textLight,
+                        borderRadius: 5,
+                        width: "20%",
+                      }}
+                    />
+                  </View>
+
                   {newTag && data.length > 0 ? (
                     <View style={{ height: 400 }}>
                       <FlatList
@@ -272,9 +337,8 @@ const FilterModal = ({ isVisible, onClose }) => {
                             style={({ pressed }) => [
                               { opacity: pressed ? 0.5 : 1 },
                             ]}
-                            onPress={async () => {
-                              await setNewTag(item.value);
-                              handleNewTagSubmit();
+                            onPress={() => {
+                              selecteSuget(item);
                             }}
                           >
                             <View
@@ -308,15 +372,52 @@ const FilterModal = ({ isVisible, onClose }) => {
     );
   }
 
+  function renderTagType() {
+    const handleTypeTagPress = (tag) => {
+      if (selectedTypeTags.includes(tag)) {
+        // Hủy chọn tag nếu đã được chọn trước đó
+        setSelectedTypeTags(
+          selectedTypeTags.filter((selectedTag) => selectedTag !== tag)
+        );
+      } else {
+        // Chọn tag nếu chưa được chọn trước đó
+        setSelectedTypeTags([...selectedTypeTags, tag]);
+      }
+    };
+
+    return (
+      <View style={styles.selectedTagsContainer}>
+        {tags.map((tag, index) => (
+          <TouchableOpacity
+            key={tag + index}
+            style={[
+              styles.tagType,
+              selectedTypeTags.includes(tag) && styles.selectedTagType,
+            ]}
+            onPress={() => handleTypeTagPress(tag)}
+          >
+            <Text
+              style={{
+                color: Color.black,
+                fontSize: 13,
+                padding: 10,
+              }}
+            >
+              {tag}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
+  }
+
   //////////////////////////////////////////////
   // FILTER MODAL
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }}>
         {/* Transparent  */}
-        <TouchableWithoutFeedback
-          onPress={() => actions.updateShowFilterModel(false)}
-        >
+        <TouchableWithoutFeedback onPress={() => onClose()}>
           <View style={styles.absoluteFull}></View>
         </TouchableWithoutFeedback>
 
@@ -333,13 +434,39 @@ const FilterModal = ({ isVisible, onClose }) => {
             style={{
               flexDirection: "row",
               alignItems: "center",
+              backgroundColor: Color.white,
+              paddingTop: 10,
             }}
           >
             <Text style={styles.filterMainTitle}>Bộ lọc của bạn</Text>
 
-            <TouchableOpacity
-              onPress={() => actions.updateShowFilterModel(false)}
+            <View
+              style={{
+                // flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
+              <Switch
+                trackColor={{ true: Color.textLight, false: Color.textLight }}
+                thumbColor={switchToggle ? Color.mainColor : "#767577"}
+                ios_backgroundColor="#3e3e3e"
+                onValueChange={(value) => {
+                  setSwitchToggle(!switchToggle);
+                }}
+                value={switchToggle}
+              />
+            </View>
+
+            <Text
+              style={{
+                flex: 0.2,
+              }}
+            >
+              {switchToggle ? "On" : "Off"}
+            </Text>
+
+            <TouchableOpacity onPress={() => onClose()}>
               <View style={styles.closeButton}>
                 <Icons
                   icon={icons.Ionicons}
@@ -351,106 +478,174 @@ const FilterModal = ({ isVisible, onClose }) => {
             </TouchableOpacity>
           </View>
 
-          <ScrollView contentContainerStyle={{ paddingBottom: windowHeight }}>
-            {/* Price */}
-            <Section title={"Giá"}>
-              <View style={{ alignItems: "center", paddingTop: 0 }}>
-                <TwoPointSlider
-                  values={[0, 99]}
-                  min={0}
-                  max={10000000}
-                  postfix="Đồng"
-                  onValueChange={(value) => console.log(value)}
-                />
-              </View>
-            </Section>
+          <View
+            pointerEvents={switchToggle ? "auto" : "none"}
+            style={{ opacity: switchToggle ? 1 : 0.2 }}
+          >
+            <ScrollView
+              contentContainerStyle={{
+                paddingBottom: windowHeight,
+                backgroundColor: Color.white,
+              }}
+              showsVerticalScrollIndicator={false}
+            >
+              {/* Price */}
+              <Section title={"Giá"}>
+                <View style={{ alignItems: "center", paddingTop: 0 }}>
+                  <MultiSlider
+                    values={sliderValue}
+                    sliderLength={windowWidth - 50 - 20}
+                    min={0}
+                    max={110}
+                    step={1}
+                    markerOffsetY={20}
+                    selectedStyle={{
+                      backgroundColor: Color.mainColor,
+                    }}
+                    trackStyle={{
+                      height: 10,
+                      borderRadius: 10,
+                      backgroundColor: Color.textLight,
+                    }}
+                    minMarkerOverlapDistance={40}
+                    isMarkersSeparated={true}
+                    customMarkerLeft={(e) => {
+                      return (
+                        <View style={styles.customMakerContainer}>
+                          <View
+                            style={{
+                              ...styles.customMakerPoint,
+                              ...styles.shadowColor,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              height: 30,
+                              color: Color.textDark,
+                              fontSize: 10,
+                              fontWeight: 400,
+                            }}
+                          >
+                            {readValue[0]} {postfix}
+                          </Text>
+                        </View>
+                      );
+                    }}
+                    customMarkerRight={(e) => {
+                      return (
+                        <View style={styles.customMakerContainer}>
+                          <View
+                            style={{
+                              ...styles.customMakerPoint,
+                              ...styles.shadowColor,
+                              backgroundColor:
+                                e.currentValue > 100
+                                  ? Color.yellow
+                                  : Color.mainColor,
+                            }}
+                          />
+                          <Text
+                            style={{
+                              height: 30,
+                              color: Color.textDark,
+                              fontSize: 10,
+                              fontWeight: 400,
+                            }}
+                          >
+                            {e.currentValue > 100
+                              ? ">10 triệu"
+                              : `${readValue[1]}`}
+                          </Text>
+                        </View>
+                      );
+                    }}
+                    onValuesChange={handleSliderChange}
+                  />
+                </View>
+              </Section>
 
-            {/* Type */}
-            <Section title={"Kiểu loại"}>
-              <View
-                style={{
-                  paddingHorizontal: 10,
-                  paddingTop: 5,
-                }}
-              >
-                <MultipleSelectLists
-                  setSelected={(val) => setSelected(val)}
-                  data={dataType}
-                  onSelect={() => console.log(selected)}
-                  defaultOption={{ key: "Sandal", value: "Sandal" }}
-                  save="value"
-                  notFoundText="Không tìm thấy giá trị phù hợp"
-                  labelStyles={{ display: "none" }}
-                  placeholder="Chọn"
-                  searchPlaceholder="Tìm kiếm"
-                  badgeStyles={{
-                    backgroundColor: Color.whiteColor, //,
-                    borderRadius: 8,
-                    borderWidth: 1,
-                    borderColor: Color.mainColor,
+              {/* Type */}
+              <Section title={"Kiểu loại"}>
+                <View
+                  style={{
+                    paddingHorizontal: 10,
+                    paddingTop: 5,
                   }}
-                  badgeTextStyles={{ color: Color.blueMain, fontSize: 13 }}
-                />
-              </View>
-            </Section>
+                >
+                  {renderTagType()}
+                </View>
+              </Section>
 
-            <Section title={"Nhãn hiệu"}>
-              <TouchableOpacity
-                onPress={() => openPopup()}
-                style={{
-                  borderWidth: 1,
-                  height: 50,
-                  ...styles.newTagInput,
-                  justifyContent: "center",
-                }}
-              >
-                <Text style={{ opacity: 0.2 }}>Nhập nhãn hiệu muốn tìm</Text>
-              </TouchableOpacity>
+              <Section title={"Nhãn hiệu"}>
+                <TouchableOpacity
+                  onPress={() => openPopup()}
+                  style={{
+                    borderWidth: 1,
+                    height: 50,
+                    ...styles.newTagInput,
+                    justifyContent: "center",
+                  }}
+                >
+                  <Text style={{ opacity: 0.2 }}>Nhập nhãn hiệu muốn tìm</Text>
+                </TouchableOpacity>
 
-              {renderAutocompleteScreen()}
-              <View style={styles.selectedTagsContainer}>
-                {selectedTags.map((tag) => (
-                  <TouchableOpacity
-                    key={tag}
-                    style={styles.selectedTag}
-                    onPress={() => handleTagPress(tag)}
-                  >
-                    <Text
-                      style={{
-                        color: Color.blueMain,
-                        fontSize: 13,
-                        padding: 10,
-                      }}
+                {renderAutocompleteScreen()}
+                <View style={styles.selectedTagsContainer}>
+                  {selectedBrandTags.map((tag) => (
+                    <TouchableOpacity
+                      key={tag}
+                      style={styles.selectedTag}
+                      onPress={() => handleTagBrandPress(tag)}
                     >
-                      {tag}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </Section>
+                      <Text
+                        style={{
+                          color: Color.blueMain,
+                          fontSize: 13,
+                          padding: 10,
+                        }}
+                      >
+                        {tag}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </Section>
+            </ScrollView>
+          </View>
 
-            {/* Button Submit */}
-            <View
+          <View
+            style={{
+              position: "absolute",
+              bottom: 120,
+              left: 0,
+              right: 0,
+              height: 55,
+              paddingHorizontal: 20,
+              paddingVertical: 20,
+              backgroundColor: Color.transparent,
+              flex: 1,
+            }}
+          >
+            <TouchableOpacity
               style={{
-                height: 110,
-                flex: 1,
-                paddingHorizontal: 15,
+                backgroundColor: Color.mainColor,
+                borderRadius: 10,
+                justifyContent: "center",
+                alignItems: "center",
+                height: 55,
+                borderWidth: 0,
+              }}
+              onPress={() => {
+                saveFilterValue();
               }}
             >
-              <TouchableOpacity
-                style={{
-                  height: 50,
-                  backgroundColor: Color.mainColor,
-                  borderRadius: 10,
-                }}
-                onPress={() => {
-                  console.log(nowRangeMinMaxPrice);
-                }}
+              <Text
+                style={{ color: Color.white, fontSize: 18, fontWeight: "600" }}
               >
-                <Text>Áp dụng</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
+                Áp dụng
+              </Text>
+            </TouchableOpacity>
+          </View>
         </Animated.View>
       </View>
     </Modal>
@@ -461,7 +656,7 @@ const Section = ({ containerStyle, title, children }) => {
   return (
     <View
       style={{
-        marginVertical: 5,
+        marginVertical: 10,
         // flex: 1,
         marginBottom: 15,
         ...containerStyle,
@@ -517,7 +712,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     paddingHorizontal: 15,
-    paddingTop: 15,
+    // paddingTop: 15,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
     backgroundColor: Color.white,
@@ -556,5 +751,47 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: "white",
     fontWeight: "bold",
+  },
+  customMakerContainer: {
+    height: 90,
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    zIndex: 10,
+  },
+  customMakerPoint: {
+    height: 30,
+    width: 30,
+    borderRadius: 15,
+    borderWidth: 4,
+    borderColor: Color.white,
+    backgroundColor: Color.mainColor,
+  },
+  shadowColor: {
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowRadius: 1,
+    shadowOpacity: 0.1,
+  },
+  tagType: {
+    // paddingHorizontal: 2,
+    margin: 2,
+    backgroundColor: Color.white,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Color.textLight,
+    paddingVertical: 0,
+  },
+  selectedTagType: {
+    paddingHorizontal: 4,
+    margin: 2,
+    backgroundColor: Color.white,
+    color: Color.mainColor,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: Color.mainColor,
   },
 });

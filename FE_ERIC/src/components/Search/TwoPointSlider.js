@@ -27,14 +27,8 @@ const TwoPointSlider = ({ values, min, max, postfix, onValueChange }) => {
 
   const handleSliderChange = (values) => {
     setSliderValue(values);
-    actions.nowRangeMinMaxPrice(values);
-    // console.log(sliderValue);
+    // actions.nowRangeMinMaxPrice(values);
   };
-
-  //   vay toi co the dat gia trị cua thanh slide la tu 0 den 100, nhung gia tri thuc the can hien ra tuong ung la 0 den 2 trieu. Khi trươc slide tu 0 den 50 thi so gia tri hien thi la 0 den 1000, con khi truot thanh tu 50 den 100 thi gia trị hien thi ra la 1000 den 2 trieu
-  // Slider  0 - 100
-  // Read    0 - 1000 -2000000
-  //         0 - 1000000 - 20000000
 
   const calculateDisplayValue = (value) => {
     const min = 0;
@@ -56,7 +50,7 @@ const TwoPointSlider = ({ values, min, max, postfix, onValueChange }) => {
 
   return (
     <MultiSlider
-      values={saveRangeMinMaxPrice}
+      values={nowRangeMinMaxPrice}
       sliderLength={windowWidth - 50 - 20}
       min={0}
       max={110}

@@ -13,8 +13,9 @@ import {
   Pressable,
 } from "react-native";
 import Icons, { icons } from "../Icons";
+import Color from "../../constans/Color";
 
-// import { MultipleSelectListProps } from "..";
+// import { MultipleSelectListProps } from ".";
 
 // type L1Keys = { key?: any, value?: any, disabled?: boolean | undefined };Ư
 
@@ -46,16 +47,23 @@ const MultipleSelectLists = ({
   checkBoxStyles,
   save = "key",
   dropdownShown = false,
-  defaultSelected = ["Sandal", "Sneaker"],
+  defaultSelected = [
+    { key: "Thigh-high", value: "Thigh-high" },
+    { key: "Knee-high", value: "Knee-high" },
+    { key: "Sneaker", value: "Sneaker" },
+  ],
 }) => {
   const oldOption = React.useRef(null);
+
   const [_firstRender, _setFirstRender] = React.useState(true);
   const [dropdown, setDropdown] = React.useState(dropdownShown);
-  const [selectedval, setSelectedVal] = React.useState(defaultSelected);
+  const [selectedval, setSelectedVal] = React.useState(previouslySelected);
   const [height, setHeight] = useState(350);
   const animatedvalue = React.useRef(new Animated.Value(0)).current;
   const [filtereddata, setFilteredData] = React.useState(data);
-  // const [selectedval, setSelectedVal] = useState(defaultSelected);
+
+  const [previouslySelected, setPreviouslySelected] =
+    React.useState(defaultSelected);
 
   const slidedown = () => {
     setDropdown(true);
@@ -83,18 +91,25 @@ const MultipleSelectLists = ({
   }, [data]);
 
   React.useEffect(() => {
-    if (_firstRender) {
-      _setFirstRender(false);
-      return;
-    }
+    // if (_firstRender) {
+    //   _setFirstRender(false);
+    //   return;
+    // }
+    setPreviouslySelected(selectedval);
     onSelect();
   }, [selectedval]);
 
+  // React.useEffect(() => {
+  //   let a = defaultSelected.map((value) => ({ value, checked: true }));
+  //   setSelectedVal(a);
+  // }, []);
+
   React.useEffect(() => {
-    if (!_firstRender) {
-      if (dropdownShown) slidedown();
-      else slideup();
-    }
+    // if (!_firstRender) {
+    //   if (dropdownShown) slidedown();
+    //   else slideup();
+    // }
+    if (dropdownShown) slidedown();
   }, [dropdownShown]);
 
   return (
@@ -173,7 +188,7 @@ const MultipleSelectLists = ({
                     key={index}
                     style={[
                       {
-                        backgroundColor: "gray",
+                        backgroundColor: Color.mainColor,
                         paddingHorizontal: 20,
                         paddingVertical: 5,
                         borderRadius: 50,
@@ -244,120 +259,65 @@ const MultipleSelectLists = ({
                 filtereddata.map((item, index) => {
                   let key = item.key ?? item.value ?? item;
                   let value = item.value ?? item;
-                  let disabled = item.disabled ?? false;
-                  if (disabled) {
-                    return (
-                      <TouchableOpacity
-                        style={[styles.disabledoption, disabledItemStyles]}
-                        key={index}
+
+                  let isChecked = previouslySelected
+                    .map((selected) => selected.key)
+                    .includes(key);
+
+                  // ...
+
+                  return (
+                    <TouchableOpacity
+                      style={[styles.option, dropdownItemStyles]}
+                      key={index}
+                      onPress={() => {
+                        let existing = selectedval?.findIndex(
+                          (selected) => selected.key === key
+                        );
+
+                        if (existing !== -1 && existing !== undefined) {
+                          let sv = [...selectedval];
+                          sv.splice(existing, 1);
+                          setSelectedVal(sv);
+                        } else {
+                          // ...
+
+                          setSelectedVal((val) => {
+                            let temp = [...new Set([...val, { key, value }])];
+                            return temp;
+                          });
+                        }
+                      }}
+                    >
+                      <View
+                        style={[
+                          {
+                            width: 15,
+                            height: 15,
+                            borderWidth: 1,
+                            marginRight: 10,
+                            borderColor: "gray",
+                            borderRadius: 3,
+                            justifyContent: "center",
+                            alignItems: "center",
+                          },
+                          checkBoxStyles,
+                        ]}
                       >
-                        <View
-                          style={[
-                            {
-                              width: 15,
-                              height: 15,
-                              marginRight: 10,
-                              borderRadius: 3,
-                              justifyContent: "center",
-                              alignItems: "center",
-                              backgroundColor: "#c4c5c6",
-                            },
-                            disabledCheckBoxStyles,
-                          ]}
-                        >
-                          {selectedval?.includes(value) ? (
-                            <Image
-                              key={index}
-                              source={require("../../public/assets/icons/check.png")}
-                              resizeMode="contain"
-                              style={[{ width: 8, height: 8, paddingLeft: 7 }]}
-                            />
-                          ) : null}
-                        </View>
-                        <Text
-                          style={[
-                            { fontFamily, color: "#c4c5c6" },
-                            disabledTextStyles,
-                          ]}
-                        >
-                          {value}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  } else {
-                    return (
-                      <TouchableOpacity
-                        style={[styles.option, dropdownItemStyles]}
-                        key={index}
-                        onPress={() => {
-                          let existing = selectedval?.indexOf(value);
-
-                          // console.log(existing);
-
-                          if (existing != -1 && existing != undefined) {
-                            let sv = [...selectedval];
-                            sv.splice(existing, 1);
-                            setSelectedVal(sv);
-
-                            setSelected((val) => {
-                              let temp = [...val];
-                              temp.splice(existing, 1);
-                              return temp;
-                            });
-
-                            // onSelect()
-                          } else {
-                            if (save === "value") {
-                              setSelected((val) => {
-                                let temp = [...new Set([...val, value])];
-                                return temp;
-                              });
-                            } else {
-                              setSelected((val) => {
-                                let temp = [...new Set([...val, key])];
-                                return temp;
-                              });
-                            }
-
-                            setSelectedVal((val) => {
-                              let temp = [...new Set([...val, value])];
-                              return temp;
-                            });
-
-                            // onSelect()
-                          }
-                        }}
-                      >
-                        <View
-                          style={[
-                            {
-                              width: 15,
-                              height: 15,
-                              borderWidth: 1,
-                              marginRight: 10,
-                              borderColor: "gray",
-                              borderRadius: 3,
-                              justifyContent: "center",
-                              alignItems: "center",
-                            },
-                            checkBoxStyles,
-                          ]}
-                        >
-                          {selectedval?.includes(value) ? (
-                            <Image
-                              key={index}
-                              source={require("../../public/assets/icons/check.png")}
-                              resizeMode="contain"
-                              style={{ width: 8, height: 8, paddingLeft: 7 }}
-                            />
-                          ) : null}
-                        </View>
-                        <Text style={[{ fontFamily }, dropdownTextStyles]}>
-                          {value}
-                        </Text>
-                      </TouchableOpacity>
-                    );
-                  }
+                        {isChecked ? (
+                          <Image
+                            key={index}
+                            source={require("../../public/assets/icons/check.png")}
+                            resizeMode="contain"
+                            style={{ width: 8, height: 8, paddingLeft: 7 }}
+                          />
+                        ) : null}
+                      </View>
+                      <Text style={[{ fontFamily }, dropdownTextStyles]}>
+                        {value}
+                      </Text>
+                    </TouchableOpacity>
+                  );
                 })
               ) : (
                 <TouchableOpacity
@@ -471,3 +431,27 @@ const styles = StyleSheet.create({
     backgroundColor: "whitesmoke",
   },
 });
+
+{
+  /* <MultipleSelectLists
+                  setSelected={(val) => setSelected(val)}
+                  data={dataType}
+                  onSelect={() => console.log(selected)}
+                  defaultSelected={typeSelectedList}
+                  save="value"
+                  notFoundText="Không tìm thấy giá trị phù hợp"
+                  labelStyles={{ display: "none" }}
+                  placeholder="Chọn"
+                  searchPlaceholder="Tìm kiếm"
+                  badgeStyles={{
+                    backgroundColor: Color.whiteColor, //,
+                    borderRadius: 8,
+                    borderWidth: 1,
+                    borderColor: Color.mainColor,
+                  }}
+                  badgeTextStyles={{ color: Color.blueMain, fontSize: 13 }}
+                /> */
+}
+{
+  /* <TagList /> */
+}

@@ -18,4 +18,10 @@ public interface ProductService {
 
     List<Product> searchByTextNotPageable(String searchText);
 
+
+    Page<Product> searchAndFilterProducts(String keyword, String[] types, String[] brands, Double minPrice, Double maxPrice, Pageable pageable);
+    List<Product> searchAndFilterProducts(String keyword, String[] types, String[] brands, Double minPrice, Double maxPrice);
+
+
+
 }

@@ -1,18 +1,15 @@
 import types from "../types";
 
 const initialState = {
-  showFilterModel: false,
+  isChangeFilter: false,
+  isApplyFilter: false,
 
   ///price
-  nowRangeMinMaxPrice: null,
-  nowValueMinMaxPrice: null,
-
-  saveRangeMinMaxPrice: [0, 100],
-  saveValueMinMaxPrice: [0, 0],
+  nowRangeMinMaxPrice: [0, 80],
 
   //  Type
-  typeSelected: null,
-  brandSelected: null,
+  typeSelectedList: [], //have
+  brandSelectedList: [], //have
 };
 
 export default function (state = initialState, action) {
@@ -22,21 +19,26 @@ export default function (state = initialState, action) {
       return { ...state, showFilterModel: data };
     }
 
-    case types.nowRangeMinMaxPrice: {
+    case types.NOW_RANGE_MINMAX: {
       const data = action.payload;
       return { ...state, nowRangeMinMaxPrice: data };
     }
-    case types.nowValueMinMaxPrice: {
+
+    case types.TYPE_SELECTED_LIST: {
       const data = action.payload;
-      return { ...state, nowValueMinMaxPrice: data };
+      return { ...state, typeSelectedList: data };
     }
-    case types.saveRangeMinMaxPrice: {
+    case types.BRAND_SELECTED_LIST: {
       const data = action.payload;
-      return { ...state, saveRangeMinMaxPrice: data };
+      return { ...state, brandSelectedList: data };
     }
-    case types.saveValueMinMaxPrice: {
+
+    case types.IS_CHANGE_FILTER: {
+      return { ...state, isChangeFilter: !state.isChangeFilter };
+    }
+    case types.UPDATE_APPLY_FILTER: {
       const data = action.payload;
-      return { ...state, saveValueMinMaxPrice: data };
+      return { ...state, isApplyFilter: data };
     }
 
     default:

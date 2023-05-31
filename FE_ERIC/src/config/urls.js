@@ -17,6 +17,9 @@ export const SEARCH_ALL_B_IMG = getApiUrl("/search/searchByImage");
 export const SEARCH_POST_B_TEXT = getApiUrl("/search/posts/SearchByText");
 export const SEARCH_PRODUCT_B_TEXT = getApiUrl("/search/products/SearchByText");
 export const SEARCH_ALL_BY_TEXT = getApiUrl("/search/all/SearchByText");
+export const SEARCH_AND_FILTER_PRODUCTS = getApiUrl(
+  "/search/products/searchAndFilterProducts"
+);
 
 //Product
 export const GET_PRODUCT_DISCUSSION = getApiUrl(
