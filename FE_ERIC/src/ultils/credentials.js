@@ -1,12 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import store from "../redux/store";
-
-const { dispatch, getState } = store;
-
-export async function getUserData() {
+export async function getStorageTokenUserData() {
   return new Promise((resolve, reject) => {
-    AsyncStorage.getItem("userData").then((data) => {
+    AsyncStorage.getItem("tokenData").then((data) => {
       resolve(JSON.parse(data));
     });
   });
@@ -14,9 +10,9 @@ export async function getUserData() {
 
 export function setCredentials(data) {
   data = JSON.stringify(data);
-  return AsyncStorage.setItem("userData", data);
+  return AsyncStorage.setItem("tokenData", data);
 }
 
 export async function clearUserData() {
-  return AsyncStorage.removeItem("userData");
+  return AsyncStorage.removeItem("tokenData");
 }

@@ -92,6 +92,8 @@ export const searchWithImage = (pickedImagePath) => {
   });
 };
 
+
+
 export const fetchDataForSearchText = (
   searchText,
   page,
@@ -108,14 +110,6 @@ export const fetchDataForSearchText = (
         page: page,
       },
     };
-
-    // var endPoit =
-    //   categoryIndex == 1 ? SEARCH_PRODUCT_B_TEXT : SEARCH_POST_B_TEXT;
-
-    // var endPoint = SEARCH_ALL_BY_TEXT;
-
-    // if (categoryIndex == 1) endPoint = SEARCH_PRODUCT_B_TEXT;
-    // else if (categoryIndex == 2) endPoint = SEARCH_POST_B_TEXT;
 
     await apiGet(endPoint, data, headers, true)
       .then((res) => {

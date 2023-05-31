@@ -2,7 +2,7 @@ package com.example.be_eric.controllers;
 
 
 import com.example.be_eric.models.Post;
-import com.example.be_eric.models.Product;
+import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.models.Shop;
 import com.example.be_eric.models.User;
 import com.example.be_eric.service.PostService;
@@ -15,16 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @Slf4j
 public class ShopController {
-
 
     @Autowired
     private PostService postService;
@@ -89,6 +85,22 @@ public class ShopController {
             consumes = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> getPost()
+    {
+        try {
+
+            Post responeList = postService.getPostById(1L);
+            return ResponseEntity.ok().body(responeList);
+        } catch (Exception e) {
+            System.out.println(e);
+            return ResponseEntity.badRequest().body(e);
+        }
+    }
+
+
+    @GetMapping(value = "/sale/shop/getCountProductOfShop",
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> getCountProductOfShop()
     {
         try {
 

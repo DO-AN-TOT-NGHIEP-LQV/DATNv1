@@ -4,22 +4,32 @@ import { Button } from "react-native-paper";
 import { StyleSheet } from "react-native";
 import Color from "../../constans/Color";
 
-const CustomButton = ({ label, onPress, className, isLoading }) => {
+const CustomButton = ({
+  label,
+  onPress,
+  styleContainer,
+  isLoading,
+  textStyle,
+}) => {
   return (
     <Button
       onPress={onPress}
-      style={className ? className : styles.defaultClassname}
+      // style={className ? className : styles.defaultClassname}
+      style={{ ...styles.defaultClassname, ...styleContainer }}
       loading={isLoading}
       loadingProps={{ color: "black" }}
     >
       {!!isLoading ? (
         ""
       ) : (
-        <Text className=" text-center text-[16px] text-[#fff] ">{label}</Text>
+        <Text style={{ ...styles.textStyle, ...textStyle }}>{label}</Text>
       )}
     </Button>
   );
 };
+{
+  /* <Text className=" text-center text-[16px] text-[#fff] ">{label}</Text> */
+}
 
 const styles = StyleSheet.create({
   defaultClassname: {
@@ -37,8 +47,9 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontSize: 16,
-    textTransform: "uppercase",
-    fontWeight: "bold",
+    alignItems: "center",
+    // textTransform: "uppercase",
+    // fontWeight: "bold",
     color: "white",
   },
 });

@@ -1,7 +1,7 @@
 package com.example.be_eric.service;
 
 import com.example.be_eric.models.Image;
-import com.example.be_eric.models.Product;
+import com.example.be_eric.models.Product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -17,5 +17,11 @@ public interface ProductService {
     Page<Product> searchByText(String searchText, Pageable pageable);
 
     List<Product> searchByTextNotPageable(String searchText);
+
+
+    Page<Product> searchAndFilterProducts(String keyword, String[] types, String[] brands, Double minPrice, Double maxPrice, Pageable pageable);
+    List<Product> searchAndFilterProducts(String keyword, String[] types, String[] brands, Double minPrice, Double maxPrice);
+
+
 
 }

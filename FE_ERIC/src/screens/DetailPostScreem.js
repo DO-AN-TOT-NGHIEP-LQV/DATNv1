@@ -5,21 +5,17 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
+import { Rating } from "react-native-stock-star-rating";
 
 const DetailScreem = ({ route }) => {
   const id = route?.params?.param;
   const [isLoading, setLoading] = useState(false);
 
   const navigation = useNavigation();
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerShown : false,
-  //   });
-  // } , [])
 
   return (
     <View className=" flex-1 bg-white   relative mt-6">
@@ -37,7 +33,7 @@ const DetailScreem = ({ route }) => {
           <SafeAreaView className="absolute z-10 inset-0 flex items-center justify-start">
             <TouchableOpacity
               className="w-full flex px-4"
-              onPress={() => navigation.navigate("Discover")}
+              onPress={navigation.navigate("Discover")}
             >
               <AntDesign name="caretleft" size={24} color="white" />
             </TouchableOpacity>

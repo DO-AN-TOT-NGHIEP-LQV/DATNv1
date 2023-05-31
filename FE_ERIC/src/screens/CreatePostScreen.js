@@ -12,25 +12,21 @@ import {
   TouchableOpacity,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { createNew } from "../constans/raw";
 
 import colors from "../constans/Color";
-import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import Color from "../constans/Color";
-// import { Avatar, Hotels, Restaurants, Attractions } from '../public/assets';
 import CustomButton from "../components/CustomButton/index.js";
 import { ActivityIndicator, Button } from "react-native-paper";
 import InputFieldCustom from "../components/InputFieldCustom";
 import { showError, showSuccess } from "../ultils/helperFunction";
 import { validatorCreatePost } from "../ultils/validations";
-import { apiGet, apiPost } from "../ultils/utilsApi";
+import { apiPost } from "../ultils/utilsApi";
 import { CREATE_POST } from "../config/urls";
 import CustomGradient from "../components/CustomGradient";
-import { ImageBackground } from "react-native";
 import * as Progress from "react-native-progress";
+import Icons, { icons } from "../components/Icons";
 
-// const width = Dimensions.get("window").width / 2 - 30;
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -39,7 +35,6 @@ const CreatePostScreen = () => {
 
   const [pickedImagePath, setPickedImagePath] = useState("");
   const [loading, setLoading] = useState(false);
-  const [item, setItem] = useState(createNew);
   const [imageUris, setImageUris] = useState([]);
 
   const [post, setPost] = useState({
@@ -255,7 +250,12 @@ const CreatePostScreen = () => {
         <View style={[styles.headerWrapper, styles.shadowTouch]}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <View style={styles.headerLeft}>
-              <Feather name="chevron-left" size={12} color={colors.black} />
+              <Icons
+                icon={icons.Feather}
+                size={12}
+                color={colors.black}
+                name={"chevron-left"}
+              />
             </View>
           </TouchableOpacity>
 
@@ -477,20 +477,10 @@ export default CreatePostScreen;
 
 const renderIngredientsItem = ({ item }) => {
   return (
-    <View
-      style={[
-        styles.ingredientItemWrapper,
-        // {
-        //   marginLeft: item.id === '1' ? 20 : 0,
-        // },
-      ]}
-    >
+    <View style={[styles.ingredientItemWrapper]}>
       <Image
         source={{ uri: item }}
         resizeMode="contain"
-        // className="w-20 h-[20]  "  //object-cover
-        // style={{width: 100, height: 80, borderRadius: 5 }}
-        // resizeMode='contain'
         style={styles.ingredientImage}
       />
     </View>
@@ -506,9 +496,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 10,
+    // paddingVertical: 5,
     borderRadius: 16,
-    backgroundColor: "#ffffff", // colors.white,
-    height: 55,
+    backgroundColor: colors.white,
+    height: Dimensions.get("window").height / 15,
     marginHorizontal: 5,
     marginTop: 5,
   },
@@ -580,7 +571,6 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   ingredientItemWrapper: {
-    // flex:1,
     backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",

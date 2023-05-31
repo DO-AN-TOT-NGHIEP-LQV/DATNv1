@@ -34,11 +34,12 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function SearchScreen() {
   const listAll = useSelector((state) => state.search.listSearch);
+  // const listAll =
+
   const showAllCategories = useSelector(
     (state) => state.search.showAllCategories
   );
 
-  // const page = useSelector((state) => state.search.page);
   const pagePost = useSelector((state) => state.search.pagePost);
   const pageProduct = useSelector((state) => state.search.pageProduct);
 
@@ -57,14 +58,11 @@ export default function SearchScreen() {
   const [pickedImagePath, setPickedImagePath] = useState("");
   const [loadingEndScroll, setLoadingEndScroll] = useState(false);
 
-  const translateYAnim = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
   const CATEGORIES = ["All", "Products", "Posts"];
 
-  // useEffect(() => {
-
-  // }, [isMainViewVisible]);
+  useEffect(() => {}, []);
 
   const handleScroll = (event) => {
     const offsetY = event.nativeEvent.contentOffset.y;
@@ -76,7 +74,7 @@ export default function SearchScreen() {
         contentOffset.y + layoutMeasurement.height >= contentSize.height;
 
       if (isEndReached && !isLoading) {
-        console.log("cuoou");
+        console.log("Cuối");
         fetchDataSearch();
       }
     } else {
@@ -87,11 +85,11 @@ export default function SearchScreen() {
             duration: 100,
             useNativeDriver: true,
           }),
-          Animated.timing(translateYAnim, {
-            toValue: 0,
-            duration: 100,
-            useNativeDriver: true,
-          }),
+          // Animated.timing(translateYAnim, {
+          //   toValue: 0,
+          //   duration: 100,
+          //   useNativeDriver: true,
+          // }),
         ]).start(() => {
           actions.updateIsMainViewDisplay(true);
         });
@@ -102,26 +100,17 @@ export default function SearchScreen() {
             duration: 100,
             useNativeDriver: true,
           }),
-          Animated.timing(translateYAnim, {
-            toValue: -100,
-            duration: 100,
-            useNativeDriver: true,
-          }),
+          // Animated.timing(translateYAnim, {
+          //   toValue: -100,
+          //   duration: 100,
+          //   useNativeDriver: true,
+          // }),
         ]).start(() => {
           actions.updateIsMainViewDisplay(false);
         });
       }
     }
   };
-
-  // const handleScrollLoadData = (event) => {
-  //   const { contentOffset, layoutMeasurement, contentSize } = event.nativeEvent;
-  //   const isEndReached =
-  //     contentOffset.y + layoutMeasurement.height >= contentSize.height;
-
-  //   if (isEndReached && !isLoading) {
-  //   }
-  // };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -229,7 +218,6 @@ export default function SearchScreen() {
             alignItems: "center",
             zIndex: 100,
             opacity: fadeAnim,
-            // transform: [{ translateY: translateYAnim }],
             borderBottomColor: COLORS.backGround,
           }}
         >

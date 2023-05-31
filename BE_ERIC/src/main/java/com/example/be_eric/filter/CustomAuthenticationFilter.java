@@ -2,6 +2,8 @@ package com.example.be_eric.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.be_eric.service.UserService;
+import com.example.be_eric.service.UserServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +34,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    private UserService userService;
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager){
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager ,UserService userService){
         this.authenticationManager = authenticationManager;
+        this.userService = userService;
     }
 
     @Override
@@ -66,6 +70,15 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Map<String,String> tokens = new HashMap<>();
         tokens.put("access_token",access_token);
         tokens.put("refresh_token",refresh_token);
+//        com.example.be_eric.models.User dU = userService.getUserByEmail(user.getUsername());
+
+//        ObjectMapper objectMapper = new ObjectMapper();
+//
+//        tokens.put("detail_user",objectMapper.writeValueAsString(dU));
+
+
+//        UserService userService = new UserServiceImpl();
+
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
     }

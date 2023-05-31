@@ -2,17 +2,18 @@ import Routes from "./src/navigations/Routes";
 import { Provider } from "react-redux";
 import store from "./src/redux/store";
 import { useEffect } from "react";
-import { getUserData } from "./src/ultils/credentials";
+import { getStorageTokenUserData } from "./src/ultils/credentials";
 import { saveUserData } from "./src/redux/actions/auth";
 import { StatusBar, View } from "react-native";
+import { MenuProvider } from "react-native-popup-menu";
 
 export default function App() {
   useEffect(() => {
     (async () => {
-      const userData = await getUserData();
-      if (!!userData) {
+      const tokenData = await getStorageTokenUserData();
+      if (!!tokenData) {
         console.log("lai ren lai");
-        await saveUserData(userData);
+        await saveUserData(tokenData);
       }
     })();
   }, []);
@@ -26,7 +27,9 @@ export default function App() {
       />
       <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
         <Provider store={store}>
-          <Routes />
+          <MenuProvider>
+            <Routes />
+          </MenuProvider>
         </Provider>
       </View>
 

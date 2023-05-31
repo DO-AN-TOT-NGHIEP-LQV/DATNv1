@@ -1,5 +1,7 @@
-package com.example.be_eric.models;
+package com.example.be_eric.models.Product;
 
+import com.example.be_eric.models.Image;
+import com.example.be_eric.models.Shop;
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,14 +29,19 @@ public class Product {
     private Long id;
 
     private String name;
+    @Column(columnDefinition = "TEXT")
+
     private String description;
 
     private int quantity;
+
     private double  originalPrice = 0;
     private double  price = 0;
+    private String type;
+    private String brand;
     private String status;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "product_images",
             joinColumns = @JoinColumn(name = "product_id"),
@@ -59,7 +66,17 @@ public class Product {
         this.shop = shop;
     }
 
-    public Product(Long id, String name, String description, int quantity, double  originalPrice ,  double  price, Shop shop) {
+    public Product(Long id, String name, String description, int quantity, String type, String brand, Shop shop) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.quantity = quantity;
+        this.type = type;
+        this.brand = brand;
+        this.shop = shop;
+    }
+
+    public Product(Long id, String name, String description, int quantity, double  originalPrice , double  price, Shop shop) {
         this.id = id;
         this.name = name;
         this.description = description;

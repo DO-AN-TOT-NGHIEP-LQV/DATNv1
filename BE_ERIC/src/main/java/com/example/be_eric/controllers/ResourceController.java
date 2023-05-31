@@ -1,6 +1,5 @@
 package com.example.be_eric.controllers;
 
-import com.example.be_eric.models.Image;
 import com.example.be_eric.models.Post;
 import com.example.be_eric.models.User;
 import com.example.be_eric.service.FirebaseFileService;
@@ -12,7 +11,6 @@ import com.example.be_eric.ultils.Messenger.UploadImageResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.web.JsonPath;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,8 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Map;
 
 @Controller

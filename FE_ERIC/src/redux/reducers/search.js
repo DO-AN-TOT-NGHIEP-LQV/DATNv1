@@ -4,10 +4,10 @@ const initialState = {
   categoryIndex: 0,
   showAllCategories: false,
 
-  listSearch: null,
+  listSearch: [],
   page: 0,
-  pageProduct: 0,
-  pagePost: 0,
+  pageProduct: 0, ////
+  pagePost: 0, ////
   searchText: "",
   isMainViewVisible: true,
   isLoading: false,

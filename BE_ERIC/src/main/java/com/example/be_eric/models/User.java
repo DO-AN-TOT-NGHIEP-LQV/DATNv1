@@ -47,7 +47,7 @@ public class User {
     private String number;
     private String avatar;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "User_Role",
             joinColumns = @JoinColumn(name = "user_id"),  //lien ket voi khoa chinh cua bang hien tai
@@ -72,6 +72,18 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    public User(Long id, @NotBlank String username, @NotBlank String email,  @NotBlank String password, String avatar, List<Role> roles) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+        this.avatar =avatar;
+    }
+
+
+
 
     public User(Long id, @NotBlank String username, @NotBlank String email, @NotBlank String password, List<Role> roles) {
         this.id = id;

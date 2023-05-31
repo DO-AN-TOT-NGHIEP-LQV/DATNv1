@@ -6,6 +6,8 @@ import {
   Feeds,
   CreatePostScreen,
   SearchScreen,
+  SearchTextScreen,
+  DetailProductScreen,
 } from "../screens/index";
 import Profile from "../screens/Profile";
 import {
@@ -20,6 +22,7 @@ import {
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CustomTabBarIcon from "../components/CustomTabBarIcon";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 export default function (Stack) {
   return <Stack.Screen name="MainTab" component={MainTabs} />;
@@ -28,18 +31,12 @@ export default function (Stack) {
 const BottomTab = createBottomTabNavigator();
 const MainTabs = () => {
   return (
-    // <KeyboardAvoidingView
-    //   style={{ flex: 1 }}
-    //   // behavior="height"
-    //   behavior="padding"
-    //   keyboardVerticalOffset={Dimensions.get("window").height - 50}
-    // >
     <BottomTab.Navigator
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-
         // tabBarHideOnKeyboard: true,
+
         tabBarStyle: [
           {
             ...styles.tabBarStyle,
@@ -87,13 +84,6 @@ const MainTabs = () => {
         component={CreatePostStackNavigator}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
-            // <View className=" items-center justify-center " >
-            //     <AntDesign name="search1" size={size}  color={ focused ?'#AD40AF' : color } />
-            //     <Text style={{ color: focused ?'#AD40AF' : color,  fontSize: 12 }} >
-            //       SEARCH
-            //     </Text>
-            // </View>
-
             <CustomTabBarIcon
               nameIcon={"pluscircleo"}
               textLabel={"POST"}
@@ -201,9 +191,20 @@ const HomeStackNavigator = () => {
 
 const SearchNavigator = createNativeStackNavigator();
 const SearchStackNavigator = () => {
+  // const getTabBarVisibility = (route) => {
+  //   const routeName = getFocusedRouteNameFromRoute(route);
+  //   const hideOnScreens = ["DetailProduct"]; // remove "DetailProduct" from the hideOnScreens array
+  //   return hideOnScreens.indexOf(routeName) <= -1;
+  // };
   return (
     <SearchNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <HomeNavigator.Screen name="SearchText" component={SearchTextScreen} />
+
       <HomeNavigator.Screen name="Search" component={SearchScreen} />
+      <HomeNavigator.Screen
+        name="DetailProduct"
+        component={DetailProductScreen}
+      />
     </SearchNavigator.Navigator>
   );
 };
@@ -216,6 +217,7 @@ const DiscoverStackNavigator = () => {
       <DiscoverNavigator.Screen
         name="DetailPost"
         component={DetailPostScreem}
+        // options={{ tabBarStyle: { display: "flex" } }}
       />
     </DiscoverNavigator.Navigator>
   );

@@ -10,12 +10,12 @@ import FlashMessage from "react-native-flash-message";
 const Stack = createNativeStackNavigator();
 
 const Routes = () => {
-  const userData = useSelector((state) => state.auth.userData);
+  const tokenData = useSelector((state) => state.auth.tokenData);
 
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {!!userData && userData?.access_token
+        {!!tokenData && tokenData?.access_token
           ? MainStack(Stack)
           : AuthStack(Stack)}
       </Stack.Navigator>

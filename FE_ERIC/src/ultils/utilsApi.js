@@ -10,11 +10,11 @@ import { clearUserData, setCredentials } from "./credentials";
 const { dispatch, getState } = store;
 
 export async function getHeaders() {
-  let userData = await AsyncStorage.getItem("userData");
-  if (userData) {
-    userData = JSON.parse(userData);
+  let tokenData = await AsyncStorage.getItem("tokenData");
+  if (tokenData) {
+    tokenData = JSON.parse(tokenData);
     return {
-      authorization: "Bearer " + `${userData.access_token}`,
+      authorization: "Bearer " + `${tokenData.access_token}`,
     };
   }
   return {};
@@ -67,30 +67,34 @@ export async function apiReq(
       })
       .catch(async (error) => {
         if (error && error.response && 401 === error.response.status) {
-          let a = await AsyncStorage.removeItem("userData");
+          let a = await AsyncStorage.removeItem("tokenData");
           dispatch({
             type: types.CLEAR_REDUX_STATE,
             payload: {},
           });
-          return rej(error.response.data.error_message);
+          return rej(
+            error?.response?.data?.error_message || {
+              error_message: "Loi 401",
+            }
+          );
         }
 
         if (error && error.response) {
           if (error.response.data) {
             if (!error.response.data.error_message) {
               error.response.data.error_message = "Network Error";
-              console.log("coi loi o 1 co loi nhung khong co messenger");
+              console.log("Co loi nhung khong co messenger");
               return rej(error.response.data);
             }
             console.log(error.response.data.error_message);
             showError(error.response.data.error_message);
             return rej(error.response.data); // backend co tra ve messenger
           } else {
-            console.log("coi loi o ultils 2", error);
-            showError("Network Error");
+            console.log("Coi loi không co erro data tra ve", error);
+            return rej({ error_message: "Network Error" });
           }
         } else {
-          console.log("coi loi o 3 Khong co phan hoi tu backend");
+          console.log("Khong co phan hoi tu backend");
           return rej({ error_message: "Network Error" });
           // error.response.data.error_message = 'Network Error' ;
           // return rej(error.response.data);
@@ -125,7 +129,7 @@ export function apiPut(endPoint, data, headers = {}, withAuth = true) {
 export async function getCredentials() {
   return new Promise(async (resolve, reject) => {
     try {
-      let credentials = await AsyncStorage.getItem("userData");
+      let credentials = await AsyncStorage.getItem("tokenData");
 
       let cred = await getVerifiedUsers(JSON.parse(credentials));
       if (credentials != null && cred != null) {
@@ -153,17 +157,15 @@ export async function getCredentials() {
 // refresh lai accesstoken
 export async function updateAccessUsingRefresh(refresh_token) {
   return new Promise(async (resolve, reject) => {
-    console.log("call api ref  3 ");
     const header = {
       authorization: "Bearer " + `${refresh_token}`,
     };
-    console.log("call api ref  0 ");
     return apiGet(REFRESH_TOKEN, {}, header, false, {}).then((res) => {
-      console.log("call api ref 1");
+      console.log("REFRESH_TOKEN UPDATE");
       setCredentials(res.data).then(() => {
         resolve(res);
         dispatch({
-          type: types.LOGIN,
+          type: types.GET_DETAIL_USERS,
           payload: data,
         });
         // saveUserData(res.data)
@@ -184,28 +186,24 @@ export function isTokenExpired(token) {
   }
 }
 
-export async function getVerifiedUsers(userData) {
+export async function getVerifiedUsers(tokenData) {
   console.log("Loading keys from storage");
-  if (userData) {
-    console.log("co token trong stoage");
-    if (!isTokenExpired(userData.access_token)) {
-      console.log("token con co gia tri");
-      return userData;
+  if (tokenData) {
+    if (!isTokenExpired(tokenData.access_token)) {
+      return tokenData;
     } else {
       console.log("token het gia tri refresh");
-      if (!isTokenExpired(userData.refresh_token)) {
+      if (!isTokenExpired(tokenData.refresh_token)) {
         try {
           console.log("getVerifiedUsers  1");
           const refreshResponse = await updateAccessUsingRefresh(
-            userData.refresh_token
+            tokenData.refresh_token
           );
           return refreshResponse;
         } catch (error) {
           console.log("getVerifiedUsers  2");
           return null;
         }
-        console.log("getVerifiedUsers  3");
-        return null;
       } else {
         console.log("refresh expired, please login");
         return null;
