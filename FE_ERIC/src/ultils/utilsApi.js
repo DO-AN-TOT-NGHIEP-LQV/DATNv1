@@ -160,13 +160,13 @@ export async function updateAccessUsingRefresh(refresh_token) {
     const header = {
       authorization: "Bearer " + `${refresh_token}`,
     };
-    return apiGet(REFRESH_TOKEN, {}, header, false, {}).then((res) => {
+    await apiGet(REFRESH_TOKEN, {}, header, false, {}).then((res) => {
       console.log("REFRESH_TOKEN UPDATE");
       setCredentials(res.data).then(() => {
         resolve(res);
         dispatch({
-          type: types.GET_DETAIL_USERS,
-          payload: data,
+          type: types.LOGIN,
+          payload: res.data,
         });
         // saveUserData(res.data)
       });

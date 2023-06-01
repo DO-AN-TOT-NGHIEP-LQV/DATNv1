@@ -2,12 +2,24 @@ import { Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
-export const sizes = {
+export const SIZES = {
   width,
   height,
-  title: 32,
-  h2: 24,
-  h3: 18,
+
+  base: 8,
+  font: 14,
+  radius: 12,
+  title: 24,
+
+  h1: 30,
+  h2: 22,
+  h3: 16,
+  h4: 14,
+  body1: 30,
+  body2: 22,
+  body3: 16,
+  body4: 14,
+
   body: 14,
   caption: 12,
   radius: 16,
@@ -18,6 +30,34 @@ export const spacing = {
   m: 18,
   l: 24,
   xl: 40,
+};
+
+export const FONTS = {
+  h1: { fontFamily: "Roboto-Black", fontSize: SIZES.h1, lineHeight: 36 },
+  h2: { fontFamily: "Roboto-Bold", fontSize: SIZES.h2, lineHeight: 20 },
+  h3: { fontFamily: "Roboto-Bold", fontSize: SIZES.h3, lineHeight: 22 },
+  h4: { fontFamily: "Roboto-Bold", fontSize: SIZES.h4, lineHeight: 22 },
+
+  body1: {
+    fontFamily: "Roboto-Regular",
+    fontSize: SIZES.body1,
+    lineHeight: 36,
+  },
+  body2: {
+    fontFamily: "Roboto-Regular",
+    fontSize: SIZES.body2,
+    lineHeight: 30,
+  },
+  body3: {
+    fontFamily: "Roboto-Regular",
+    fontSize: SIZES.body3,
+    lineHeight: 22,
+  },
+  body4: {
+    fontFamily: "Roboto-Regular",
+    fontSize: SIZES.body4,
+    lineHeight: 22,
+  },
 };
 
 export const shadow = {
@@ -41,11 +81,5 @@ export const shadow = {
   },
 };
 
-// export const colors = {
-//   primary: "#070f18",
-//   gray: "#8b8989",
-//   lightGray: "#b2b2b2",
-//   light: "#fbfbfb",
-//   white: "#fff",
-//   black: "#000",
-// };
+const appTheme = { SIZES, FONTS, spacing };
+export default appTheme;

@@ -18,6 +18,8 @@ import {
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Color from "../constans/Color";
+import { FONTS } from "../constans/Theme";
+
 import { product_tabs } from "../constans/raw";
 
 import Icons, { icons } from "../components/Icons";
@@ -395,7 +397,9 @@ const Tabs = ({ scrollX, onTabPress }) => {
               onTabPress(index);
             }}
           >
-            <Text style={{ fontSize: 17, fontWeight: "600" }}>{item.name}</Text>
+            <Text style={{ fontSize: 17, fontWeight: "600", ...FONTS.h3 }}>
+              {item.name}
+            </Text>
           </TouchableOpacity>
         );
       })}

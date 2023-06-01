@@ -8,6 +8,7 @@ import {
   SearchScreen,
   SearchTextScreen,
   DetailProductScreen,
+  SearchImageScreen,
 } from "../screens/index";
 import Profile from "../screens/Profile";
 import {
@@ -41,28 +42,11 @@ const MainTabs = () => {
           {
             ...styles.tabBarStyle,
             ...styles.shadow,
-            // display: "flex",
-            // height: 50,
           },
           null,
         ],
       }}
     >
-      <BottomTab.Screen
-        name="SearchTab"
-        component={SearchStackNavigator}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => (
-            <CustomTabBarIcon
-              nameIcon={"search1"}
-              textLabel={"SEARCH"}
-              color={color}
-              size={size}
-              focused={focused}
-            />
-          ),
-        }}
-      />
       <BottomTab.Screen
         name="HomeTab"
         component={HomeStackNavigator}
@@ -71,6 +55,22 @@ const MainTabs = () => {
             <CustomTabBarIcon
               nameIcon={"home"}
               textLabel={"HOME"}
+              color={color}
+              size={size}
+              focused={focused}
+            />
+          ),
+        }}
+      />
+
+      <BottomTab.Screen
+        name="SearchTab"
+        component={SearchStackNavigator}
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            <CustomTabBarIcon
+              nameIcon={"search1"}
+              textLabel={"SEARCH"}
               color={color}
               size={size}
               focused={focused}
@@ -198,7 +198,10 @@ const SearchStackNavigator = () => {
   // };
   return (
     <SearchNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <HomeNavigator.Screen name="SearchImage" component={SearchImageScreen} />
+
       <HomeNavigator.Screen name="SearchText" component={SearchTextScreen} />
+      {/* <HomeNavigator.Screen name="SearchImage" component={SearchImageScreen} /> */}
 
       <HomeNavigator.Screen name="Search" component={SearchScreen} />
       <HomeNavigator.Screen

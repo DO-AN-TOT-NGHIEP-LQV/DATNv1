@@ -11,13 +11,13 @@ const Stack = createNativeStackNavigator();
 
 const Routes = () => {
   const tokenData = useSelector((state) => state.auth.tokenData);
+  const detailUser = useSelector((state) => state.auth.detailUser);
 
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {!!tokenData && tokenData?.access_token
-          ? MainStack(Stack)
-          : AuthStack(Stack)}
+        {/* {!!tokenData && tokenData?.access_token */}
+        {!!detailUser?.email ? MainStack(Stack) : AuthStack(Stack)}
       </Stack.Navigator>
       <FlashMessage position="top" />
     </NavigationContainer>

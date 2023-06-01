@@ -44,8 +44,7 @@ const LoginScreen = ({ navigation }) => {
         showSuccess("Login successfully...!!!!");
         updateState({ isLoading: false });
       } catch (error) {
-        console.log(" co loi ba oi");
-        // showError(error.error_message);
+        showError("Loi khong login duoc");
         updateState({ isLoading: false });
       }
     }
@@ -60,7 +59,9 @@ const LoginScreen = ({ navigation }) => {
             source={LoginImg}
           />
         </View>
-        <Text className="mb-[30] font-lg text-[28px] text-[#333] ">Login</Text>
+        <Text className="mb-[30] font-lg text-[28px] text-[#333] ">
+          Đăng nhập
+        </Text>
 
         <InputFieldCustom
           label="Username"
@@ -98,9 +99,9 @@ const LoginScreen = ({ navigation }) => {
         <CustomButton label={"Login"} onPress={onLogin} isLoading={isLoading} />
 
         <View className="mt-[1px] justify-center flex-row">
-          <Text>New to the app?</Text>
+          <Text>Chưa có tài khoảng?</Text>
           <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
-            <Text className=" font-[700] text-[#AD40AF]"> Register</Text>
+            <Text className=" font-[700] text-[#AD40AF]"> Đăng ký</Text>
           </TouchableOpacity>
         </View>
       </View>

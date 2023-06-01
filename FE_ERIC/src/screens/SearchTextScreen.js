@@ -26,12 +26,14 @@ import FilterModal from "../components/Search/FilterModal";
 // import SearchInputHeader from "../components/Search/SearchInputHeader";
 import { spacing } from "../constans/Theme";
 import Icons, { icons } from "../components/Icons";
+import { useNavigation } from "@react-navigation/native";
 
 const width = Dimensions.get("window").width / 2 - 30;
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const SearchTextScreen = () => {
+  const navigation = useNavigation();
   // const listSearch = useSelector((state) => state.search.listSearch);
   const [listSearch, setListSearch] = useState([]);
 
@@ -178,7 +180,7 @@ const SearchTextScreen = () => {
     };
 
     return (
-      <View style={{ backgroundColor: "#F2F1FD" }}>
+      <View style={{ backgroundColor: Color.mainTheme }}>
         <View style={[style.headerWrapperHeader, style.shadowTouch]}>
           <TouchableOpacity>
             <View style={style.headerLeft}>
@@ -213,6 +215,10 @@ const SearchTextScreen = () => {
                     ...style.cameraButton,
                   }}
                   onPress={() => {
+                    navigation.navigate("SearchTab", {
+                      screen: "SearchImage",
+                    });
+
                     // updateIsMainViewDisplay(!isMainViewVisible);
                   }}
                 >
