@@ -5,6 +5,8 @@ export const getApiUrl = (endpoint) => endpoint;
 // Auth and User
 export const LOGIN = getApiUrl("/login");
 export const SIGNUP = getApiUrl("/user/register");
+export const CHANGE_PASSWORD = getApiUrl("/user/changePassword");
+
 export const GET_ALL_USERS = getApiUrl("/users");
 export const GET_DETAIL_USERS = getApiUrl("/user/getDetail");
 export const REFRESH_TOKEN = getApiUrl("/token/refresh");

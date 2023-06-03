@@ -13,11 +13,11 @@ import Icons, { icons } from "../components/Icons";
 import { useRef } from "react";
 import { useState } from "react";
 import { data } from "../constans/raw";
-import CustomGradient from "../components/CustomGradient";
+// import CustomGradient from "../components/CustomGradient";
 
 const RenderItem = ({ item, navigation }) => {
   return (
-    <CustomGradient>
+    // <CustomGradient>
       <Surface style={styles.item}>
         <View style={styles.content}>
           {/* <SharedElement id={`item.${item.avatar}.avatar`}>
@@ -60,7 +60,7 @@ const RenderItem = ({ item, navigation }) => {
           </View>
         </View>
       </Surface>
-    </CustomGradient>
+    // </CustomGradient>
   );
 };
 

@@ -52,9 +52,6 @@ export const searchAndFilterProducts = (
       "Content-Type": "application/json",
     };
 
-    console.log(types);
-    console.log(brands);
-
     const keywordParam = keyword.trim() == "" ? undefined : keyword;
 
     const typesParam =
@@ -94,103 +91,17 @@ export const searchAndFilterProducts = (
       url += `maxPrice=${maxPriceParam}&`;
     }
     url += `page=${page}`;
-
-    await apiGet(url, {}, headers, true)
+    console.log(SEARCH_AND_FILTER_PRODUCTS);
+    await apiGet(url, {}, headers, false)
       .then((res) => {
-        // console.log(res);
         resolve(res);
       })
       .catch((error) => {
-        // console.log(error);
-        reject({ error_message: "Lỗi" });
+        console.log(error.error_message);
+        reject(error);
       });
-
-    // await apiGet(SEARCH_AND_FILTER_PRODUCTS, data, headers, true)
-    //   .then((res) => {
-    //     console.log(res);
-    //     resolve(res);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     reject({ error_message: "ai biet" });
-    //   });
-
-    // let tokenData = await AsyncStorage.getItem("tokenData");
-    // tokenData = JSON.parse(tokenData);
-
-    // var headers = {
-    //   "Content-Type": "application/json",
-    //   authorization: "Bearer " + `${tokenData.access_token}`,
-    // };
-
-    // await axios
-    //   .get(SEARCH_AND_FILTER_PRODUCTS, {
-    //     params: {
-    //       types: typesParam,
-    //       minPrice: minPriceParam,
-    //       maxPrice: maxPriceParam,
-    //       page,
-    //     },
-    //     headers,
-    //   })
-    //   .then((response) => {
-    //     resolve(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //     reject(error);
-    //   });
   });
 };
-
-// export const searchAndFilterProducts = (
-//   page = 0,
-//   keyword = "",
-//   types = undefined,
-//   brands = undefined,
-//   minPrice = 0,
-//   maxPrice = null
-// ) => {
-//   return new Promise(async (resolve, reject) => {
-//     var headers = {
-//       "Content-Type": "application/json",
-//     };
-
-//     var params = {
-//       page,
-//     };
-
-//     if (keyword.trim() != "") {
-//       params.keyword = encodeURIComponent(keyword);
-//     }
-
-//     if (types !== undefined) {
-//       params.types = types.map((type) => encodeURIComponent(type));
-//     }
-
-//     if (brands !== undefined) {
-//       params.brands = brands.map((brand) => encodeURIComponent(brand));
-//     }
-
-//     params.minPrice = encodeURIComponent(calculateDisplayValue(minPrice));
-//     params.maxPrice =
-//       maxPrice > 100 || maxPrice == null
-//         ? undefined
-//         : encodeURIComponent(calculateDisplayValue(maxPrice));
-
-//     var data = {
-//       params,
-//     };
-
-//     await apiGet(SEARCH_AND_FILTER_PRODUCTS, data, headers, true)
-//       .then((res) => {
-//         resolve(res);
-//       })
-//       .catch((error) => {
-//         reject(error);
-//       });
-//   });
-// };
 
 export const searchProductByText = (
   searchText,

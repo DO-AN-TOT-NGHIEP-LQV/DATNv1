@@ -4,9 +4,11 @@ import com.example.be_eric.models.Image;
 import com.example.be_eric.models.Product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public interface ProductService {
 
     Product save(Product product);
@@ -18,6 +20,7 @@ public interface ProductService {
 
     List<Product> searchByTextNotPageable(String searchText);
 
+    boolean updateViews( Long idProduct);
 
     Page<Product> searchAndFilterProducts(String keyword, String[] types, String[] brands, Double minPrice, Double maxPrice, Pageable pageable);
     List<Product> searchAndFilterProducts(String keyword, String[] types, String[] brands, Double minPrice, Double maxPrice);

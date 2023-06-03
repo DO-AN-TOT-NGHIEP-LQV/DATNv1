@@ -80,9 +80,8 @@ export const searchWithImage = (pickedImagePath) => {
       name: "fileSearchImg",
     });
 
-    await apiPost(SEARCH_ALL_B_IMG, formData, headers, true)
+    await apiPost(SEARCH_ALL_B_IMG, formData, headers, false)
       .then((res) => {
-        // console.log(res.data);
         saveListSearch(res.data);
         resolve(res);
       })
@@ -91,8 +90,6 @@ export const searchWithImage = (pickedImagePath) => {
       });
   });
 };
-
-
 
 export const fetchDataForSearchText = (
   searchText,

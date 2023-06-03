@@ -8,8 +8,11 @@ import {
   SearchScreen,
   SearchTextScreen,
   DetailProductScreen,
+  SearchImageScreen,
+  LoginScreen,
+  SignupScreen,
 } from "../screens/index";
-import Profile from "../screens/Profile";
+import ProfileScreen from "../screens/ProfileScreen";
 import {
   View,
   Text,
@@ -41,28 +44,11 @@ const MainTabs = () => {
           {
             ...styles.tabBarStyle,
             ...styles.shadow,
-            // display: "flex",
-            // height: 50,
           },
           null,
         ],
       }}
     >
-      <BottomTab.Screen
-        name="SearchTab"
-        component={SearchStackNavigator}
-        options={{
-          tabBarIcon: ({ color, size, focused }) => (
-            <CustomTabBarIcon
-              nameIcon={"search1"}
-              textLabel={"SEARCH"}
-              color={color}
-              size={size}
-              focused={focused}
-            />
-          ),
-        }}
-      />
       <BottomTab.Screen
         name="HomeTab"
         component={HomeStackNavigator}
@@ -71,6 +57,22 @@ const MainTabs = () => {
             <CustomTabBarIcon
               nameIcon={"home"}
               textLabel={"HOME"}
+              color={color}
+              size={size}
+              focused={focused}
+            />
+          ),
+        }}
+      />
+
+      <BottomTab.Screen
+        name="SearchTab"
+        component={SearchStackNavigator}
+        options={{
+          tabBarIcon: ({ color, size, focused }) => (
+            <CustomTabBarIcon
+              nameIcon={"search1"}
+              textLabel={"SEARCH"}
               color={color}
               size={size}
               focused={focused}
@@ -94,18 +96,6 @@ const MainTabs = () => {
           ),
         }}
       />
-      {/* 
-            <BottomTab.Screen name="PostTab" 
-             component={CreatePostStackNavigator}
-              options={{
-                tabBarIcon: ({color, size, focused }) => (
-                    <AntDesign name="plus" size={35} color="#AD40AF"  />
-                ),
-                tabBarButton: (props)=>(
-                    <CustomTabBarButton {...props}/>
-                ) 
-              }}
-            /> */}
 
       <BottomTab.Screen
         name="DiscoverTab"
@@ -152,32 +142,24 @@ const MainTabs = () => {
           ),
         }}
       />
+
+      <BottomTab.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
+      <BottomTab.Screen
+        name="Signup"
+        component={SignupScreen}
+        options={{
+          tabBarButton: () => null,
+        }}
+      />
     </BottomTab.Navigator>
-    // {/* </KeyboardAvoidingView> */}
   );
 };
-
-// const CustomTabBarButton = ({children, onPress}) => {
-//   return (
-
-//     <TouchableOpacity
-//       style={{
-//           // top: 20,
-//           justifyContent: 'center',
-//           alignItems: 'center',
-//           ...styles.shadow
-//       }}
-//       onPress={onPress}
-//     >
-//         <View
-//           style={styles.customTabBarButton}
-//         >
-//           {children}
-//         </View>
-//     </TouchableOpacity>
-//   )
-
-// }
 
 const HomeNavigator = createNativeStackNavigator();
 const HomeStackNavigator = () => {
@@ -191,13 +173,10 @@ const HomeStackNavigator = () => {
 
 const SearchNavigator = createNativeStackNavigator();
 const SearchStackNavigator = () => {
-  // const getTabBarVisibility = (route) => {
-  //   const routeName = getFocusedRouteNameFromRoute(route);
-  //   const hideOnScreens = ["DetailProduct"]; // remove "DetailProduct" from the hideOnScreens array
-  //   return hideOnScreens.indexOf(routeName) <= -1;
-  // };
   return (
     <SearchNavigator.Navigator screenOptions={{ headerShown: false }}>
+      <HomeNavigator.Screen name="SearchImage" component={SearchImageScreen} />
+
       <HomeNavigator.Screen name="SearchText" component={SearchTextScreen} />
 
       <HomeNavigator.Screen name="Search" component={SearchScreen} />
@@ -239,8 +218,16 @@ const CreatePostStackNavigator = () => {
 const SettingNavigator = createNativeStackNavigator();
 const SettingStackNavigator = () => {
   return (
-    <SettingNavigator.Navigator screenOptions={{ headerShown: false }}>
-      <SettingNavigator.Screen name="Profile" component={Profile} />
+    <SettingNavigator.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="ProfileScreen"
+    >
+      <SettingNavigator.Screen name="ProfileScreen" component={ProfileScreen} />
+      {/* <SettingNavigator.Screen name="Login" component={LoginScreen} />
+      <SettingNavigator.Screen name="Signup" component={SignupScreen} /> */}
+
+      {/* <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Signup" component={SignupScreen} /> */}
     </SettingNavigator.Navigator>
   );
 };

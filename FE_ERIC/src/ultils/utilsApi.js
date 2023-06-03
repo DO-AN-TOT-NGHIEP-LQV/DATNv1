@@ -6,10 +6,11 @@ import axios from "axios";
 import { REFRESH_TOKEN } from "../config/urls";
 import jwtDecode from "jwt-decode";
 import { clearUserData, setCredentials } from "./credentials";
+import { useNavigation } from "@react-navigation/native";
 
 const { dispatch, getState } = store;
 
-export async function getHeaders() {
+export async function getAuthorizationHeaders() {
   let tokenData = await AsyncStorage.getItem("tokenData");
   if (tokenData) {
     tokenData = JSON.parse(tokenData);
@@ -25,12 +26,12 @@ export async function apiReq(
   data,
   method,
   headers,
-  withAuth = true,
+  withAuth = false,
   requestOptions = {}
 ) {
   return new Promise(async (res, rej) => {
     if (withAuth === true) {
-      await console.log("check out");
+      console.log("check out");
       const c = await getCredentials();
       if (c === null) {
         console.log("c == null");
@@ -40,16 +41,30 @@ export async function apiReq(
           type: types.CLEAR_REDUX_STATE,
           payload: {},
         });
-        showError("Phiên đăng nhập đã hết hạn. Hãy Đăng nhập lại");
-        return null;
+
+        rej({
+          error_message: "The login session has expired. Please log in again.",
+        });
       }
     }
 
-    const getTokenHeader = await getHeaders();
+    // const getTokenHeader = await getAuthorizationHeaders();
+    // headers = {
+    //   ...getTokenHeader,
+    //   ...headers,
+    // };
+
     headers = {
-      ...getTokenHeader,
       ...headers,
     };
+
+    if (withAuth) {
+      const getTokenHeader = await getAuthorizationHeaders();
+      headers = {
+        ...headers,
+        ...getTokenHeader,
+      };
+    }
 
     if (method === "get" || method === "delete") {
       data = {
@@ -74,7 +89,7 @@ export async function apiReq(
           });
           return rej(
             error?.response?.data?.error_message || {
-              error_message: "Loi 401",
+              error_message: "ERROR 401",
             }
           );
         }
@@ -83,18 +98,18 @@ export async function apiReq(
           if (error.response.data) {
             if (!error.response.data.error_message) {
               error.response.data.error_message = "Network Error";
-              console.log("Co loi nhung khong co messenger");
+              // console.log("Co loi nhung khong co messenger");
               return rej(error.response.data);
             }
             console.log(error.response.data.error_message);
             showError(error.response.data.error_message);
             return rej(error.response.data); // backend co tra ve messenger
           } else {
-            console.log("Coi loi không co erro data tra ve", error);
+            // console.log("Coi loi không co erro data tra ve", error);
             return rej({ error_message: "Network Error" });
           }
         } else {
-          console.log("Khong co phan hoi tu backend");
+          // console.log("Khong co phan hoi tu backend");
           return rej({ error_message: "Network Error" });
           // error.response.data.error_message = 'Network Error' ;
           // return rej(error.response.data);
@@ -103,11 +118,11 @@ export async function apiReq(
   });
 }
 
-export function apiPost(endPoint, data, headers = {}, withAuth = true) {
+export function apiPost(endPoint, data, headers = {}, withAuth = false) {
   return apiReq(endPoint, data, "post", headers, withAuth);
 }
 
-export function apiDelete(endPoint, data, headers = {}, withAuth = true) {
+export function apiDelete(endPoint, data, headers = {}, withAuth = false) {
   return apiReq(endPoint, data, "delete", headers, withAuth);
 }
 
@@ -115,13 +130,13 @@ export function apiGet(
   endPoint,
   data,
   headers = {},
-  withAuth = true,
+  withAuth = false,
   requestOptions = {}
 ) {
   return apiReq(endPoint, data, "get", headers, withAuth, requestOptions);
 }
 
-export function apiPut(endPoint, data, headers = {}, withAuth = true) {
+export function apiPut(endPoint, data, headers = {}, withAuth = false) {
   return apiReq(endPoint, data, "put", headers, withAuth);
 }
 
@@ -133,10 +148,9 @@ export async function getCredentials() {
 
       let cred = await getVerifiedUsers(JSON.parse(credentials));
       if (credentials != null && cred != null) {
-        // neu 1 tron 2 cai null
         resolve(cred);
       } else {
-        return resolve(null);
+        resolve(null);
       }
       resolve(null);
     } catch (error) {
@@ -145,28 +159,19 @@ export async function getCredentials() {
   });
 }
 
-// export function setCredentials (data) {
-// 	data = JSON.stringify(data);
-// 	return AsyncStorage.setItem('userData', data);
-// }
-
-// export async function clearUserData() {
-// 	return AsyncStorage.removeItem('userData');
-// }
-
 // refresh lai accesstoken
 export async function updateAccessUsingRefresh(refresh_token) {
   return new Promise(async (resolve, reject) => {
     const header = {
       authorization: "Bearer " + `${refresh_token}`,
     };
-    return apiGet(REFRESH_TOKEN, {}, header, false, {}).then((res) => {
+    await apiGet(REFRESH_TOKEN, {}, header, false, {}).then((res) => {
       console.log("REFRESH_TOKEN UPDATE");
       setCredentials(res.data).then(() => {
         resolve(res);
         dispatch({
-          type: types.GET_DETAIL_USERS,
-          payload: data,
+          type: types.LOGIN,
+          payload: res.data,
         });
         // saveUserData(res.data)
       });

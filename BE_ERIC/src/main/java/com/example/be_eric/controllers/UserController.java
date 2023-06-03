@@ -19,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -49,6 +51,9 @@ public class UserController {
 
     @Autowired
     private PostService postService;
+
+    final
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @GetMapping("/user/getDetail")
     public ResponseEntity<?> getPosts (HttpServletRequest request, HttpServletResponse response) {
@@ -83,17 +88,57 @@ public class UserController {
     }
 
     @PostMapping("/user/register")
-    public ResponseEntity<?> saveUser(@RequestBody User user, HttpServletResponse response) {
+    public ResponseEntity<?> saveUser(@RequestBody UserForm user) {
         try {
-            URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/register").toUriString());
-            return ResponseEntity.created(uri).body(userService.saveUser(user));
+
+            User newUser = new User(user.getUsername(), user.getEmail(), user.getPassword());
+            userService.saveUser(newUser);
+            return ResponseEntity.ok().build();
         } catch (DuplicateValueException e) {
-            Map<String, Object> errorResBody = new HashMap<>();
-            errorResBody.put("error_message", e.getMessage());
+            System.out.println(e.getMessage());
             return ResponseEntity.badRequest()
-                    .body(errorResBody);
+                    .body(new ErrorResponse(e.getMessage()));
         }
     }
+
+    @PostMapping("/user/changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody UserForm userForm, HttpServletRequest request) {
+        try {
+
+            String authorizationHeader = request.getHeader(AUTHORIZATION);
+
+            String refresh_token = authorizationHeader.substring("Bearer ".length());
+            Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            DecodedJWT decodedJWT = verifier.verify(refresh_token);
+            String username = decodedJWT.getSubject();
+            User user = userService.getUserByEmail(username);
+            if( user == null)
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User does not exist"));
+
+
+            boolean isMatch = passwordEncoder.matches( userForm.getCurrentPassword(), user.getPassword());
+                System.out.println(isMatch);
+
+            if(isMatch == false)
+//                System.out.println("khong trung");
+                return ResponseEntity.badRequest().body(new ErrorResponse("Password is wrong"));
+
+            user.setPassword(userForm.getNewPassword());
+
+            if(userService.changePassword(user))
+            return ResponseEntity.ok().build();
+            else
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse("An error occurred during the process."));
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
 
     @PostMapping("/role/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role){
@@ -107,46 +152,83 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+//    @GetMapping("/token/refresh")
+//    public void refreshToken( HttpServletRequest request, HttpServletResponse response)  {
+//
+//        String authorizationHeader = request.getHeader(AUTHORIZATION);
+//        if( authorizationHeader != null && authorizationHeader.startsWith("Bearer ") ){
+//            try {
+//                String refresh_token = authorizationHeader.substring("Bearer ".length());
+//                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+//                JWTVerifier verifier = JWT.require(algorithm).build();
+//                DecodedJWT decodedJWT = verifier.verify(refresh_token);
+//                String username = decodedJWT.getSubject();
+//                User user = userService.getUserByEmail(username);
+//
+//                String access_token = JWT.create()
+//                        .withSubject(user.getEmail())
+//                        .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+//                        .withIssuer(request.getRequestURL().toString())
+//                        .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
+//                        .sign(algorithm);
+//
+//                Map<String,String> tokens = new HashMap<>();
+//                tokens.put("access_token",access_token);
+//                tokens.put("refresh_token",refresh_token);
+//                response.setContentType(APPLICATION_JSON_VALUE);
+//                new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+//                System.out.println("khong loi");
+//
+//            }catch (Exception exception){
+//                System.out.println(exception.getMessage());
+//
+//                response.setHeader("error", exception.getMessage());
+//                response.setStatus(FORBIDDEN.value());
+//                //response.sendError(FORBIDDEN.value()); //403
+//                Map<String,String> error = new HashMap<>();
+//                error.put("error_message", "Refresh token da het han, hay danh nhap la");
+//                response.setContentType(APPLICATION_JSON_VALUE);
+//                new ObjectMapper().writeValue(response.getOutputStream(), error);
+//            }
+//        }else {
+//            throw new RuntimeException("Refresh token is missing");
+//        }
+//    }
+
     @GetMapping("/token/refresh")
-    public void refreshToken( HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-        String authorizationHeader = request.getHeader(AUTHORIZATION);
-        if( authorizationHeader != null && authorizationHeader.startsWith("Bearer ") ){
-            try {
-                String refresh_token = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-                JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = verifier.verify(refresh_token);
-                String username = decodedJWT.getSubject();
-                User user = userService.getUserByEmail(username);
-
-                String access_token = JWT.create()
-                        .withSubject(user.getEmail())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
-                        .withIssuer(request.getRequestURL().toString())
-                        .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
-                        .sign(algorithm);
-
-                Map<String,String> tokens = new HashMap<>();
-                tokens.put("access_token",access_token);
-                tokens.put("refresh_token",refresh_token);
-                response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), tokens);
-                System.out.println("khong loi");
-
-            }catch (Exception exception){
-                System.out.println(exception.getMessage());
-
-                response.setHeader("error", exception.getMessage());
-                response.setStatus(FORBIDDEN.value());
-                //response.sendError(FORBIDDEN.value()); //403
-                Map<String,String> error = new HashMap<>();
-                error.put("error_message", exception.getMessage());
-                response.setContentType(APPLICATION_JSON_VALUE);
-                new ObjectMapper().writeValue(response.getOutputStream(), error);
+    public ResponseEntity<?> refreshToken(HttpServletRequest request) {
+        try {
+            String authorizationHeader = request.getHeader(AUTHORIZATION);
+            if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+                return ResponseEntity.badRequest().body(new ErrorResponse("Refresh token is missing"));
             }
-        }else {
-            throw new RuntimeException("Refresh token is missing");
+
+            String refresh_token = authorizationHeader.substring("Bearer ".length());
+            Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            DecodedJWT decodedJWT = verifier.verify(refresh_token);
+            String username = decodedJWT.getSubject();
+            User user = userService.getUserByEmail(username);
+
+            String access_token = JWT.create()
+                    .withSubject(user.getEmail())
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+                    .withIssuer(request.getRequestURL().toString())
+                    .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
+                    .sign(algorithm);
+
+            Map<String, String> tokens = new HashMap<>();
+            tokens.put("access_token", access_token);
+            tokens.put("refresh_token", refresh_token);
+
+            return ResponseEntity.ok(tokens);
+        } catch (Exception exception) {
+//            logger.error("Error refreshing token: {}", exception.getMessage());
+            System.out.println( exception.getMessage());
+
+            Map<String, String> error = new HashMap<>();
+            error.put("error_message", "Refresh token đã hết hạn, hãy đăng nhập lại");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
         }
     }
 }
@@ -155,5 +237,15 @@ public class UserController {
 class RoleToUserForm {
     private String username;
     private String roleName;
+}
+
+@Data
+class UserForm {
+    private String username;
+    private String email;
+    private String password;
+    private String currentPassword;
+    private String newPassword;
+
 }
 

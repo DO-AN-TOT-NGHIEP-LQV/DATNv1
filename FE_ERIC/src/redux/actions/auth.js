@@ -2,7 +2,6 @@ import {
   GET_ALL_USERS,
   GET_DETAIL_USERS,
   LOGIN,
-  REFRESH_TOKEN,
   SIGNUP,
 } from "../../config/urls";
 import store from "../store";
@@ -26,84 +25,87 @@ export const saveDetailUser = (data) => {
   });
 };
 
-// export function login(data) {
-//   return new Promise(async (resolve, reject) => {
-//     const header = {
-//       "Content-Type": "multipart/form-data",
-//     };
-//     await apiPost(LOGIN, data, header, false)
-//       .then((res) => {
-//         console.log("login:");
-//         setCredentials(res.data).then(() => {
-//           // resolve(res);
-//           saveUserData(res.data);
-//         });
+export const setIsLogin = (data) => {
+  dispatch({
+    type: types.IS_LOGIN,
+    payload: data,
+  });
+};
 
-//         resolve(res);
-//       })
-//       .catch((error) => {
-//         reject(error);
-//       });
-//   });
-// }
 
 export function login(data) {
   return new Promise(async (resolve, reject) => {
     const header = {
       "Content-Type": "multipart/form-data",
     };
-    const a = await apiPost(LOGIN, data, header, false)
-      .then((res) => {
-        console.log("LOGIN:");
-        setCredentials(res.data).then(() => {
-          // resolve(res);
-          saveUserData(res.data);
-          resolve(res);
-        });
-      })
-      .catch((error) => {
-        reject(error);
-      });
-    await apiGet(GET_DETAIL_USERS, {}, {}, true)
-      .then((res) => {
-        console.log("GET_DETAIL_USERS");
-        saveDetailUser(res.data);
-        resolve(res);
-      })
-      .catch((error) => {
-        console.log(error);
-        reject(error);
-      });
+    try {
+      const loginResponse = await apiPost(LOGIN, data, header, false);
+      console.log("LOGIN:");
+      await setCredentials(loginResponse.data);
+      await saveUserData(loginResponse.data);
+
+      // console.log("Loi o ham login 7");
+      const detailUsersResponse = await apiGet(GET_DETAIL_USERS, {}, {}, true);
+      // console.log(error, "Loi o ham login 6");
+      console.log("GET_DETAIL_USERS");
+      saveDetailUser(detailUsersResponse.data);
+
+      resolve(loginResponse);
+    } catch (error) {
+      console.log("Loi o ham login9");
+      logout();
+      reject(error);
+    }
   });
 }
 
-export function refreshToken(refresh_token) {
+// export function refreshToken(refresh_token) {
+//   return new Promise(async (resolve, reject) => {
+//     const header = {
+//       authorization: "Bearer " + `${refresh_token}`,
+//     };
+//     return apiGet(REFRESH_TOKEN, {}, header, {}, false)
+//       .then((res) => {
+//         console.log("REFRESH_TOKEN 1");
+//         setCredentials(res.data).then(() => {
+//           resolve(res);
+//           saveUserData(res.data);
+//         });
+//       })
+//       .catch((error) => {
+//         console.log("Loi khong the refresh token refreshToken");
+//         logout();
+//         reject(error);
+//       });
+//   });
+// }
+
+export function getDetailUser() {
   return new Promise(async (resolve, reject) => {
     const header = {
-      authorization: "Bearer " + `${refresh_token}`,
+      "Content-Type": "multipart/form-data",
     };
-    return apiGet(REFRESH_TOKEN, {}, header, {}, false)
-      .then((res) => {
-        //   data = JSON.parse(res.data)         //data = JSON.parse(data)/ bien 1 chuoi thang 1 mang
-        console.log("REFRESH_TOKEN 1");
-        setCredentials(res.data).then(() => {
-          resolve(res);
-          saveUserData(res.data);
-        });
-      })
-      .catch((error) => {
-        console.log("Loi khong the refresh token refreshToken");
-        reject(error);
-      });
+    try {
+      const detailUsersResponse = await apiGet(GET_DETAIL_USERS, {}, {}, true);
+      console.log("GET_DETAIL_USERS");
+      saveDetailUser(detailUsersResponse.data);
+      resolve(detailUsersResponse);
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 
 export function signup(data) {
   return apiPost(SIGNUP, data, {}, false);
 }
+export function changePassword(data) {
+  return apiPost(SIGNUP, data, {}, false);
+}
 
 export function logout() {
   dispatch({ type: types.CLEAR_REDUX_STATE });
+  dispatch({ type: types.IS_LOGIN, data: false });
   clearUserData();
 }
 

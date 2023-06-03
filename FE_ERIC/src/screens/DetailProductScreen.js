@@ -18,10 +18,12 @@ import {
 
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Color from "../constans/Color";
+import { FONTS } from "../constans/Theme";
+
 import { product_tabs } from "../constans/raw";
 
 import Icons, { icons } from "../components/Icons";
-import { useNavigation } from "@react-navigation/core";
+import { useNavigation } from "@react-navigation/native";
 import LineDivider from "../components/LineDivider";
 
 import {
@@ -30,11 +32,14 @@ import {
   DetailDiscussion,
 } from "../components/DetailProductTabs";
 import hideTabBar from "../hookFuntion/hideTabBar ";
+import AuthRequired from "../components/AuthRequired";
+import { useSelector } from "react-redux";
 
 const { width, height } = Dimensions.get("window");
 
 const MIN_HEIGHT = Platform.OS === "ios" ? 90 : 65;
 const MAX_HEIGHT = 300;
+
 const product_details_tabs = product_tabs.map((product_details_tab) => ({
   ...product_details_tab,
   ref: React.createRef(),
@@ -49,6 +54,8 @@ const DetailProductScreen = ({ route }) => {
   const [homeBarColor, setHomeBarColor] = useState("rgba(0,0,0,0.2)");
   const [homeIconBColor, setHomeIconColor] = useState(Color.textLight);
   const navigation = useNavigation();
+
+  const isLogin = useSelector((state) => state.auth.isLogin);
 
   hideTabBar();
 
@@ -222,7 +229,12 @@ const DetailProductScreen = ({ route }) => {
                 {index == 1 && (
                   <DetailShop dataProduct={dataProduct}></DetailShop>
                 )}
-                {index == 2 && <DetailDiscussion dataProduct={dataProduct} />}
+                {index == 2 &&
+                  (isLogin ? (
+                    <DetailDiscussion dataProduct={dataProduct} />
+                  ) : (
+                    <AuthRequired />
+                  ))}
               </View>
             );
           }}
@@ -395,7 +407,9 @@ const Tabs = ({ scrollX, onTabPress }) => {
               onTabPress(index);
             }}
           >
-            <Text style={{ fontSize: 17, fontWeight: "600" }}>{item.name}</Text>
+            <Text style={{ fontSize: 17, fontWeight: "600", ...FONTS.h3 }}>
+              {item.name}
+            </Text>
           </TouchableOpacity>
         );
       })}

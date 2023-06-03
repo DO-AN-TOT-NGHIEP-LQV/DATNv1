@@ -10,7 +10,15 @@ const checkEmpty = (val, key) => {
 
 const checkMinLength = (val, minLength, key) => {
   if (val.trim().length < minLength) {
-    return `Please enter valid ${key}`;
+    return `Vui lòng nhập hợp kệ: ${key}`;
+  } else {
+    return "";
+  }
+};
+
+const checkSpace = (val, key) => {
+  if (val.trim().includes(" ")) {
+    return `${key}`;
   } else {
     return "";
   }
@@ -78,6 +86,51 @@ export function validatorLogin(data) {
         return minLengthValidation;
       }
     }
+  }
+}
+
+export function validatorChangePass(data) {
+  const { currentPass, newPass, confirmPass } = data;
+
+  if (currentPass !== undefined) {
+    let emptyValidationText = checkEmpty(
+      currentPass,
+      "Hãy nhập mật khẩu hiện tại"
+    );
+
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    }
+
+    let spaceValid = checkSpace(currentPass, "Không được chứa khoảng trống");
+    if (spaceValid !== "") {
+      return spaceValid;
+    }
+  }
+
+  if (newPass !== undefined) {
+    let newPassEmptyValid = checkEmpty(newPass, "Hãy nhập vào mật khẩu mới");
+    if (newPassEmptyValid !== "") {
+      return newPassEmptyValid;
+    }
+
+    let minLengthNewPass = checkMinLength(
+      newPass,
+      8,
+      "Mật khẩu mới có ít nhất 8 ký tự"
+    );
+    if (minLengthNewPass !== "") {
+      return "Mật khẩu mới có ít nhất 8 ký tự";
+    }
+
+    let spaceValidnewPass = checkSpace(newPass, "Không được chứa khoảng trống");
+    if (spaceValidnewPass !== "") {
+      return spaceValidnewPass;
+    }
+  }
+
+  if (confirmPass !== newPass) {
+    return "Mật khẩu mới không trùng khớp";
   }
 }
 

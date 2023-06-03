@@ -10,6 +10,7 @@ const CustomButton = ({
   styleContainer,
   isLoading,
   textStyle,
+  isDisable = false,
 }) => {
   return (
     <Button
@@ -18,6 +19,7 @@ const CustomButton = ({
       style={{ ...styles.defaultClassname, ...styleContainer }}
       loading={isLoading}
       loadingProps={{ color: "black" }}
+      disabled={isDisable}
     >
       {!!isLoading ? (
         ""
@@ -46,10 +48,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   textStyle: {
-    fontSize: 16,
     alignItems: "center",
-    // textTransform: "uppercase",
-    // fontWeight: "bold",
     color: "white",
   },
 });

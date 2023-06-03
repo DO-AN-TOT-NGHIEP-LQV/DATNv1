@@ -26,18 +26,20 @@ import FilterModal from "../components/Search/FilterModal";
 // import SearchInputHeader from "../components/Search/SearchInputHeader";
 import { spacing } from "../constans/Theme";
 import Icons, { icons } from "../components/Icons";
+import { useNavigation } from "@react-navigation/native";
 
 const width = Dimensions.get("window").width / 2 - 30;
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const SearchTextScreen = () => {
+  const navigation = useNavigation();
   // const listSearch = useSelector((state) => state.search.listSearch);
   const [listSearch, setListSearch] = useState([]);
 
   // const pageProduct = useSelector((state) => state.search.pageProduct);
 
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   // const searchText = useSelector((state) => state.search.searchText);
 
   const [searchText, setSearchText] = useState("");
@@ -87,7 +89,7 @@ const SearchTextScreen = () => {
     const isEndReached =
       contentOffset.y + layoutMeasurement.height >= contentSize.height;
 
-    if (isEndReached && !isLoading && !isEndOfData) {
+    if (isEndReached && !loadingEndScroll && !isEndOfData) {
       fetchMoreDataSearch();
     }
   };
@@ -117,8 +119,9 @@ const SearchTextScreen = () => {
       setPageProduct(0);
       setLoadingEndScroll(false);
     } catch (error) {
-      showError(error.error_message);
+      setPageProduct(0);
       setLoadingEndScroll(false);
+      showError(error.error_message);
     }
   };
 
@@ -174,11 +177,12 @@ const SearchTextScreen = () => {
 
   function searchInputHeader() {
     const onSearch = async () => {
-      firstRenderData();
+      if (loadingEndScroll) return;
+      await firstRenderData();
     };
 
     return (
-      <View style={{ backgroundColor: "#F2F1FD" }}>
+      <View style={{ backgroundColor: Color.mainTheme }}>
         <View style={[style.headerWrapperHeader, style.shadowTouch]}>
           <TouchableOpacity>
             <View style={style.headerLeft}>
@@ -213,7 +217,10 @@ const SearchTextScreen = () => {
                     ...style.cameraButton,
                   }}
                   onPress={() => {
-                    // updateIsMainViewDisplay(!isMainViewVisible);
+                    navigation.navigate("SearchTab", {
+                      screen: "SearchImage",
+                    });
+
                   }}
                 >
                   <View>
@@ -242,7 +249,10 @@ const SearchTextScreen = () => {
                 </TouchableOpacity>
 
                 {/* Search Button */}
-                <TouchableOpacity style={style.filter} onPress={onSearch}>
+                <TouchableOpacity
+                  style={style.filter}
+                  onPress={async () => await onSearch()}
+                >
                   <View>
                     <Icons
                       icon={icons.AntDesign}
@@ -324,9 +334,7 @@ const SearchTextScreen = () => {
         <FilterModal
           isVisible={showFilterModel}
           onClose={() => setShowFilterModel(false)}
-          firstRenderData={() => {
-            firstRenderData();
-          }}
+     
         />
       )}
     </View>
@@ -347,7 +355,8 @@ const style = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 16,
-    backgroundColor: "#ffffff",
+    backgroundColor: Color.white, // "#ffffff",
+
     height: Dimensions.get("window").height / 15,
     marginHorizontal: 5,
     marginTop: 5,

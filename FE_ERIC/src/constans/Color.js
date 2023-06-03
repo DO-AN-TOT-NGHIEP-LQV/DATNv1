@@ -1,6 +1,8 @@
 export default {
   mainColor: "#7179f7", // #AD40AF
+  // mainColor: "#00BCC9", //, // #AD40AF
   backGround: "#FEE2E2",
+  mainTheme: "#F2F1FD",
   heard: "#f54",
   heardDark: "#f54",
   accent: "#7fc",

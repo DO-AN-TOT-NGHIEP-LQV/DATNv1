@@ -46,8 +46,8 @@ public class DataSeeder implements CommandLineRunner {
         if ("create".equals(ddlAuto)) {
 
         userService.saveRole(new Role(1L, "ROLE_USER"));
-        userService.saveRole(new Role(2L, "ROLE_ADMIN"));
-        userService.saveRole(new Role(3L, "ROLE_SALER"));
+        userService.saveRole(new Role(2L, "ROLE_SALER"));
+        userService.saveRole(new Role(3L, "ROLE_ADMIN"));
 
         userService.saveUser(new User(1L, "Le QViet",  "1@gmail.com", "1", "https://www.shutterstock.com/image-vector/man-character-face-avatar-glasses-260nw-562077406.jpg", new ArrayList<>()));
         userService.saveUser(new User(2L, "Viet 2",  "2@gmail.com", "2", new ArrayList<>()));
@@ -55,10 +55,8 @@ public class DataSeeder implements CommandLineRunner {
         userService.saveUser(new User(4L, "Jame",  "4@gmail.com", "4","https://img.freepik.com/premium-vector/businessman-avatar-cartoon-character-profile_18591-50581.jpg?w=740", new ArrayList<>()));
         userService.saveUser(new User(5L, "Samiel",  "5@gmail.com", "5", new ArrayList<>()));
 
-        userService.addRoleToUser("Le QViet", "ROLE_USER" );
         userService.addRoleToUser("Le QViet", "ROLE_ADMIN" );
         userService.addRoleToUser("Le QViet", "ROLE_SUPER_ADMIN" );
-        userService.addRoleToUser("Viet 2", "ROLE_USER" );
         userService.addRoleToUser("Viet 2", "ROLE_SALER" );
         userService.addRoleToUser("Jame", "ROLE_ADMIN" );
         userService.addRoleToUser("Samiel", "ROLE_SALER" );

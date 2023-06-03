@@ -5,6 +5,7 @@ import Color from "../../constans/Color";
 import Icons, { icons } from "../Icons";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigation } from "@react-navigation/core";
+import { FONTS } from "../../constans/Theme";
 
 const MasonryListProducts = ({ data }) => {
   return (
@@ -49,27 +50,10 @@ const CardItem = ({ data, i }) => {
             // paddingVertical: 5,
             paddingTop: 5,
             paddingBottom: 0,
-            // borderColor: Color.black,
-            // borderWidth: 1,
           }}
         >
           <Image
             source={{ uri: data.images[0].url || null }}
-            // resizeMode="contain"
-            // style={{
-            //   resizeMode: "contain",
-            //   width: 160,
-            //   height: 100,
-            //   borderRadius: 3,
-            // }}
-            // resizeMode="contain"
-            // className=" object-cover"
-            // style={{
-            //   // resizeMode: "contain",
-            //   width: 160,
-            //   height: 100,
-            //   // borderRadius: 3,
-            // }}
             className="w-full h-full object-cover"
             resizeMode="contain"
             style={{
@@ -89,6 +73,7 @@ const CardItem = ({ data, i }) => {
               fontSize: 14,
               marginLeft: 0,
               lineHeight: 15,
+              fontFamily: "Roboto-Bold",
             }}
           >
             {`${data.name}`}
@@ -100,6 +85,7 @@ const CardItem = ({ data, i }) => {
               fontSize: 12,
               marginLeft: 0,
               lineHeight: 15,
+              fontFamily: "Roboto-Regular",
             }}
           >
             {`${data.content || data.description}`}
@@ -117,7 +103,7 @@ const CardItem = ({ data, i }) => {
               đ
             </Text>
             <Text numberOfLines={1} style={style.priceBig}>
-              {data.price}
+              {(data.price || 0).toLocaleString("vi-VN")}
             </Text>
 
             {(data.originalPrice !== null ||
@@ -195,11 +181,14 @@ const style = StyleSheet.create({
     fontSize: 14,
     fontWeight: "300",
     color: Color.red,
+    // color: Color.blueTheme,
   },
   priceBig: {
+    color: Color.red,
+    color: Color.red,
+    fontFamily: "Roboto-Bold",
     fontSize: 16,
     fontWeight: "normal",
-    color: Color.red,
   },
   originalPrice: {
     fontWeight: "300",

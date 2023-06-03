@@ -1,5 +1,6 @@
 export default {
-  //Auth
+  //Authexport
+  IS_LOGIN: "IS_LOGIN",
   LOGIN: "LOGIN",
   SIGNUP: "SIGNUP",
   GET_DETAIL_USERS: "GET_DETAIL_USERS",

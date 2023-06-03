@@ -34,11 +34,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Autowired
     private AuthenticationManager authenticationManager;
-    private UserService userService;
 
-    public CustomAuthenticationFilter(AuthenticationManager authenticationManager ,UserService userService){
+    public CustomAuthenticationFilter(AuthenticationManager authenticationManager){
         this.authenticationManager = authenticationManager;
-        this.userService = userService;
     }
 
     @Override
@@ -57,27 +55,19 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() +  24 * 60 * 60 * 1000))
+                        .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(algorithm);
 
         String refresh_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() +   30L * 24 * 60 * 60  * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
         Map<String,String> tokens = new HashMap<>();
         tokens.put("access_token",access_token);
         tokens.put("refresh_token",refresh_token);
-//        com.example.be_eric.models.User dU = userService.getUserByEmail(user.getUsername());
-
-//        ObjectMapper objectMapper = new ObjectMapper();
-//
-//        tokens.put("detail_user",objectMapper.writeValueAsString(dU));
-
-
-//        UserService userService = new UserServiceImpl();
 
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);

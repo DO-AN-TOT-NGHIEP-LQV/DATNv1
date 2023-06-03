@@ -12,7 +12,7 @@ public interface UserService {
     User getUser(String usename);
     User getUserByEmail(String email);
     User getUserById(Long  id);
-
+    boolean changePassword( User user);
     List<User> getUsers();
 
 }

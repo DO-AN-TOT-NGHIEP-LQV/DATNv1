@@ -40,6 +40,8 @@ public class Product {
     private String type;
     private String brand;
     private String status;
+    @Column(name = "count_views", columnDefinition = "bigint default 0")
+    private Long  countViews;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(

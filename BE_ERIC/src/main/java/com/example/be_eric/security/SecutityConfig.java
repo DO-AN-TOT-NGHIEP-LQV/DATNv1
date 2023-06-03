@@ -27,7 +27,6 @@ public class SecutityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private final UserService userService;
 
     @Bean
     @Override
@@ -42,22 +41,22 @@ public class SecutityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter= new CustomAuthenticationFilter(authenticationManagerBean(), userService);
+        CustomAuthenticationFilter customAuthenticationFilter= new CustomAuthenticationFilter(authenticationManagerBean());
         customAuthenticationFilter.setFilterProcessesUrl("/api/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh", "/api/user/register",
                                                        "/api/user/image", "/api/users/**", "api/search/**",
-                "/api/user/discussion"
+                "/api/user/**"
                 ).permitAll();
 
-        http.authorizeRequests().antMatchers( GET, "/api/users/**", "api/sale/shop/**" ).hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers( GET,  "api/sale/shop/**" ).hasAnyAuthority("ROLE_USER");
 //        http.authorizeRequests().antMatchers( GET, "/api/users/**" ).hasAnyAuthority("ROLE_USER");
         http.authorizeRequests().antMatchers( POST, "/api/user/save/**").hasAnyAuthority("ROLE_ADMIN");
 //        http.authorizeRequests().antMatchers( "GET", "/api/user/**").hasAnyAuthority("ROLE_MANAGER");
 //        http.authorizeRequests().antMatchers( "GET", "/api/user/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
-        http.authorizeRequests().anyRequest().authenticated();
+//        http.authorizeRequests().anyRequest().authenticated(); // bat buoc tat cac cac trong deu phai xac thuc
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore( new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
