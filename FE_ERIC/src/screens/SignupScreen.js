@@ -1,27 +1,25 @@
 import React, { useState } from "react";
 import { Image, ImageBackground, StyleSheet, View } from "react-native";
-import { Button, Surface, TextInput, Title, Text } from "react-native-paper";
+import { Surface, TextInput, Text } from "react-native-paper";
 import { LoginImg } from "../public/assets";
 import { showMessage } from "react-native-flash-message";
-import { showError } from "../ultils/helperFunction";
+import { showError, showSuccess } from "../ultils/helperFunction";
 import CustomButton from "../components/CustomButton/index.js";
 import validator from "../ultils/validations";
 import actions from "../redux/actions";
+import { Color } from "../constans";
 
 export default function SignupScreen({ navigation }) {
   const [state, setState] = useState({
     isLoading: false,
-    username: "1@gmail.com",
-    email: "1@gmail.com",
-    password: "1",
-    confirmPassword: "",
-    isSecure: true,
+    username: "@gmail.com",
+    email: "@gmail.com",
+    password: "",
   });
-  const { isLoading, username, email, password, isSecure, confirmPassword } =
-    state;
+  const { isLoading, username, email, password } = state;
   const updateState = (data) => setState(() => ({ ...state, ...data }));
 
-  const isValidData = () => {
+  const isValidData = (username, email, password) => {
     const error = validator({
       username,
       email,
@@ -35,19 +33,17 @@ export default function SignupScreen({ navigation }) {
   };
 
   const onSignup = async () => {
-    // const checkValid = isValidData();
+    // const checkValid = isValidData(username, email, password);
     if (true) {
       updateState({ isLoading: true });
 
-      console.log("dasdasdasdasdasd");
       try {
         const res = await actions.signup({
           username,
           email,
           password,
         });
-        console.log("res of signup==>>>>>", res);
-        showMessage("Registered successfully...!!!!");
+        showSuccess("Successful account registration");
         updateState({ isLoading: false });
         navigation.goBack();
       } catch (error) {
@@ -61,7 +57,7 @@ export default function SignupScreen({ navigation }) {
   return (
     <ImageBackground source={LoginImg} style={styles.image} blurRadius={10}>
       <View style={styles.container}>
-        <Text style={styles.title}>Register</Text>
+        <Text style={styles.title}>Đăng ký</Text>
         <Surface style={styles.box}>
           <View>
             <TextInput
@@ -121,5 +117,6 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
     justifyContent: "center",
+    backgroundColor: Color.mainTheme,
   },
 });

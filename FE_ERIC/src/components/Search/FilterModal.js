@@ -24,11 +24,12 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import Icons, { icons } from "../Icons";
 import CustomButton from "../CustomButton/index.js";
+import { typeList } from "../../constans/raw";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const FilterModal = ({ isVisible, onClose, firstRenderData, searchText }) => {
+const FilterModal = ({ isVisible, onClose }) => {
   const isApplyFilter = useSelector((state) => state.filter.isApplyFilter);
 
   const [switchToggle, setSwitchToggle] = useState(isApplyFilter);
@@ -57,14 +58,8 @@ const FilterModal = ({ isVisible, onClose, firstRenderData, searchText }) => {
   });
 
   const saveFilterValue = async () => {
-    // actions.nowRangeMinMaxPrice(sliderValue);
-    // actions.typeSelectedList(selectedTypeTags);
-    // actions.brandSelectedList(selectedBrandTags);
-    // actions.updateApplyFilter(switchToggle);
-
-    // onClose();
-
     let isAnyVariableChanged = false;
+    onClose();
     if (sliderValue !== nowRangeMinMaxPrice) {
       await actions.nowRangeMinMaxPrice(sliderValue);
       isAnyVariableChanged = true;
@@ -86,8 +81,6 @@ const FilterModal = ({ isVisible, onClose, firstRenderData, searchText }) => {
     }
 
     if (isAnyVariableChanged) await actions.changeFilter();
-
-    onClose();
   };
 
   /////////////////////////////////////
@@ -141,16 +134,6 @@ const FilterModal = ({ isVisible, onClose, firstRenderData, searchText }) => {
     (state) => state.filter.typeSelectedList
   );
 
-  const tags = [
-    "Sneakers",
-    "Sandals",
-    "Flip flops",
-    "High - Heels",
-    "Oxfords",
-    "Athletics",
-    "Boots - Ankle",
-    "Baby",
-  ];
   const [selectedTypeTags, setSelectedTypeTags] = useState([]);
 
   // Modal search Brand
@@ -387,14 +370,14 @@ const FilterModal = ({ isVisible, onClose, firstRenderData, searchText }) => {
 
     return (
       <View style={styles.selectedTagsContainer}>
-        {tags.map((tag, index) => (
+        {typeList.map((tag, index) => (
           <TouchableOpacity
-            key={tag + index}
+            key={tag?.value + index}
             style={[
               styles.tagType,
-              selectedTypeTags.includes(tag) && styles.selectedTagType,
+              selectedTypeTags.includes(tag?.value) && styles.selectedTagType,
             ]}
-            onPress={() => handleTypeTagPress(tag)}
+            onPress={() => handleTypeTagPress(tag?.value)}
           >
             <Text
               style={{
@@ -403,7 +386,7 @@ const FilterModal = ({ isVisible, onClose, firstRenderData, searchText }) => {
                 padding: 10,
               }}
             >
-              {tag}
+              {tag?.value}
             </Text>
           </TouchableOpacity>
         ))}
@@ -434,8 +417,8 @@ const FilterModal = ({ isVisible, onClose, firstRenderData, searchText }) => {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              backgroundColor: Color.white,
-              paddingTop: 10,
+              marginTop: 10,
+              paddingHorizontal: 5,
             }}
           >
             <Text style={styles.filterMainTitle}>Bộ lọc của bạn</Text>
@@ -480,13 +463,12 @@ const FilterModal = ({ isVisible, onClose, firstRenderData, searchText }) => {
 
           <View
             pointerEvents={switchToggle ? "auto" : "none"}
-            style={{ opacity: switchToggle ? 1 : 0.2 }}
+            style={{
+              opacity: switchToggle ? 1 : 0.2,
+            }}
           >
             <ScrollView
-              contentContainerStyle={{
-                paddingBottom: windowHeight,
-                backgroundColor: Color.white,
-              }}
+              contentContainerStyle={styles.contentScrollView}
               showsVerticalScrollIndicator={false}
             >
               {/* Price */}
@@ -711,11 +693,11 @@ const styles = StyleSheet.create({
     right: 0,
     width: "100%",
     height: "100%",
-    paddingHorizontal: 15,
-    // paddingTop: 15,
+    paddingHorizontal: 10,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 20,
-    backgroundColor: Color.white,
+    borderColor: Color.textLight,
+    backgroundColor: Color.mainTheme,
   },
   selectedTagsContainer: {
     flexDirection: "row",
@@ -766,6 +748,7 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: Color.white,
     backgroundColor: Color.mainColor,
+    zIndexL: 1,
   },
   shadowColor: {
     shadowColor: "#000000",
@@ -793,5 +776,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 2,
     borderColor: Color.mainColor,
+  },
+  contentScrollView: {
+    paddingBottom: windowHeight,
+    backgroundColor: Color.white,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
+    borderWidth: 1,
+    borderColor: Color.textLight,
   },
 });

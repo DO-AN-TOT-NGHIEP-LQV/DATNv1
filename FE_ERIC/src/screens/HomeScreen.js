@@ -6,6 +6,8 @@ import {
   Alert,
   ScrollView,
   StyleSheet,
+  ImageBackground,
+  FlatList,
 } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -17,24 +19,30 @@ import { useSelector } from "react-redux";
 import { showError } from "../ultils/helperFunction";
 import Color from "../constans/Color";
 import { GET_DETAIL_USERS } from "../config/urls";
-import { saveDetailUser, saveUserData } from "../redux/actions/auth";
+import { saveDetailUser } from "../redux/actions/auth";
 import { apiGet } from "../ultils/utilsApi";
-import { banner1, banner2, banner3 } from "../public/assets/image";
+import { banner1, banner2, banner3, bg1, bg2 } from "../public/assets/image";
 import { FONTS, SIZES } from "../constans/Theme";
 import Swiper from "react-native-swiper";
-
+import Moment from "moment";
+import { newListProduct, typeList } from "../constans/raw";
+import {
+  HorizontalProductCard,
+  SectionHome,
+  TypeCard,
+} from "../components/Home";
 const HomeScreen = () => {
   const navigation = useNavigation();
   const tokenData = useSelector((state) => state.auth.tokenData);
   const detailData = useSelector((state) => state.auth.detailUser);
 
+  const currentDate = Moment();
+  const formattedDate = currentDate.format("dddd, DD/MM/YYYY");
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
-
-    console.log(tokenData);
-    console.log(detailData);
   }, []);
 
   const navigatorToScreen = () => {
@@ -49,16 +57,6 @@ const HomeScreen = () => {
       console.log("co loi");
       showError(error.error_message);
     }
-  };
-
-  const refreshToken = async (refresh_token = tokenData.refresh_token) => {
-    // try {
-    //   const res = await actions.refreshToken(refresh_token);
-    //   console.log(res.data);
-    // } catch (error) {
-    //   console.log("////////////");
-    //   showError(error.error_message);
-    // }
   };
 
   const getDetailUser = async () => {
@@ -78,79 +76,272 @@ const HomeScreen = () => {
       <View
         style={{
           flexDirection: "row",
-          marginTop: 40,
-          marginBottom: 10,
-          paddingHorizontal: 8,
+          marginTop: 15,
+          paddingHorizontal: 10,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
         }}
       >
         <View style={{ flex: 1 }}>
-          <Text style={{ ...FONTS.h2 }}>
-            Xin chào, {`${detailData.username}`}{" "}
+          <Text style={{ ...FONTS.h3 }}>
+            Xin chào, {detailData?.username || null}
+          </Text>
+          <Text
+            numberOfLines={1}
+            style={{ ...FONTS.body4, color: Color.textLight }}
+          >
+            {formattedDate}
           </Text>
         </View>
       </View>
     );
   }
 
+  function renderListType() {
+    return (
+      <SectionHome title={"Loại"} containerStyle={{ marginTop: 20 }}>
+        <FlatList
+          horizontal
+          data={typeList}
+          keyExtractor={(item) => item?.value}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            marginTop: SIZES.base,
+          }}
+          renderItem={({ item, index }) => (
+            <TypeCard
+              type={item}
+              containerStyle={{
+                marginLeft: index == 0 ? SIZES.padding : SIZES.base,
+                marginRight: index == typeList.length - 1 ? SIZES.padding : 0,
+              }}
+            ></TypeCard>
+          )}
+        ></FlatList>
+      </SectionHome>
+    );
+  }
+
+  function renderPopularList() {
+    return (
+      <SectionHome title={"Thịnh hành"} containerStyle={{}}>
+        <FlatList
+          data={newListProduct}
+          scrollEnabled={false}
+          keyExtractor={(item) => `popular-${item?.id}`}
+          contentContainerStyle={{ marginHorizontal: 10 }}
+          renderItem={({ item, index }) => {
+            return (
+              <HorizontalProductCard
+                product={item}
+                containerStyle={{
+                  // marginVertical: 20,
+                  marginTop: index == 0 ? SIZES.radius : SIZES.padding,
+                }}
+              />
+            );
+          }}
+        />
+      </SectionHome>
+    );
+  }
+
   return (
     <SafeAreaView
-      className="bg-red-100 flex-1 relative "
-      style={{ backgroundColor: Color.mainTheme }}
+      // className="bg-red-100 flex-1 relative "
+      style={{ backgroundColor: Color.mainTheme, flex: 1 }}
     >
       {renderHeader()}
-      {/* First Section */}
-      <View className="flex-row px-6 mt-5 items-center space-x-2">
-        <View className="w-16 h-16 bg-black rounded-full items-center justify-center">
-          <Text className="text-[#00BCC9] text-2xl font-semibold">Go</Text>
+
+      {/* First Section DONE */}
+      <View
+        className="flex-row px-3 mt-3 mb-3 items-center space-x-2"
+        style={{ marginTop: 65 }}
+      >
+        <View className="w-12 h-12 bg-black rounded-full items-center justify-center">
+          <Text
+            className="text-[#00BCC9]  font-semibold"
+            style={{ fontSize: 20, lineHeight: 32, color: Color.blueTheme }}
+          >
+            Go
+          </Text>
         </View>
         <Text
-          className="text-[#2A2B4B] text-2xl font-semibold"
-          style={{ color: "rgb(0 188 201)" }}
+          className="text-[#2A2B4B]  font-semibold"
+          style={{
+            fontSize: 20,
+            lineHeight: 32,
+            fontFamily: "Roboto-Bold",
+          }}
         >
           Shoes ERIC
         </Text>
-        <TouchableOpacity onPress={() => refreshToken()}>
-          <Text>dsfdsf</Text>
-        </TouchableOpacity>
       </View>
 
-      {/* Seccond Section */}
-      <View className="px-6 mt-5 space-y-2" style={{ zIndex: 0 }}>
-        <Text className="text-[#3c6072] text-[38px]">Enjoy the </Text>
-        <Text className="text-[#00BCC9] text-[34px] font-bold">
-          Good moments
+      <View
+        style={{
+          // flex: 1,
+          alignItems: "flex-start",
+          backgroundColor: "transparent",
+          borderRadius: 8,
+          paddingHorizontal: 6,
+          color: Color.mainColor,
+          marginHorizontal: 10,
+          marginBottom: 10,
+        }}
+      >
+        <Text
+          className="text-[#3c6072] text-[36px]"
+          style={{ alignSelf: "flex-start" }}
+        >
+          Chào mừng đến với
+        </Text>
+        <Text
+          className="text-[#00BCC9] text-[30px] font-bold"
+        >
+          Shoes ERIC
         </Text>
 
         <Text className="text-[#3C6072]">
-          Lsdjas ddasvnkdjck xlcvv ndsvsdvnk svsdcsdcsdcmv sdskdvlsdvdskvm slkv
-          sldv sldv
+          Hãy để chúng tôi giúp bạn tìm sản phẩm mà bạn mong muốn
         </Text>
       </View>
 
-      {/* Swiper Section */}
-      <View style={{ marginTop: 5, zIndex: 10, marginHorizontal: 5 }}>
-        <View style={styles.sliderContainer}>
+      {/* Second Section DONE */}
+      {/* <View
+        style={{
+          marginHorizontal: 10,
+          paddingHorizontal: 10,
+          height: 150,
+          width: "100%",
+          marginTop: 10,
+          // justifyContent: "center",
+          alignSelf: "center",
+          borderRadius: 8,
+          // height: 180,
+          marginTop: 0,
+        }}
+      >
+        <View
+          style={{
+            flex: 1,
+            alignItems: "flex-start",
+            // justifyContent: "center",
+            backgroundColor: "transparent",
+            borderRadius: 8,
+            paddingHorizontal: 6,
+            color: Color.mainColor,
+          }}
+        >
+          <Text
+            className="text-[#3c6072] text-[36px]"
+            style={{ alignSelf: "flex-start" }}
+          >
+            Chào mừng đến với
+          </Text>
+          <Text
+            className="text-[#00BCC9] text-[30px] font-bold"
+            // style={{ color: Color.mainTheme }}
+          >
+            Shoes ERIC
+          </Text>
+
+          <Text className="text-[#3C6072]">
+            Hãy để chúng tôi giúp bạn tìm sản phẩm mà bạn mong muốn
+          </Text>
+        </View>
+      </View> */}
+
+      <ScrollView>
+        {/* Swiper Section */}
+        <View
+          style={{
+            marginHorizontal: 10,
+            paddingHorizontal: 10,
+            ...styles.sliderContainer,
+            marginTop: 0,
+            borderRadius: 10,
+          }}
+        >
           <Swiper
             autoplay
-            horizontal={true}
-            height={200}
-            activeDotColor="#FF6347"
+            horizontal={false}
+            height={180}
+            activeDotColor={Color.mainColor}
           >
-            <View style={{ ...styles.slide, flex: 1 }}>
-              <View className="w-16 h-16 bg-black rounded-full items-center justify-center">
-                <Text className="text-[#00BCC9] text-2xl font-semibold">
-                  Go
-                </Text>
-              </View>
-              <Text
-                className="text-[#2A2B4B] text-2xl font-semibold"
-                style={{ color: "rgb(0 188 201)" }}
-              >
-                Shoes ERIC
-              </Text>
-            </View>
+            {/* <ImageBackground
+            source={bg1}
+            style={{
+              flex: 1,
+              backgroundColor: "transparent",
+              // borderRadius: 10,
+              paddingHorizontal: 10,
+              color: Color.mainColor,
+            }}
+            imageStyle={{ borderRadius: 10, opacity: 0.5 }}
+          >
+            <Text
+              className="text-[#3c6072] text-[26px]"
+              style={{ ...FONTS.body2, color: Color.white }}
+            >
+              Chào mừng đến với
+            </Text>
+            <Text
+              className="text-[#00BCC9] text-[30px] font-bold"
+              style={{ color: Color.white }}
+            >
+              Shoes ERIC
+            </Text>
 
-            {/* <View style={styles.slide}>
+            <Text
+              className="text-[#3C6072]"
+              style={{ color: Color.white, marginTop: 8, ...FONTS.body4 }}
+            >
+              Hãy để chúng tôi giúp bạn tìm sản phẩm mà bạn mong muốn
+            </Text>
+          </ImageBackground>
+
+          <ImageBackground
+            source={bg2}
+            style={{
+              flex: 1,
+              backgroundColor: "transparent",
+              borderRadius: 10,
+              paddingHorizontal: 10,
+              color: Color.mainColor,
+            }}
+            imageStyle={{ borderRadius: 8, opacity: 0.8 }}
+          >
+            <Text
+              className="text-[#3c6072] text-[30px]"
+              style={{ alignSelf: "flex-start" }}
+            >
+              Chào mừng đến với
+            </Text>
+            <Text
+              className="text-[#00BCC9] text-[34px] font-bold"
+              style={{
+                color: Color.mainColor,
+                ...FONTS.h1,
+                fontSize: 34,
+                marginTop: 8,
+              }}
+            >
+              Shoes ERIC
+            </Text>
+
+            <Text
+              className="text-[#3C6072]"
+              style={{ color: Color.white, marginTop: 8, ...FONTS.body4 }}
+            >
+              Hãy để chúng tôi giúp bạn tìm sản phẩm mà bạn mong muốn
+            </Text>
+          </ImageBackground> */}
+
+            <View style={styles.slide}>
               <Image
                 source={banner1}
                 resizeMode="cover"
@@ -170,10 +361,16 @@ const HomeScreen = () => {
                 resizeMode="cover"
                 style={styles.sliderImage}
               />
-            </View> */}
+            </View>
           </Swiper>
         </View>
-      </View>
+
+        {/* <LineDivider /> */}
+
+        {renderListType()}
+
+        {renderPopularList()}
+      </ScrollView>
 
       {/* Circel Section */}
       <View
@@ -188,18 +385,18 @@ const HomeScreen = () => {
       ></View>
 
       {/* Circel Section */}
-      <View
+      {/* <View
         className="flex-1 relative items-center justify-center"
         style={{ zIndex: -10 }}
       >
-        {/* <Animatable.Image
+        <Animatable.Image
           animation="fadeIn"
           easing="ease-in-out"
           source={ShoesFLas}
           className="w-80 h-80 object-cover mt-20"
-        /> */}
+        />
 
-        {/* <TouchableOpacity
+        <TouchableOpacity
           onPress={() => getDetailUser()}
           // onPress={() => testAxios()}
           className=" absolute bottom-[100px] w-24 h-24 border-l-2 border-r-2 border-t-4 border-[#00BCC9] rounded-full items-center justify-center"
@@ -227,53 +424,12 @@ const HomeScreen = () => {
           >
             <Text className="text-gray-50 text-[34px] font-semibold">Re</Text>
           </Animatable.View>
-        </TouchableOpacity> */}
-      </View>
+        </TouchableOpacity>
+      </View> */}
 
-      <ScrollView>
-        <Text>
-          "access_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIiwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdfQ.yX_06xiMUKl4oDscAIk8FTWkm-s50zn6MdUZk2ceFMs",
-          "refresh_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIn0.yDC7XkdXs1biumfsFBT8zqKzZVQAwpgVuXLM0zeps_I"
-        </Text>
-        <Text>
-          "access_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIiwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdfQ.yX_06xiMUKl4oDscAIk8FTWkm-s50zn6MdUZk2ceFMs",
-          "refresh_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIn0.yDC7XkdXs1biumfsFBT8zqKzZVQAwpgVuXLM0zeps_I"
-        </Text>
-        <Text>
-          "access_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIiwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdfQ.yX_06xiMUKl4oDscAIk8FTWkm-s50zn6MdUZk2ceFMs",
-          "refresh_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIn0.yDC7XkdXs1biumfsFBT8zqKzZVQAwpgVuXLM0zeps_I"
-        </Text>
-        <Text>
-          "access_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIiwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdfQ.yX_06xiMUKl4oDscAIk8FTWkm-s50zn6MdUZk2ceFMs",
-          "refresh_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIn0.yDC7XkdXs1biumfsFBT8zqKzZVQAwpgVuXLM0zeps_I"
-        </Text>
-        <Text>
-          "access_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIiwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdfQ.yX_06xiMUKl4oDscAIk8FTWkm-s50zn6MdUZk2ceFMs",
-          "refresh_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIn0.yDC7XkdXs1biumfsFBT8zqKzZVQAwpgVuXLM0zeps_I"
-        </Text>
-        <Text>
-          "access_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIiwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdfQ.yX_06xiMUKl4oDscAIk8FTWkm-s50zn6MdUZk2ceFMs",
-          "refresh_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIn0.yDC7XkdXs1biumfsFBT8zqKzZVQAwpgVuXLM0zeps_I"
-        </Text>
-        <Text>
-          "access_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIiwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdfQ.yX_06xiMUKl4oDscAIk8FTWkm-s50zn6MdUZk2ceFMs",
-          "refresh_token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxQGdtYWlsLmNvbSIsImV4cCI6MTY4NTYzMjExOCwiaXNzIjoiaHR0cDovLzE5Mi4xNjguMS44OjgwODAvYXBpL2xvZ2luIn0.yDC7XkdXs1biumfsFBT8zqKzZVQAwpgVuXLM0zeps_I"
-        </Text>
-      </ScrollView>
+      {/* <ScrollView> */}
+
+      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };
@@ -281,70 +437,10 @@ const HomeScreen = () => {
 export default HomeScreen;
 
 const styles = StyleSheet.create({
-  categoryContainer: {
-    flexDirection: "row",
-    marginTop: 20,
-    marginBottom: 20,
-    justifyContent: "space-between",
-  },
-  categoryText: { fontSize: 16, color: "grey", fontWeight: "bold" },
-  categoryTextSelected: {
-    color: Color.green,
-    paddingBottom: 5,
-    borderBottomWidth: 2,
-    borderColor: Color.green,
-  },
-  card: {
-    height: 250,
-    backgroundColor: Color.light,
-    width: SIZES.width,
-    marginHorizontal: 2,
-    borderRadius: 10,
-    marginBottom: 20,
-    padding: 15,
-  },
-  header: {
-    marginTop: 5,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  searchContainer: {
-    height: 50,
-    backgroundColor: Color.light,
-    borderRadius: 10,
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  input: {
-    fontSize: 18,
-    fontWeight: "bold",
-    flex: 1,
-    color: Color.darkGray,
-  },
-  sortBtn: {
-    marginLeft: 10,
-    height: 50,
-    width: 50,
-    borderRadius: 10,
-    backgroundColor: Color.green,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  sliderContainer: {
-    height: 200,
-    width: "100%",
-    marginTop: 10,
-    justifyContent: "center",
-    alignSelf: "center",
-    borderRadius: 8,
-  },
-
-  wrapper: {},
-
   slide: {
     flex: 1,
     justifyContent: "center",
+    alignItems: "flex-start",
     backgroundColor: "transparent",
     borderRadius: 8,
   },
@@ -356,11 +452,16 @@ const styles = StyleSheet.create({
   },
 
   sliderContainer: {
-    height: 200,
+    height: 180,
     width: "100%",
     marginTop: 10,
     justifyContent: "center",
     alignSelf: "center",
     borderRadius: 8,
   },
+  sessionRow: {
+    flexDirection: "row",
+    paddingHorizontal: SIZES.padding,
+  },
+  title: { flex: 1, ...FONTS.h2 },
 });

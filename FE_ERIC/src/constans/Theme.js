@@ -10,6 +10,7 @@ export const SIZES = {
   font: 14,
   radius: 12,
   title: 24,
+  padding: 10,
 
   h1: 30,
   h2: 22,
@@ -22,7 +23,7 @@ export const SIZES = {
 
   body: 14,
   caption: 12,
-  radius: 16,
+  // radius: 16,
 };
 
 export const spacing = {

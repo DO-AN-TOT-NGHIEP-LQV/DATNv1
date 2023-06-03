@@ -95,13 +95,14 @@ const SearchImageScreen = () => {
     const fetchData = async () => {
       if (pickedImagePath) {
         try {
+          setListSearch([]);
           setIsLoading(true);
           const res = await actions.searchWithImage(pickedImagePath);
           setListSearch(res.data);
           console.log(res.data);
           setIsLoading(false);
         } catch (error) {
-          console.log("Có lỗi xảy ra");
+          setListSearch([]);
           showError(error.error_message);
           setIsLoading(false);
         }
@@ -116,7 +117,6 @@ const SearchImageScreen = () => {
         style={{
           marginVertical: 5,
           alignItems: "center",
-          // alignSelf: "center",
           borderWidth: 2,
           height: MAX_HEIGHT,
           paddingVertical: 5,
@@ -130,21 +130,11 @@ const SearchImageScreen = () => {
         {!pickedImagePath ? (
           <Image
             source={require("../public/assets/splashShoe.png")}
-            // source={{
-            //   uri: "https://sneakerdaily.vn/wp-content/uploads/2022/11/giay-chay-bo-nike-quest-5-black-grey-white-dd0204-001-2.jpg",
-            // }}
             style={{
-              // width: (windowHeight * 1) / 5,
-              // height: (windowHeight * 1) / 5,
-              // borderRadius: 16,
-              // borderWidth: 1,
-
+ 
               height: MAX_HEIGHT / 2,
               width: MAX_HEIGHT / 2,
-              // alignSelf: "center",
-              // justifyContent: "center",
               alignSelf: "center",
-              // alignSelf: "stretch",
               resizeMode: "cover",
             }}
           />
@@ -204,10 +194,8 @@ const SearchImageScreen = () => {
         quality: 1,
       });
       if (!result.canceled) {
-        // setPickedImagePath(result.assets[0].uri);
-        // fetchData();
-        // actions.updateIsLoading(true);
-        // setLoading(true);
+        setPickedImagePath(result.assets[0].uri);
+   
       }
     };
     return (

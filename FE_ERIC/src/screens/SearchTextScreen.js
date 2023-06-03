@@ -39,7 +39,7 @@ const SearchTextScreen = () => {
 
   // const pageProduct = useSelector((state) => state.search.pageProduct);
 
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   // const searchText = useSelector((state) => state.search.searchText);
 
   const [searchText, setSearchText] = useState("");
@@ -89,7 +89,7 @@ const SearchTextScreen = () => {
     const isEndReached =
       contentOffset.y + layoutMeasurement.height >= contentSize.height;
 
-    if (isEndReached && !isLoading && !isEndOfData) {
+    if (isEndReached && !loadingEndScroll && !isEndOfData) {
       fetchMoreDataSearch();
     }
   };
@@ -119,8 +119,9 @@ const SearchTextScreen = () => {
       setPageProduct(0);
       setLoadingEndScroll(false);
     } catch (error) {
-      showError(error.error_message);
+      setPageProduct(0);
       setLoadingEndScroll(false);
+      showError(error.error_message);
     }
   };
 
@@ -176,7 +177,8 @@ const SearchTextScreen = () => {
 
   function searchInputHeader() {
     const onSearch = async () => {
-      firstRenderData();
+      if (loadingEndScroll) return;
+      await firstRenderData();
     };
 
     return (
@@ -219,7 +221,6 @@ const SearchTextScreen = () => {
                       screen: "SearchImage",
                     });
 
-                    // updateIsMainViewDisplay(!isMainViewVisible);
                   }}
                 >
                   <View>
@@ -248,7 +249,10 @@ const SearchTextScreen = () => {
                 </TouchableOpacity>
 
                 {/* Search Button */}
-                <TouchableOpacity style={style.filter} onPress={onSearch}>
+                <TouchableOpacity
+                  style={style.filter}
+                  onPress={async () => await onSearch()}
+                >
                   <View>
                     <Icons
                       icon={icons.AntDesign}
@@ -330,9 +334,7 @@ const SearchTextScreen = () => {
         <FilterModal
           isVisible={showFilterModel}
           onClose={() => setShowFilterModel(false)}
-          firstRenderData={() => {
-            firstRenderData();
-          }}
+     
         />
       )}
     </View>
@@ -353,7 +355,8 @@ const style = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 16,
-    backgroundColor: "#ffffff",
+    backgroundColor: Color.white, // "#ffffff",
+
     height: Dimensions.get("window").height / 15,
     marginHorizontal: 5,
     marginTop: 5,

@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 @Transactional
 @Slf4j
-//@RequiredArgsConstructor
+
 public class UserServiceImpl implements  UserService, UserDetailsService {
 
     @Autowired
@@ -93,6 +93,22 @@ public class UserServiceImpl implements  UserService, UserDetailsService {
     @Override
     public User getUserById(Long id) {
         return  userRepo.findById(id).orElse(null);
+    }
+
+    @Override
+    public boolean changePassword(User user) {
+        try{
+            if ( userRepo.existsById(user.getId())){
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                Role role = roleRepo.findByName("ROLE_USER");
+                user.getRoles().add(role);  // vi role la 1 array list nen get lay [] roi a vao
+                 userRepo.save(user);
+                return  true;
+            }
+            return  false;
+        }catch (Exception e)
+        { throw  e;}
+
     }
 
     @Override

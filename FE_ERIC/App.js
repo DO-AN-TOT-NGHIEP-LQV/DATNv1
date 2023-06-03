@@ -31,16 +31,17 @@ export default function App() {
   useEffect(() => {
     const firstLoad = async () => {
       const tokenData = await getStorageTokenUserData();
+      // actions.setIsLogin(false);
       if (!!tokenData) {
         try {
           await saveUserData(tokenData);
           const detailData = await actions.getDetailUser();
           console.log(detailData.data);
           await actions.saveDetailUser(detailData.data);
-
-          
+          await actions.setIsLogin(true);
         } catch (error) {
-          actions.logout();
+          // actions.logout();
+          actions.setIsLogin(false);
         }
       }
     };
@@ -53,10 +54,6 @@ export default function App() {
     "Roboto-Black": require("./assets/fonts/Roboto-Black.ttf"),
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
   });
-
-  // if (!loadedFonts) {
-  //   return undefined;
-  // }
 
   useEffect(() => {
     async function prepare() {

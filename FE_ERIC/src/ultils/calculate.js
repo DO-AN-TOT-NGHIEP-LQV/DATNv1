@@ -1,4 +1,4 @@
-export function calculateDisplayValue (value)  {
+export function calculateDisplayValue(value) {
   const min = 0;
   const max = 100;
   const threshold = 70;
@@ -19,4 +19,4 @@ export function calculateDisplayValue (value)  {
   } else {
     return undefined;
   }
-};
+}

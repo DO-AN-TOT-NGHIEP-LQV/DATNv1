@@ -7,6 +7,7 @@ import com.example.be_eric.repository.ProductSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -32,9 +33,6 @@ public class ProductServiceImpl implements  ProductService{
     @Override
     @Transactional
     public void addImageToProduct(Product product, Image image) {
-//        image.setIsProductImage(true);
-//        product.getImages().add(image);
-//        productRepo.save(product);
 
         Optional<Product> optionalPost = productRepo.findById(product.getId());
         if (optionalPost.isPresent()) {
@@ -58,6 +56,29 @@ public class ProductServiceImpl implements  ProductService{
     @Override
     public List<Product> searchByTextNotPageable(String searchText) {
         return productRepo.findProductsByNameContainingOrDescriptionContaining(searchText,  searchText);
+    }
+
+    @Override
+    @Transactional
+    public boolean updateViews(Long idProduct) {
+       try {
+            Product product = getById(idProduct);
+            if (product != null) {
+                product.setCountViews(product.getCountViews() + 1);
+                productRepo.save(product);
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+       catch (ObjectOptimisticLockingFailureException ex) {
+           // Xử lý khi xảy ra xung đột cập nhật
+           throw  ex ;
+       }
+       catch (Exception e){
+           throw  e;
+       }
     }
 
     @Override

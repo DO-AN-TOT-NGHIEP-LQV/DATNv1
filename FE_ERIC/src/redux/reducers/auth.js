@@ -3,6 +3,7 @@ import types from "../types";
 const initialState = {
   tokenData: {},
   detailUser: {},
+  isLogin: false,
 };
 
 export default function (state = initialState, action) {
@@ -15,6 +16,11 @@ export default function (state = initialState, action) {
       const data = action.payload;
       return { ...state, detailUser: data };
     }
+    case types.IS_LOGIN: {
+      const data = action.payload;
+      return { ...state, isLogin: data };
+    }
+
     default:
       return { ...state };
   }

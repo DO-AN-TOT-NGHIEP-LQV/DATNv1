@@ -41,29 +41,6 @@ const CardItem = ({ data, i }) => {
       }}
     >
       <View style={style.card}>
-        {/* <TouchableOpacity
-          style={{
-            // position: "absolute",
-            // left: -8,
-            top: 0,
-            // paddingHorizontal: 12,
-            paddingVertical: 1,
-            // backgroundColor: "rgba(0,0,0,0.5)",
-            borderRadius: 5,
-            zIndex: 100,
-            // width: "10%",
-            height: "10%",
-            // textShadowColor: "rgba(0,0,0,0.2)",
-            // textShadowOffset: {
-            //   height: 1,
-            //   width: 0,
-            // },
-            // textShadowRadius: 4,
-          }}
-        >
-          <Text style={{ fontSize: 10, color: Color.black }}>{data}</Text>
-        </TouchableOpacity> */}
-
         <TouchableOpacity
           style={{
             borderRadius: 3,
@@ -78,9 +55,7 @@ const CardItem = ({ data, i }) => {
             className="w-full h-full object-cover"
             resizeMode="contain"
             style={{
-              // borderWidth: 1,
               borderRadius: 3,
-              // borderColor: Color.textLight,
             }}
           />
         </TouchableOpacity>
@@ -96,7 +71,7 @@ const CardItem = ({ data, i }) => {
               lineHeight: 15,
             }}
           >
-            {`${data.title || "sdfsdfsdfsdfsadjasljdlasd;asdsadj"}`}
+            {`${data.title || ""}`}
           </Text>
 
           <Text
@@ -108,10 +83,7 @@ const CardItem = ({ data, i }) => {
               lineHeight: 15,
             }}
           >
-            {`${
-              data.content ||
-              "sdfsdfsdfsdfsadjasljdlasd;asdsadsdasdasdasdsdfgg654qwwasdfghjmn j"
-            }`}
+            {`${data.content || ""}`}
           </Text>
         </View>
 
@@ -119,7 +91,6 @@ const CardItem = ({ data, i }) => {
         <View
           style={{
             flexDirection: "row",
-            // flex: 1,
           }}
         >
           <Text numberOfLines={1}>
@@ -141,32 +112,7 @@ const CardItem = ({ data, i }) => {
             alignItems: "center",
             alignContent: "center",
           }}
-        >
-          {/* Name && address */}
-          {/* <TouchableOpacity style={{ flex: 1 }}>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={{
-                fontSize: 12,
-                fontWeight: "500",
-              }}
-            >
-              [{data.content}]
-            </Text>
-
-            <Text
-              numberOfLines={1}
-              style={{
-                fontSize: 9,
-                fontWeight: "300",
-              }}
-            >
-              <Icons icon={icons.Feather} name="map-pin" size={10} />
-              {data.title}
-            </Text>
-          </TouchableOpacity> */}
-        </View>
+        ></View>
       </View>
     </View>
   );
@@ -183,10 +129,11 @@ const style = StyleSheet.create({
     fontSize: 16,
     fontWeight: "300",
     color: Color.red,
+    color: Color.blueTheme,
   },
   priceBig: {
     fontSize: 18,
     fontWeight: "normal",
-    color: Color.red,
+    color: Color.blueTheme,
   },
 });
