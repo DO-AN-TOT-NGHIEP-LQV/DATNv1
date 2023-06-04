@@ -64,7 +64,7 @@ public class SearchController {
             };
             body.add("fileSearchImg", resource);
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-            String url = "http://127.0.0.1:5000/ai/api/post/searchByImg";
+            String url = "http://127.0.0.1:5000/ai/api/product/searchByImg";
             ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -74,14 +74,25 @@ public class SearchController {
             for ( String stringIdDocumentImage : stringList){
                 String[] parts = stringIdDocumentImage.split("_");
                 String typeString = parts[0]; // Lấy phần tử đầu tiên
-                if(typeString.equals("post")){
-                    Post tmp = postService.getPostById( Long.valueOf(stringIdDocumentImage.replaceAll("[^\\d]", "")));
-                    responeList.add(tmp);
+//                if(typeString.equals("post")){
+//                    Post tmp = postService.getPostById( Long.valueOf(stringIdDocumentImage.replaceAll("[^\\d]", "")));
+//                    responeList.add(tmp);
+//                }
+//                else {
+//                    Product tmp =  productService.getById(Long.valueOf(stringIdDocumentImage.replaceAll("[^\\d]", "")));
+//                    responeList.add(tmp);
+//                }
+
+                if(typeString.equals("product")){
+                    try{
+                        Product tmp =  productService.getById(Long.valueOf(stringIdDocumentImage.replaceAll("[^\\d]", "")));
+                        if(tmp != null )  responeList.add(tmp);
+                    }
+                    catch (Exception e){
+                    }
+
                 }
-                else {
-                    Product tmp =  productService.getById(Long.valueOf(stringIdDocumentImage.replaceAll("[^\\d]", "")));
-                    responeList.add(tmp);
-                }
+
             }
             return ResponseEntity.ok().body(responeList);
 
@@ -114,13 +125,11 @@ public class SearchController {
 
     @GetMapping(value = "/search/posts/SearchByText")
     public ResponseEntity searchPostByText(@RequestParam("searchText") String searchText, @RequestParam("page") int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 30);
         Page<Post> postListPage = postService.searchByText(searchText, pageable);
         List<Post> postList = postListPage.getContent();
         return ResponseEntity.ok().body(postList);
     }
-
-
 
 
     @GetMapping(value = "/search/all/SearchByText")

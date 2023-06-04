@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import jsonify, request, make_response
 import os
-
+import threading
 import numpy as np
 from numpy.linalg import norm
 from PIL import Image
@@ -47,100 +47,99 @@ cred = credentials.Certificate('./serviceAccount.json')
 app = firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-app = Flask(__name__)  
+app = Flask(__name__)   
 
-@app.route("/ai", methods=['GET'])    
-def test():
-    name = []
-    name.append("sads")
-    name.append("dsds")
-    return jsonify(name)    
-
-@app.route("/ai/api/post/searchByImg", methods=['POST'])
+@app.route("/ai/api/product/searchByImg", methods=['POST'])
 def extract_feature():
-    
-    img = request.files['fileSearchImg']
-    img = Image.open(img)
-    
-    png = remove(img)
-    background = Image.new('RGBA', png.size, (255, 255, 255))
-    img = (Image.alpha_composite(background, png)).convert("RGB")
-    img = img.resize((224, 224))
-    
-    x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-    x = preprocess_input(x)
-    search_vector = model.predict(x)[0].flatten()
-    
-    collection_ref = db.collection('Image_Feature_Vector')
-    vectors = [] 
-    results = [] 
-
-    docs = collection_ref.stream()
-    for doc in docs:
-        data = doc.to_dict()
-        vector = np.array(data['feature_vector'])
-        doc_id = doc.id
-        # doc_id = doc_id.split('_')[0]
+    try:
+        img = request.files['fileSearchImg']
+        img = Image.open(img)
+        img = img.resize((224, 224))
         
-        doc_id = doc_id[:doc_id.rindex("_")]
-        distance = np.linalg.norm(vector - search_vector)
-        results.append((doc_id, distance))
-    
-    nearest_image = sorted(results, key=lambda x: x[1])
-    
-    K = 1
-    df = pd.DataFrame(nearest_image, columns=["id_product", "distance"])
-    df = df.drop_duplicates(subset=["id_product"])  # loai bo trung lap
-    nearest_image[:K] = [(row["id_product"]) for _, row in df.iterrows()]
+        png = remove(img)
+        background = Image.new('RGBA', png.size, (255, 255, 255))
+        img = (Image.alpha_composite(background, png)).convert("RGB")
+        
+        
+        x = image.img_to_array(img)
+        x = np.expand_dims(x, axis=0)
+        x = preprocess_input(x)
+        search_vector = model.predict(x)[0].flatten()
+        
+        collection_ref = db.collection('Image_Feature_Vector')
+        vectors = [] 
+        results = [] 
 
-    nearest_path  = nearest_image
-    nearest_path = [(row["id_product"]) for _, row in df.iterrows()]
-    print(nearest_path)
-    return  jsonify(nearest_path)
+        docs = collection_ref.stream()
+        for doc in docs:
+            data = doc.to_dict()
+            vector = np.array(data['feature_vector'])
+            doc_id = doc.id
+            # doc_id = doc_id.split('_')[0]
+            
+            doc_id = doc_id[:doc_id.rindex("_")]
+            distance = np.linalg.norm(vector - search_vector)
+            results.append((doc_id, distance))
+        
+        nearest_image = sorted(results, key=lambda x: x[1])
+        
+        K = 1
+        df = pd.DataFrame(nearest_image, columns=["id_product", "distance"])
+        df = df.drop_duplicates(subset=["id_product"])  # loai bo trung lap
+        nearest_image[:K] = [(row["id_product"]) for _, row in df.iterrows()]
+
+        nearest_path  = nearest_image
+        nearest_path = [(row["id_product"]) for _, row in df.iterrows()]
+        print(nearest_path)
+        return  jsonify(nearest_path)
+    except Exception as e:
+        print(e)
+        response = jsonify(error=str(e))
+        response.status_code = 500
+        return response
 
 # @app.route("/ai/api/post/searchByImg", methods=['POST'])
 # def extract_feature():
     
-    img = request.files['fileSearchImg']
-    img = Image.open(img)
+    # img = request.files['fileSearchImg']
+    # img = Image.open(img)
     
-    png = remove(img)
-    background = Image.new('RGBA', png.size, (255, 255, 255))
-    img = (Image.alpha_composite(background, png)).convert("RGB")
-    img = img.resize((224, 224))
+    # png = remove(img)
+    # background = Image.new('RGBA', png.size, (255, 255, 255))
+    # img = (Image.alpha_composite(background, png)).convert("RGB")
+    # img = img.resize((224, 224))
     
-    x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-    x = preprocess_input(x)
+    # x = image.img_to_array(img)
+    # x = np.expand_dims(x, axis=0)
+    # x = preprocess_input(x)
 
-    search_vector = model.predict(x)[0].flatten()
+    # search_vector = model.predict(x)[0].flatten()
 
-    # Tinh khoang cach tu search_vector den tat ca cac vector
-    distance = np.linalg.norm(vectors - search_vector, axis=1)
+    # # Tinh khoang cach tu search_vector den tat ca cac vector
+    # distance = np.linalg.norm(vectors - search_vector, axis=1)
 
-    ids = np.argsort(distance)
-    nearest_image = [(paths[id], distance[id]) for id in ids]
+    # ids = np.argsort(distance)
+    # nearest_image = [(paths[id], distance[id]) for id in ids]
 
-    K = 1
-    df = pd.DataFrame(nearest_image, columns=["path", "distance"])
-    # df = df.sort_values(by="distance")
-    df = df.drop_duplicates(subset=["path"])
-    nearest_image[:K] = [(row["path"], row["distance"]) for _, row in df.iterrows()]
+    # K = 1
+    # df = pd.DataFrame(nearest_image, columns=["path", "distance"])
+    # # df = df.sort_values(by="distance")
+    # df = df.drop_duplicates(subset=["path"])
+    # nearest_image[:K] = [(row["path"], row["distance"]) for _, row in df.iterrows()]
 
-    nearest_path  = nearest_image;
-    nearest_path = [(row["path"]) for _, row in df.iterrows()]
-    print(nearest_path)
-    return  jsonify(nearest_path)
+    # nearest_path  = nearest_image;
+    # nearest_path = [(row["path"]) for _, row in df.iterrows()]
+    # print(nearest_path)
+    # return  jsonify(nearest_path)
 
 
-@app.route("/ai/api/post/addNewImg", methods=['POST'])
-def saveImageToFirestore():
+@app.route("/ai/api/product/addNewImg", methods=['POST'])
+def saveImageToFireStore():
     db = firestore.client()
 
     try:
         img = request.files['fileImage']
-        post_id = request.form['post_id']
+        post_id = request.form['product_id']
         img = Image.open(img)
 
         png = remove(img)
@@ -157,7 +156,7 @@ def saveImageToFirestore():
         for batch in dataGenerator.flow(x, batch_size=1, shuffle=False):
             
             features = model.predict(batch)[0].flatten()    
-            doc_ref = db.collection("Image_Feature_Vector").document(  "post_" + post_id +"_"+ str(i))
+            doc_ref = db.collection("Image_Feature_Vector").document(  "product_" + post_id +"_"+ str(i))
             doc_ref.set({
                     "feature_vector": features.tolist()
                 })
@@ -173,7 +172,7 @@ def saveImageToFirestore():
         
         print(e)
         for doc_id in doc_ids:
-            doc_ref = db.collection('my_collection').document(doc_id)
+            doc_ref = db.collection('Image_Feature_Vector').document(doc_id)
             doc_ref.delete()
         response = make_response("")
         response.status_code = 500

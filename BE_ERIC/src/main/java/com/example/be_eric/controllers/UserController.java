@@ -223,7 +223,6 @@ public class UserController {
 
             return ResponseEntity.ok(tokens);
         } catch (Exception exception) {
-//            logger.error("Error refreshing token: {}", exception.getMessage());
             System.out.println( exception.getMessage());
 
             Map<String, String> error = new HashMap<>();

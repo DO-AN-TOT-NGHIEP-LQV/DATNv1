@@ -2,6 +2,7 @@ package com.example.be_eric.service;
 
 import com.example.be_eric.models.Image;
 import com.example.be_eric.models.Post;
+import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.ultils.Exception.UploadImageException;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -38,6 +39,9 @@ public class FirebaseFileService {
     private PostService postService;
 
     @Autowired
+    private  ProductService productService;
+
+    @Autowired
     private  ImageService imageService;
 
     @Autowired
@@ -60,14 +64,17 @@ public class FirebaseFileService {
     }
 
     @Transactional(rollbackOn = UploadImageException.class)
-    public String uploadImage_saveVector(MultipartFile fileImage, Post post) throws  UploadImageException {
+    public String uploadImage_saveVector(MultipartFile fileImage, Product product) throws  UploadImageException {
 
         try {
 
-            postService.savePost(post);
+//            postService.savePost(post);
+            System.out.println("save begin");
+            productService.save(product);
+            System.out.println("save   product after");
 
-            String imageName = "u_" + post.getUser().getId() + "_p_" + post.getId() + "_name_" + generateFileName(fileImage.getOriginalFilename());
-            String folderName = "ImageTest";
+            String imageName = "shop_" + product.getShop().getId() + "_p_" + product.getId() + "_name_" + generateFileName(fileImage.getOriginalFilename());
+            String folderName = "ImageProduct";
             String filePath = folderName + "/" + imageName;
             System.out.println(imageName);
             System.out.println("555555555555");
@@ -81,7 +88,9 @@ public class FirebaseFileService {
             String fileUrl = "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/" + URLEncoder.encode(filePath, "UTF-8") + "?alt=media";
 
             Image image = imageService.saveImage(new Image(null, imageName, fileUrl, false));
-            postService.addImageToPost(post, image);
+            productService.addImageToProduct( product, image );
+//            postService.addImageToPost(poas, image);
+
 
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
@@ -95,11 +104,10 @@ public class FirebaseFileService {
                 }
             };
             body.add("fileImage", resource);
-            body.add("post_id", post.getId());
-            System.out.println("66666666666666666");
+            body.add("product_id", product.getId());
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-            String url = "http://127.0.0.1:5000/ai/api/post/addNewImg";
+            String url = "http://127.0.0.1:5000/ai/api/product/addNewImg";
             ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
             HttpStatus statusCode = response.getStatusCode();
             int statusCodeValue = statusCode.value();
@@ -117,22 +125,22 @@ public class FirebaseFileService {
     }
 
     @Transactional
-    public  boolean deletePost_removeVector(Post post) throws Exception {
+    public  boolean deleteProduct_removeVector(Product product) throws Exception {
 
         try {
             WriteBatch batch = firestore.batch();
             for ( int i = 0 ; i < 10 ; i++){
 
-                DocumentReference docRef = firestore.collection("Image_Feature_Vector").document("post_" +  post.getId() + "_" + i);
+                DocumentReference docRef = firestore.collection("Image_Feature_Vector").document("product_" +  product.getId() + "_" + i);
                 batch.delete(docRef);
-                System.out.println("Xoa anh thanh cong anh " + i);
+                System.out.println("Xoa anh thanh cong anh  product_" +  product.getId() + i);
             }
 
-            List<Image> images = post.getImages();
-            String folderName = "ImageTest";
+            List<Image> images = product.getImages();
+            String folderName = "ImageProduct";
 
             for (Image image : images) {
-                String filePath = folderName + "/" + image.getNo();
+                String filePath = folderName + "/" + image.getName();
                 BlobId blobId = BlobId.of("datnv1-34493.appspot.com", filePath);
                 boolean deleted = storage.delete(blobId);
                 if (deleted) {
@@ -144,7 +152,8 @@ public class FirebaseFileService {
                 }
             };
 
-            postService.deleteAPost(post);
+            productService.deleteProduct(product);
+//            postService.deleteAPost(post);
             ApiFuture<List<WriteResult>> future = batch.commit();
             future.get();
             return  true;

@@ -96,7 +96,7 @@ def seedData33ImgTest():
     try:
         doc_ids = []
         data_folder = "./testimg"
-        for stt in range(1, 34):
+        for stt in range(1, 34):   
             name_image = str(stt) + '.jpg'
             image_path_full = os.path.join(data_folder, name_image)
             print("Xu ly : ", name_image)
@@ -110,10 +110,7 @@ def seedData33ImgTest():
             for batch in dataGenerator.flow(x, batch_size=1, shuffle=False):
                 # Trích xuất đặc trưng của ảnh
                 features = model.predict(batch)[0].flatten()
-                if stt <= 20:
-                    doc_ref = db.collection("Image_Feature_Vector").document( "post_" +   str(stt) +"_"+ str(i))
-                else:
-                    doc_ref = db.collection("Image_Feature_Vector").document(  "product_" + str(stt-20) +"_"+ str(i))
+                doc_ref = db.collection("Image_Feature_Vector").document( "product_" +   str(stt) +"_"+ str(i))
 
                 doc_ref.set({
                         "feature_vector": features.tolist()

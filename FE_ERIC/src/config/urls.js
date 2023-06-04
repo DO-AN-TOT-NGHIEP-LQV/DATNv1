@@ -40,6 +40,8 @@ export const DELETE_SUB_DISCUSSION = getApiUrl(
   "/user/discussion/product/deleteSubDiscussion"
 );
 
+export const CREATE_NEW_PRODUCT = getApiUrl("/sale/product/create");
+
 // "user/discussion/product/deleteSubDiscussion"
 axios.defaults.baseURL = "http://192.168.1.8:8080/api";
 // axios.defaults.baseURL = 'http://192.168.1.6:8080/api'

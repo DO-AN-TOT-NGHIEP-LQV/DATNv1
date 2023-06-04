@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="BeEricApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" singleton="false">
     <module name="be_eric.main" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.be_eric.BE" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.be_eric.BeEricApplication" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="ALTERNATIVE_JRE_PATH" value="11" />
-    <option name="SHORTEN_COMMAND_LINE" value="NONE" />
+    <option name="SHORTEN_COMMAND_LINE" value="MANIFEST" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

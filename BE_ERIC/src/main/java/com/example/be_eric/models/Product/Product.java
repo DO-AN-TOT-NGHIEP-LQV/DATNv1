@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +32,22 @@ public class Product {
     private String name;
     @Column(columnDefinition = "TEXT")
 
+//    @NotNull
     private String description;
 
+//    @NotNull
     private int quantity;
 
     private double  originalPrice = 0;
+
+//    @NotNull
     private double  price = 0;
+
+//    @NotNull
     private String type;
+
     private String brand;
+
     private String status;
     @Column(name = "count_views", columnDefinition = "bigint default 0")
     private Long  countViews;

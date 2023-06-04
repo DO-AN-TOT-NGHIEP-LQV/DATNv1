@@ -37,6 +37,7 @@ import * as ImagePicker from "expo-image-picker";
 import actions from "../redux/actions";
 import { showError } from "../ultils/helperFunction";
 import MasonryListProducts from "../components/Search/MasonryListProducts";
+import ScanImageEffect from "../components/Search/ScanImageEffect";
 
 // const { width, height } = Dimensions.get("window");
 const width = Dimensions.get("window").width / 2 - 30;
@@ -94,6 +95,7 @@ const SearchImageScreen = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (pickedImagePath) {
+        const startTime = new Date().getTime();
         try {
           setListSearch([]);
           setIsLoading(true);
@@ -106,6 +108,9 @@ const SearchImageScreen = () => {
           showError(error.error_message);
           setIsLoading(false);
         }
+        const endTime = new Date().getTime(); // Thời gian kết thúc request
+        const elapsedTime = endTime - startTime;
+        console.log(elapsedTime / 1000);
       }
     };
     fetchData();
@@ -131,10 +136,19 @@ const SearchImageScreen = () => {
           <Image
             source={require("../public/assets/splashShoe.png")}
             style={{
- 
               height: MAX_HEIGHT / 2,
               width: MAX_HEIGHT / 2,
               alignSelf: "center",
+              resizeMode: "cover",
+            }}
+          />
+        ) : isLoading ? (
+          <ScanImageEffect
+            pickedImagePath={pickedImagePath}
+            style={{
+              height: MAX_HEIGHT,
+              width: width,
+              alignSelf: "stretch",
               resizeMode: "cover",
             }}
           />
@@ -195,7 +209,6 @@ const SearchImageScreen = () => {
       });
       if (!result.canceled) {
         setPickedImagePath(result.assets[0].uri);
-   
       }
     };
     return (

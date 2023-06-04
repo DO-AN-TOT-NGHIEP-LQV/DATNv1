@@ -36,14 +36,14 @@ public class PostServiceImpl  implements  PostService{
     @Override
     @Transactional
     public void addImageToPost(Post post, Image image) {
-
-        Optional<Post> optionalPost = postRepo.findById(post.getId());
-        if (optionalPost.isPresent()) {
-            Post newpost = optionalPost.get();
-            image.setIsProductImage(false);
-            newpost.getImages().add(image);
-            postRepo.save(newpost);
-        }
+//
+//        Optional<Post> optionalPost = postRepo.findById(post.getId());
+//        if (optionalPost.isPresent()) {
+//            Post newpost = optionalPost.get();
+//            image.setIsProductImage(false);
+//            newpost.getImages().add(image);
+//            postRepo.save(newpost);
+//        }
 
     }
 

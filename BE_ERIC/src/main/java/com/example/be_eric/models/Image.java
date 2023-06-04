@@ -23,15 +23,15 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String no;
+    private String name;
     private String url;
 
     @NotNull
     private Boolean isProductImage = false;
 
-    public Image(Long id, String no, String url) {
+    public Image(Long id, String name, String url) {
         this.id = id;
-        this.no = no;
+        this.name = name;
         this.url = url;
     }
 }

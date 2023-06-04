@@ -43,6 +43,7 @@ public class DataSeeder implements CommandLineRunner {
 
         String ddlAuto = environment.getProperty("spring.jpa.hibernate.ddl-auto");
 
+//        if ("create".equals(ddlAuto)) {
         if ("create".equals(ddlAuto)) {
 
         userService.saveRole(new Role(1L, "ROLE_USER"));
@@ -56,13 +57,14 @@ public class DataSeeder implements CommandLineRunner {
         userService.saveUser(new User(5L, "Samiel",  "5@gmail.com", "5", new ArrayList<>()));
 
         userService.addRoleToUser("Le QViet", "ROLE_ADMIN" );
-        userService.addRoleToUser("Le QViet", "ROLE_SUPER_ADMIN" );
+//        userService.addRoleToUser("Le QViet", "ROLE_SUPER_ADMIN" );
         userService.addRoleToUser("Viet 2", "ROLE_SALER" );
-        userService.addRoleToUser("Jame", "ROLE_ADMIN" );
+        userService.addRoleToUser("Jame", "ROLE_SALER" );
         userService.addRoleToUser("Samiel", "ROLE_SALER" );
 
-        shopService.save(new Shop("Shop2", "3853","Quang Nam", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop1.png?alt=media", userService.getUserByEmail("2@gmail.com")));
-        shopService.save(new Shop("Shop5", "0384","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop2.png?alt=media", userService.getUserByEmail("5@gmail.com")));
+        shopService.save(new Shop("Shop2", "0905202332","Quang Nam", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop1.png?alt=media", userService.getUserByEmail("2@gmail.com")));
+        shopService.save(new Shop("Shop5", "0905202332","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop2.png?alt=media", userService.getUserByEmail("5@gmail.com")));
+        shopService.save(new Shop("Shop3", "7709446333","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop3.png?alt=media", userService.getUserByEmail("5@gmail.com")));
 
         postService.savePost(new Post(1L, "Sadds", "adasd", userService.getUserByEmail("1@gmail.com")));
         postService.savePost(new Post(2L, "sdasd", "3223423", userService.getUserByEmail("3@gmail.com")));
@@ -84,7 +86,6 @@ public class DataSeeder implements CommandLineRunner {
         postService.savePost(new Post(18L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
         postService.savePost(new Post(19L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
         postService.savePost(new Post(20L, "sdasd", "asdasd", userService.getUserByEmail("1@gmail.com")));
-
         postService.savePost(new Post(21L, "fdsf", "adasd", userService.getUserByEmail("1@gmail.com")));
         postService.savePost(new Post(22L, "sdasd", "sd", userService.getUserByEmail("3@gmail.com")));
         postService.savePost(new Post(23L, "ewr", "dsd", userService.getUserByEmail("1@gmail.com")));
@@ -106,7 +107,30 @@ public class DataSeeder implements CommandLineRunner {
         postService.savePost(new Post(39L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
         postService.savePost(new Post(40L, "sd23asd", "asdasd", userService.getUserByEmail("1@gmail.com")));
 
-        productService.save(new Product(21L,"pro1",
+
+
+            productService.save(new Product(1L,"pro2", "gdegrh asdasd asdasd", 50, 100000 ,  66000, shopService.getById(3)));
+            productService.save(new Product(2L,"pro3", "gdegrh asdasd asdasd", 55, 10000  , 100000, shopService.getById(1)));
+            productService.save(new Product(3L,"pro4", "gdegrh asdasd asdasd", 54, 0,       72005,   shopService.getById(3)));
+            productService.save(new Product(4L,"pro5", "gdegrh asdasd asdasd", 52,100300,   60000, shopService.getById(3)));
+            productService.save(new Product(5L,"pro6", "gdegrh asdasd asdasd", 523,130000,  60005, shopService.getById(2)));
+            productService.save(new Product(7L,"pro7", "gdegrh asdasd asdasd", 53, 0,          6, shopService.getById(1)));
+            productService.save(new Product(8L,"pro8", "gdegrh asdasd asdasd", 53, 140000, 69999, shopService.getById(2)));
+            productService.save(new Product(9L,"pro9", "gdegrh asdasd asdasd", 25, 754333, 6.5, shopService.getById(2)));
+            productService.save(new Product(10L,"pro10", "gdegrh asdasd asdasd", 25, 140000, 100000, shopService.getById(2)));
+            productService.save(new Product(11L,"pro11", "gdegrh asdasd asdasd", 35, 12333, 6500, shopService.getById(2)));
+            productService.save(new Product(12L,"pro12", "gdegrh asdasd asdasd", 5, 65222, shopService.getById(2)));
+            productService.save(new Product(13L,"pro13", "gdegrh asdasd asdasd", 5, 15000, 14000, shopService.getById(2)));
+            productService.save(new Product(12L,"pro2", "gdegrh asdasd asdasd", 50, 100000 ,  66000, shopService.getById(2)));
+            productService.save(new Product(13L,"pro4", "gdegrh asdasd asdasd", 54, 0,       72005,   shopService.getById(3)));
+            productService.save(new Product(14L,"pro5", "gdegrh asdasd asdasd", 52,100300,   60000, shopService.getById(1)));
+            productService.save(new Product(15L,"pro6", "gdegrh asdasd asdasd", 523,130000,  60005, shopService.getById(2)));
+            productService.save(new Product(16L,"pro7", "gdegrh asdasd asdasd", 53, 0,          6, shopService.getById(3)));
+            productService.save(new Product(17L,"pro8", "gdegrh asdasd asdasd", 53, 140000, 69999, shopService.getById(2)));
+            productService.save(new Product(18L,"pro9", "gdegrh asdasd asdasd", 25, 754333, 6.5, shopService.getById(3)));
+            productService.save(new Product(19L,"pro10", "gdegrh asdasd asdasd", 25, 140000, 100000, shopService.getById(3)));
+            productService.save(new Product(20L,"pro11", "gdegrh asdasd asdasd", 35, 12333, 6500, shopService.getById(3)));
+            productService.save(new Product(21L,"pro1",
                 "gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd " +
                         "asdasd, gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh" +
                         " asdasd asdasd,gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd gdegrh asdasd asdasd " +
@@ -127,6 +151,8 @@ public class DataSeeder implements CommandLineRunner {
         productService.save(new Product(31L,"pro11", "gdegrh asdasd asdasd", 35, 12333, 6500, shopService.getById(2)));
         productService.save(new Product(32L,"pro12", "gdegrh asdasd asdasd", 5, 65222, shopService.getById(2)));
         productService.save(new Product(33L,"pro13", "gdegrh asdasd asdasd", 5, 15000, 14000, shopService.getById(2)));
+
+
 
         imageService.saveImage(new Image( 1L, "1.jpg", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ImageTest%2F1.jpg?alt=media"));
         imageService.saveImage(new Image( 2L, "2.jpg", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ImageTest%2F2.jpg?alt=media"));
@@ -163,67 +189,68 @@ public class DataSeeder implements CommandLineRunner {
         imageService.saveImage(new Image( 33L, "33.jpg", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ImageTest%2F33.jpg?alt=media"));
 
         //
-        postService.addImageToPost(postService.getPostById(1L), imageService.getImage(1L)  );
-        postService.addImageToPost(postService.getPostById(2L), imageService.getImage(2L)  );
-        postService.addImageToPost(postService.getPostById(3L), imageService.getImage(3L)  );
-        postService.addImageToPost(postService.getPostById(4L), imageService.getImage(4L)  );
-        postService.addImageToPost(postService.getPostById(5L), imageService.getImage(5L)  );
-        postService.addImageToPost(postService.getPostById(6L), imageService.getImage(6L)  );
-        postService.addImageToPost(postService.getPostById(7L), imageService.getImage(7L)  );
-        postService.addImageToPost(postService.getPostById(8L), imageService.getImage(8L)  );
-        postService.addImageToPost(postService.getPostById(9L), imageService.getImage(9L)  );
-        postService.addImageToPost(postService.getPostById(10L), imageService.getImage(10L)  );
-        postService.addImageToPost(postService.getPostById(11L), imageService.getImage(11L)  );
-        postService.addImageToPost(postService.getPostById(12L), imageService.getImage(12L)  );
-        postService.addImageToPost(postService.getPostById(13L), imageService.getImage(13L)  );
-        postService.addImageToPost(postService.getPostById(14L), imageService.getImage(14L)  );
-        postService.addImageToPost(postService.getPostById(15L), imageService.getImage(15L)  );
-        postService.addImageToPost(postService.getPostById(16L), imageService.getImage(16L)  );
-        postService.addImageToPost(postService.getPostById(17L), imageService.getImage(17L)  );
-        postService.addImageToPost(postService.getPostById(18L), imageService.getImage(18L)  );
-        postService.addImageToPost(postService.getPostById(19L), imageService.getImage(19L)  );
-        postService.addImageToPost(postService.getPostById(20L), imageService.getImage(20L)  );
-
-        postService.addImageToPost(postService.getPostById(21L), imageService.getImage(1L)  );
-        postService.addImageToPost(postService.getPostById(22L), imageService.getImage(2L)  );
-        postService.addImageToPost(postService.getPostById(23L), imageService.getImage(3L)  );
-        postService.addImageToPost(postService.getPostById(24L), imageService.getImage(4L)  );
-        postService.addImageToPost(postService.getPostById(25L), imageService.getImage(5L)  );
-        postService.addImageToPost(postService.getPostById(26L), imageService.getImage(6L)  );
-        postService.addImageToPost(postService.getPostById(27L), imageService.getImage(7L)  );
-        postService.addImageToPost(postService.getPostById(28L), imageService.getImage(8L)  );
-        postService.addImageToPost(postService.getPostById(29L), imageService.getImage(9L)  );
-        postService.addImageToPost(postService.getPostById(30L), imageService.getImage(10L)  );
-        postService.addImageToPost(postService.getPostById(31L), imageService.getImage(11L)  );
-        postService.addImageToPost(postService.getPostById(32L), imageService.getImage(12L)  );
-        postService.addImageToPost(postService.getPostById(33L), imageService.getImage(13L)  );
-        postService.addImageToPost(postService.getPostById(34L), imageService.getImage(14L)  );
-        postService.addImageToPost(postService.getPostById(35L), imageService.getImage(15L)  );
-        postService.addImageToPost(postService.getPostById(36L), imageService.getImage(16L)  );
-        postService.addImageToPost(postService.getPostById(37L), imageService.getImage(17L)  );
-        postService.addImageToPost(postService.getPostById(38L), imageService.getImage(18L)  );
-        postService.addImageToPost(postService.getPostById(39L), imageService.getImage(19L)  );
-        postService.addImageToPost(postService.getPostById(40L), imageService.getImage(20L)  );
+//        postService.addImageToPost(postService.getPostById(1L), imageService.getImage(1L)  );
+//        postService.addImageToPost(postService.getPostById(2L), imageService.getImage(2L)  );
+//        postService.addImageToPost(postService.getPostById(3L), imageService.getImage(3L)  );
+//        postService.addImageToPost(postService.getPostById(4L), imageService.getImage(4L)  );
+//        postService.addImageToPost(postService.getPostById(5L), imageService.getImage(5L)  );
+//        postService.addImageToPost(postService.getPostById(6L), imageService.getImage(6L)  );
+//        postService.addImageToPost(postService.getPostById(7L), imageService.getImage(7L)  );
+//        postService.addImageToPost(postService.getPostById(8L), imageService.getImage(8L)  );
+//        postService.addImageToPost(postService.getPostById(9L), imageService.getImage(9L)  );
+//        postService.addImageToPost(postService.getPostById(10L), imageService.getImage(10L)  );
+//        postService.addImageToPost(postService.getPostById(11L), imageService.getImage(11L)  );
+//        postService.addImageToPost(postService.getPostById(12L), imageService.getImage(12L)  );
+//        postService.addImageToPost(postService.getPostById(13L), imageService.getImage(13L)  );
+//        postService.addImageToPost(postService.getPostById(14L), imageService.getImage(14L)  );
+//        postService.addImageToPost(postService.getPostById(15L), imageService.getImage(15L)  );
+//        postService.addImageToPost(postService.getPostById(16L), imageService.getImage(16L)  );
+//        postService.addImageToPost(postService.getPostById(17L), imageService.getImage(17L)  );
+//        postService.addImageToPost(postService.getPostById(18L), imageService.getImage(18L)  );
+//        postService.addImageToPost(postService.getPostById(19L), imageService.getImage(19L)  );
+//        postService.addImageToPost(postService.getPostById(20L), imageService.getImage(20L)  );
+//
 
 
-        productService.addImageToProduct( productService.getById(1L), imageService.getImage(21L) );
-        productService.addImageToProduct( productService.getById(2L), imageService.getImage(22L) );
-        productService.addImageToProduct( productService.getById(3L), imageService.getImage(23L) );
-        productService.addImageToProduct( productService.getById(4L), imageService.getImage(24L) );
-        productService.addImageToProduct( productService.getById(5L), imageService.getImage(25L) );
-        productService.addImageToProduct( productService.getById(6L), imageService.getImage(26L) );
-        productService.addImageToProduct( productService.getById(7L), imageService.getImage(27L) );
-        productService.addImageToProduct( productService.getById(8L), imageService.getImage(28L) );
-        productService.addImageToProduct( productService.getById(9L), imageService.getImage(29L) );
-        productService.addImageToProduct( productService.getById(10L), imageService.getImage(30L) );
-        productService.addImageToProduct( productService.getById(11L), imageService.getImage(31L) );
-        productService.addImageToProduct( productService.getById(12L), imageService.getImage(32L) );
-        productService.addImageToProduct( productService.getById(13L), imageService.getImage(33L) );
+
+        productService.addImageToProduct( productService.getById(1L), imageService.getImage(1L) );
+        productService.addImageToProduct( productService.getById(2L), imageService.getImage(2L) );
+        productService.addImageToProduct( productService.getById(3L), imageService.getImage(3L) );
+        productService.addImageToProduct( productService.getById(4L), imageService.getImage(4L) );
+        productService.addImageToProduct( productService.getById(5L), imageService.getImage(5L) );
+        productService.addImageToProduct( productService.getById(6L), imageService.getImage(6L) );
+        productService.addImageToProduct( productService.getById(7L), imageService.getImage(7L) );
+        productService.addImageToProduct( productService.getById(8L), imageService.getImage(8L) );
+        productService.addImageToProduct( productService.getById(9L), imageService.getImage(9L) );
+        productService.addImageToProduct( productService.getById(10L), imageService.getImage(10L) );
+        productService.addImageToProduct( productService.getById(11L), imageService.getImage(11L) );
+        productService.addImageToProduct( productService.getById(12L), imageService.getImage(12L) );
+        productService.addImageToProduct( productService.getById(13L), imageService.getImage(13L) );
+        productService.addImageToProduct( productService.getById(14L), imageService.getImage(14L) );
+        productService.addImageToProduct( productService.getById(15L), imageService.getImage(15L) );
+        productService.addImageToProduct( productService.getById(16L), imageService.getImage(16L) );
+        productService.addImageToProduct( productService.getById(17L), imageService.getImage(17L) );
+        productService.addImageToProduct( productService.getById(18L), imageService.getImage(18L) );
+        productService.addImageToProduct( productService.getById(19L), imageService.getImage(19L) );
+        productService.addImageToProduct( productService.getById(20L), imageService.getImage(20L) );
+        productService.addImageToProduct( productService.getById(21L), imageService.getImage(21L) );
+        productService.addImageToProduct( productService.getById(22L), imageService.getImage(22L) );
+        productService.addImageToProduct( productService.getById(23L), imageService.getImage(23L) );
+        productService.addImageToProduct( productService.getById(24L), imageService.getImage(24L) );
+        productService.addImageToProduct( productService.getById(25L), imageService.getImage(25L) );
+        productService.addImageToProduct( productService.getById(26L), imageService.getImage(26L) );
+        productService.addImageToProduct( productService.getById(27L), imageService.getImage(27L) );
+        productService.addImageToProduct( productService.getById(28L), imageService.getImage(28L) );
+        productService.addImageToProduct( productService.getById(29L), imageService.getImage(29L) );
+        productService.addImageToProduct( productService.getById(30L), imageService.getImage(30L) );
+        productService.addImageToProduct( productService.getById(31L), imageService.getImage(31L) );
+        productService.addImageToProduct( productService.getById(32L), imageService.getImage(32L) );
+        productService.addImageToProduct( productService.getById(33L), imageService.getImage(33L) );
+
 
         discussionService.saveMainDiscussion(new ProductMainDiscussion(1L, "Binh luan Main 1", userService.getUserById(1L), productService.getById(1L)));
         discussionService.saveMainDiscussion(new ProductMainDiscussion(2L, "Binh luan Main 2", userService.getUserById(2L), productService.getById(1L)));
         discussionService.saveMainDiscussion(new ProductMainDiscussion(3L, "Binh luan Main 3", userService.getUserById(3L), productService.getById(1L)));
-//            System.out.println(  postService.getPostById(1L).getPostImages()  );
 
         discussionService.saveSubDiscussion(new ProductSubDiscussion(1L, "Sub cmmt 1", 1L, 1L));
         discussionService.saveSubDiscussion(new ProductSubDiscussion(2L, "Sub cmmt 1", 3L, 1L));

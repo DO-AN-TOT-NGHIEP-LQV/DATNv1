@@ -37,11 +37,20 @@ const CreatePostScreen = () => {
   const [loading, setLoading] = useState(false);
   const [imageUris, setImageUris] = useState([]);
 
-  const [post, setPost] = useState({
-    content: "dsd",
-    title: "324343",
-  });
+  // const [post, setPost] = useState({
+  //   content: "dsd",
+  //   title: "324343",
+  // });
 
+  const [post, setPost] = useState({
+    name: "dsd",
+    description: "324343",
+    quantity: 100,
+    price: 56000,
+    type: "AB",
+    brand: "Adidas",
+    shop_id: 1
+  });
   const { content, size, type, price, title } = post;
   const updatePost = (data) => setPost(() => ({ ...post, ...data }));
 
@@ -140,35 +149,65 @@ const CreatePostScreen = () => {
     return true;
   };
 
-  const createNewPost = () => {
-    const checkValid = isValidData();
-    if (checkValid) {
-      setLoading(true);
-      // fetch API
-      var formData = new FormData();
-      formData.append("post", JSON.stringify(post));
-      formData.append("fileImage", {
-        uri: pickedImagePath, // Đường dẫn đến file
-        type: "image/jpeg", // Loại file
-        name: "name", // Tên file
-      });
+  // const createNewPost = () => {
+  //   const checkValid = isValidData();
+  //   if (checkValid) {
+  //     setLoading(true);
+  //     // fetch API
+  //     var formData = new FormData();
+  //     formData.append("post", JSON.stringify(post));
+  //     formData.append("fileImage", {
+  //       uri: pickedImagePath, // Đường dẫn đến file
+  //       type: "image/jpeg", // Loại file
+  //       name: "name", // Tên file
+  //     });
 
-      var headers = {
-        "Content-type": "multipart/form-data",
-      };
+  //     var headers = {
+  //       "Content-type": "multipart/form-data",
+  //     };
 
-      apiPost(CREATE_POST, formData, headers, true)
-        .then((res) => {
-          console.log(res.data);
-          setLoading(false);
-          showSuccess("Đã tải anh thành công");
-        })
-        .catch((error) => {
-          showError(error.error_message);
-          setLoading(false);
+  //     apiPost(CREATE_POST, formData, headers, true)
+  //       .then((res) => {
+  //         console.log(res.data);
+  //         setLoading(false);
+  //         showSuccess("Đã tải anh thành công");
+  //       })
+  //       .catch((error) => {
+  //         showError(error.error_message);
+  //         setLoading(false);
+  //       });
+  //   }
+  // };
+
+    const createNewPost = () => {
+      const checkValid = isValidData();
+      if (checkValid) {
+        setLoading(true);
+        // fetch API
+        var formData = new FormData();
+        formData.append("product", JSON.stringify(post));
+        formData.append("fileImage", {
+          uri: pickedImagePath, // Đường dẫn đến file
+          type: "image/jpeg", // Loại file
+          name: "name", // Tên file
         });
-    }
-  };
+
+        var headers = {
+          "Content-type": "multipart/form-data",
+        };
+
+        apiPost(CREATE_POST, formData, headers, true)
+          .then((res) => {
+            console.log(res.data);
+            setLoading(false);
+            showSuccess("Đã tải anh thành công");
+          })
+          .catch((error) => {
+            showError(error.error_message);
+            setLoading(false);
+          });
+      }
+    };
 
   const renderAddButton = () => {
     return (

@@ -26,5 +26,7 @@ public interface ProductService {
     List<Product> searchAndFilterProducts(String keyword, String[] types, String[] brands, Double minPrice, Double maxPrice);
 
 
+    void deleteProduct(Product product);
+
 
 }

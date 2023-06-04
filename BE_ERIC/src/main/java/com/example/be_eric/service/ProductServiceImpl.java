@@ -93,4 +93,14 @@ public class ProductServiceImpl implements  ProductService{
 
     }
 
+    @Override
+    public void deleteProduct(Product product) {
+        try{
+            productRepo.delete(product);
+        }catch (Exception e){
+            throw  e;
+        }
+
+    }
+
 }

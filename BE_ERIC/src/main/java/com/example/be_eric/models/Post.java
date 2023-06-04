@@ -41,13 +41,13 @@ public class Post {
 //    @JsonBackReference
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinTable(
-            name = "post_images",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "image_id"))
-    private List<Image> images =  new ArrayList<>();
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @JoinTable(
+//            name = "post_images",
+//            joinColumns = @JoinColumn(name = "post_id"),
+//            inverseJoinColumns = @JoinColumn(name = "image_id"))
+//    private List<Image> images =  new ArrayList<>();
 
     public Post(Long id, String content, String title, User user) {
         this.id = id;
@@ -68,8 +68,5 @@ public class Post {
         this.title = title;
     }
 
-    @CreationTimestamp
-    private LocalDateTime created_at;
-    @UpdateTimestamp
-    private LocalDateTime updated_at;
+
 }
