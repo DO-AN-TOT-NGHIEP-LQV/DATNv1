@@ -10,7 +10,7 @@ import { spacing } from "../../constans/Theme";
 import colors from "../../constans/Color";
 import Icons, { icons } from "../Icons";
 import actions from "../../redux/actions";
-import { showError } from "../../ultils/helperFunction";
+import { showError } from "../../ultils/messageFunction";
 import { useSelector } from "react-redux";
 import Color from "../../constans/Color";
 import { updateIsMainViewDisplay } from "../../redux/actions/search";
@@ -51,13 +51,10 @@ const SearchInput = () => {
         actions.updateIsMainViewDisplay(false);
         actions.updateIsLoading(false);
 
-        // actions.updatePage(0);
-
         actions.updatePagePost(0);
         actions.updatePageProduct(0);
         actions.updateSearchText(searchText);
       } catch (error) {
-        console.log("Có lỗi xảy ra");
         showError(error.error_message);
       }
     }

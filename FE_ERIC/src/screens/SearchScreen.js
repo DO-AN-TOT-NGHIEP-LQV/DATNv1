@@ -24,7 +24,7 @@ import MasonryListAll from "../components/Search/MasonryListAll";
 import MasonryListProducts from "../components/Search/MasonryListProducts";
 import MasonryListPosts from "../components/Search/MasonryListPosts";
 import { useSelector } from "react-redux";
-import { showError } from "../ultils/helperFunction";
+import { showError } from "../ultils/messageFunction";
 import { updateCategoryIndex, updateIsLoading } from "../redux/actions/search";
 import { SEARCH_POST_B_TEXT, SEARCH_PRODUCT_B_TEXT } from "../config/urls";
 
@@ -74,7 +74,6 @@ export default function SearchScreen() {
         contentOffset.y + layoutMeasurement.height >= contentSize.height;
 
       if (isEndReached && !isLoading) {
-        console.log("Cuối");
         fetchDataSearch();
       }
     } else {
@@ -85,11 +84,7 @@ export default function SearchScreen() {
             duration: 100,
             useNativeDriver: true,
           }),
-          // Animated.timing(translateYAnim, {
-          //   toValue: 0,
-          //   duration: 100,
-          //   useNativeDriver: true,
-          // }),
+
         ]).start(() => {
           actions.updateIsMainViewDisplay(true);
         });
@@ -100,11 +95,7 @@ export default function SearchScreen() {
             duration: 100,
             useNativeDriver: true,
           }),
-          // Animated.timing(translateYAnim, {
-          //   toValue: -100,
-          //   duration: 100,
-          //   useNativeDriver: true,
-          // }),
+ 
         ]).start(() => {
           actions.updateIsMainViewDisplay(false);
         });
@@ -118,10 +109,8 @@ export default function SearchScreen() {
         try {
           const res = await actions.searchWithImage(pickedImagePath);
           const a = actions.updateShowAllCategories(true);
-          console.log(showAllCategories);
           actions.updateIsLoading(false);
         } catch (error) {
-          console.log("Có lỗi xảy ra");
           showError(error.error_message);
           actions.updateIsLoading(false);
         }
@@ -148,7 +137,6 @@ export default function SearchScreen() {
     });
 
     if (!result.canceled) {
-      console.log(result.assets);
       setPickedImagePath(result.assets[0].uri);
       // fetchData();
       // setLoading(true);
@@ -196,12 +184,9 @@ export default function SearchScreen() {
         (await categoryIndex) == 1
           ? actions.updatePageProduct(pageProduct + 1)
           : actions.updatePagePost(pagePost + 1);
-        // actions.updateIsLoading(false);
 
-        console.log("Post:_", pagePost, "/Product_", pageProduct);
         setLoadingEndScroll(false);
       } catch (error) {
-        console.log("Có lỗi xảy ra");
         showError(error.error_message);
       }
     }

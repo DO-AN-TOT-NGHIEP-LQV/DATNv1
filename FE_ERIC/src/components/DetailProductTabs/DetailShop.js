@@ -5,7 +5,7 @@ import Icons from "../Icons";
 import CustomButton from "../CustomButton/index.js";
 import { color } from "react-native-reanimated";
 import LineDivider from "../LineDivider";
-import { showError } from "../../ultils/helperFunction";
+import { showError } from "../../ultils/messageFunction";
 import { useSelector } from "react-redux";
 import { newListProduct } from "../../constans/raw";
 import { LinearGradient } from "expo-linear-gradient";

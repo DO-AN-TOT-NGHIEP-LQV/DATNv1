@@ -572,6 +572,7 @@ const FilterModal = ({ isVisible, onClose }) => {
                 </TouchableOpacity>
 
                 {renderAutocompleteScreen()}
+                
                 <View style={styles.selectedTagsContainer}>
                   {selectedBrandTags.map((tag) => (
                     <TouchableOpacity

@@ -11,6 +11,10 @@ import {
   SearchImageScreen,
   LoginScreen,
   SignupScreen,
+  ShopMainScreen,
+  CreateProductScreen,
+  ManagerProductScreen,
+  ProfileShopScreen,
 } from "../screens/index";
 import ProfileScreen from "../screens/ProfileScreen";
 import {
@@ -26,6 +30,8 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CustomTabBarIcon from "../components/CustomTabBarIcon";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import { useSelector } from "react-redux";
+import { hasSalerRole } from "../ultils/helperFunction";
 
 export default function (Stack) {
   return <Stack.Screen name="MainTab" component={MainTabs} />;
@@ -33,6 +39,8 @@ export default function (Stack) {
 
 const BottomTab = createBottomTabNavigator();
 const MainTabs = () => {
+  const detailUser = useSelector((state) => state.auth.detailUser);
+
   return (
     <BottomTab.Navigator
       screenOptions={{
@@ -157,6 +165,24 @@ const MainTabs = () => {
           tabBarButton: () => null,
         }}
       />
+
+      {detailUser?.roles && hasSalerRole(detailUser?.roles) && (
+        <BottomTab.Screen
+          name="SalerTab"
+          component={SalerManagerStackNavigator}
+          options={{
+            tabBarIcon: ({ color, size, focused }) => (
+              <CustomTabBarIcon
+                nameIcon={"shoppingcart"}
+                textLabel={"MY SHOP"}
+                color={color}
+                size={size}
+                focused={focused}
+              />
+            ),
+          }}
+        ></BottomTab.Screen>
+      )}
     </BottomTab.Navigator>
   );
 };
@@ -176,9 +202,7 @@ const SearchStackNavigator = () => {
   return (
     <SearchNavigator.Navigator screenOptions={{ headerShown: false }}>
       <HomeNavigator.Screen name="SearchImage" component={SearchImageScreen} />
-
       <HomeNavigator.Screen name="SearchText" component={SearchTextScreen} />
-
       <HomeNavigator.Screen name="Search" component={SearchScreen} />
       <HomeNavigator.Screen
         name="DetailProduct"
@@ -228,6 +252,33 @@ const SettingStackNavigator = () => {
 
       {/* <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} /> */}
+    </SettingNavigator.Navigator>
+  );
+};
+
+const SalerManagerNavigator = createNativeStackNavigator();
+const SalerManagerStackNavigator = () => {
+  return (
+    <SettingNavigator.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="ShopMainScreen"
+    >
+      <SettingNavigator.Screen
+        name="ShopMainScreen"
+        component={ShopMainScreen}
+      />
+      <SettingNavigator.Screen
+        name="CreateProductScreen"
+        component={CreateProductScreen}
+      />
+      <SettingNavigator.Screen
+        name="ManagerProductScreen"
+        component={ManagerProductScreen}
+      />
+      <SettingNavigator.Screen
+        name="ProfileShopScreen"
+        component={ProfileShopScreen}
+      />
     </SettingNavigator.Navigator>
   );
 };

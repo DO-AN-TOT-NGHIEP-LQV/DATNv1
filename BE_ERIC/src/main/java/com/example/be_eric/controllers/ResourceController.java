@@ -118,7 +118,7 @@ public class ResourceController {
     @PostMapping(value = "/api/sale/product/create", name = "POST",
             consumes = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity createNewProduct(@RequestPart("product") String product , @RequestPart("fileImage") MultipartFile fileImage)
+    public ResponseEntity<?> createNewProduct(@RequestPart("product") String product , @RequestPart("fileImage") MultipartFile fileImage)
     {
         Product newProduct = new Product();
         try {
@@ -138,15 +138,19 @@ public class ResourceController {
                 throw new InValidException("Invalid description");
             }
 
-            if (productMap.containsKey("quantity") && productMap.get("quantity") != null) {
-                newProduct.setQuantity(  (int) productMap.get("quantity") );
+            if (productMap.containsKey("quantity") && productMap.get("quantity") instanceof Integer) {
+                Integer quantityObj = (Integer) productMap.get("quantity");
+                int quantity = quantityObj.intValue();
+                newProduct.setQuantity(quantity);
             } else {
                 throw new InValidException("Invalid quantity");
             }
 
 
-            if (productMap.containsKey("price") && productMap.get("price") != null) {
-                newProduct.setPrice((double) productMap.get("price"));
+            if (productMap.containsKey("price") && productMap.get("price") instanceof Number) {
+                Number priceObj = (Number) productMap.get("price");
+                double price = priceObj.doubleValue();
+                newProduct.setPrice(price);
             } else {
                 throw new InValidException("Invalid price");
             }
@@ -172,7 +176,7 @@ public class ResourceController {
             } else {
                 throw new InValidException("Invalid shop id");
             }
-
+            System.out.println();
             String fileName = firebaseFileService.uploadImage_saveVector(fileImage, newProduct  );
             return ResponseEntity.ok().build();
 
@@ -192,20 +196,40 @@ public class ResourceController {
         }
     }
 
+
+
+//    @PostMapping(value = "/api/post/delete")
+//    public ResponseEntity delete(@RequestParam("IdDelete") Long IdDelete)
+//    {
+//        Product product =    productService.getById(IdDelete);
+//
+//        try {
+//            if (product == null){
+//                throw  new Exception( "Id sản phẩm không còn tồn tại");
+//            }
+//            firebaseFileService.deleteProduct_removeVector(product);
+//            return ResponseEntity.ok().build();
+//        }
+//        catch (Exception e) {
+//            return ResponseEntity.badRequest()
+//                    .body(new ErrorResponse(e.getMessage()));
+//        }
+//    }
+
     // De xoa 1 post can
     // Tao 1 transtract tion
     // Xoa san pham
     // Xoa nhung id
     // Xoa nhung id hinh anh da train trong firebase
     // Xoa nhung id hinh anh
-    @PostMapping(value = "/api/post/delete")
-    public ResponseEntity delete(@RequestParam("IdDelete") Long IdDelete)
+    @PostMapping(value = "/api/sale/product/delete", name = "POST")
+    public ResponseEntity deleteProduct(@RequestParam("IdDelete") Long IdDelete)
     {
-        Product product =    productService.getById(IdDelete);
+        Product product =  productService.getById(IdDelete);
 
         try {
             if (product == null){
-                throw  new Exception( "Id sản phẩm không còn tồn tại");
+                throw  new Exception( "Product id no longer exists");
             }
             firebaseFileService.deleteProduct_removeVector(product);
             return ResponseEntity.ok().build();
@@ -215,4 +239,5 @@ public class ResourceController {
                     .body(new ErrorResponse(e.getMessage()));
         }
     }
+
 }

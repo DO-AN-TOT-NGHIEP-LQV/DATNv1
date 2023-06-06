@@ -23,8 +23,9 @@ export const searchAndFilterProducts = (
       },
     };
 
-    await apiGet(SEARCH_AND_FILTER_PRODUCTS, data, headers, true)
+    await apiGet(SEARCH_AND_FILTER_PRODUCTS, data, headers, false)
       .then((res) => {
+        console.log(res);
         resolve(res);
       })
       .catch((error) => {

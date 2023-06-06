@@ -39,9 +39,11 @@ export const DELETE_MAIN_DISCUSSION = getApiUrl(
 export const DELETE_SUB_DISCUSSION = getApiUrl(
   "/user/discussion/product/deleteSubDiscussion"
 );
-
 export const CREATE_NEW_PRODUCT = getApiUrl("/sale/product/create");
+export const DELETE_PRODUCT = getApiUrl("/sale/product/create");
 
-// "user/discussion/product/deleteSubDiscussion"
+//Sale // Shop
+export const GET_DETAIL_SHOP = getApiUrl("/sale/shop/getShop");
+
 axios.defaults.baseURL = "http://192.168.1.8:8080/api";
 // axios.defaults.baseURL = 'http://192.168.1.6:8080/api'

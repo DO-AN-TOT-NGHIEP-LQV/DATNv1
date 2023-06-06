@@ -45,7 +45,7 @@ cred = credentials.Certificate('./serviceAccount.json')
 app = firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-app = Flask(__name__)  
+# app = Flask(__name__)  
 
 # @app.route("/ai/api/test/seedData/trainFolder", methods=['POST'])
 # def seedData33ImgTest():
@@ -157,5 +157,5 @@ def seedDataSeedDeleteALlImgTest():
         response.status_code = 500
         return response
    
-if __name__ == '__main__':
-    app.run( host= '0.0.0.0')
+# if __name__ == '__main__':
+#     app.run( host= '0.0.0.0')

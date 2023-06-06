@@ -1,4 +1,5 @@
 import { SEARCH_ALL_BY_TEXT, SEARCH_ALL_B_IMG } from "../../config/urls";
+import { getFileExtension } from "../../ultils/helperFunction";
 import { apiGet, apiPost } from "../../ultils/utilsApi";
 import store from "../store";
 import types from "../types";
@@ -73,11 +74,15 @@ export const searchWithImage = (pickedImagePath) => {
       "Content-type": "multipart/form-data",
     };
 
+    const fileUri = pickedImagePath;
+    const fileName = fileUri.split("/").pop(); // Lấy tên tệp từ đường dẫn
+    const fileExtension = getFileExtension(fileName);
+
     var formData = new FormData();
     formData.append("fileSearchImg", {
-      uri: pickedImagePath,
-      type: "image/jpeg",
-      name: "fileSearchImg",
+      uri: fileUri,
+      type: `image/${fileExtension}`,
+      name: fileName,
     });
 
     await apiPost(SEARCH_ALL_B_IMG, formData, headers, false)

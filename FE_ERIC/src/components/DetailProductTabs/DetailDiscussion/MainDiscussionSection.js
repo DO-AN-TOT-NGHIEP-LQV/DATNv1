@@ -20,7 +20,7 @@ import {
 } from "react-native-popup-menu";
 import Icons, { icons } from "../../Icons";
 import moment from "moment";
-import { showError, showSuccess } from "../../../ultils/helperFunction";
+import { showError, showSuccess } from "../../../ultils/messageFunction";
 import { useState } from "react";
 import Color from "../../../constans/Color";
 import DiscussionTextInput from "./DiscussionTextInput";

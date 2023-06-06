@@ -66,31 +66,24 @@ public class FirebaseFileService {
     @Transactional(rollbackOn = UploadImageException.class)
     public String uploadImage_saveVector(MultipartFile fileImage, Product product) throws  UploadImageException {
 
+        BlobId blobId = null;
         try {
-
-//            postService.savePost(post);
-            System.out.println("save begin");
-            productService.save(product);
-            System.out.println("save   product after");
-
             String imageName = "shop_" + product.getShop().getId() + "_p_" + product.getId() + "_name_" + generateFileName(fileImage.getOriginalFilename());
             String folderName = "ImageProduct";
             String filePath = folderName + "/" + imageName;
             System.out.println(imageName);
-            System.out.println("555555555555");
 
-            BlobId blobId = BlobId.of("datnv1-34493.appspot.com", filePath);
+            blobId = BlobId.of("datnv1-34493.appspot.com", filePath);
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
                     .setContentType(fileImage.getContentType())
                     .build();
+
             storage.create(blobInfo, fileImage.getBytes());
 
             String fileUrl = "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/" + URLEncoder.encode(filePath, "UTF-8") + "?alt=media";
 
             Image image = imageService.saveImage(new Image(null, imageName, fileUrl, false));
             productService.addImageToProduct( product, image );
-//            postService.addImageToPost(poas, image);
-
 
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
@@ -120,7 +113,11 @@ public class FirebaseFileService {
 
         } catch (Exception e) {
             System.out.println(e);
+            if (blobId != null) {
+                boolean deleted = storage.delete(blobId);
+            }            boolean deleted = storage.delete(blobId);
             throw new UploadImageException();
+
         }
     }
 
@@ -148,12 +145,11 @@ public class FirebaseFileService {
                     imageService.deleteImage(image);
                 } else {
                     System.out.println("Không thể xóa file");
-                    throw new  Exception("Lối trong quá trình xóa ảnh");
+                    throw new  Exception("Error in the process of deleting photos");
                 }
             };
 
             productService.deleteProduct(product);
-//            postService.deleteAPost(post);
             ApiFuture<List<WriteResult>> future = batch.commit();
             future.get();
             return  true;

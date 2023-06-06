@@ -1,48 +1,15 @@
 import { bg1, bg2, bg3, bg4, bg5, bg6, bg7 } from "../public/assets/image";
 
-export const loginBg =
-  "https://firebasestorage.googleapis.com/v0/b/notifyme-79a2f.appspot.com/o/illus_img4.jpg?alt=media&token=7fa378ee-245c-46c1-b251-14eb4ed77ae2";
-
-export const createNew = {
-  image:
-    "https://firebasestorage.googleapis.com/v0/b/notifyme-79a2f.appspot.com/o/illus_img2.jpg?alt=media&token=e8bd66c2-99bf-4c86-aa68-a23db085ead6",
-  id: "1",
-  title: "Primavera Pizza",
-  weight: "540 gr",
-  rating: "5.0",
-  price: 3.99,
-  sizeName: "Medium",
-  sizeNumber: 14,
-  crust: "Thin Crust",
-  deliveryTime: 30,
-  ingredients: [
-    {
-      id: 1,
-      image:
-        "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ImageTest%2Ff21cce7b-bab5-4e01-98ef-55b2b9bc0451.jpg?alt=media",
-    },
-    {
-      id: 2,
-      image:
-        "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ImageTest%2Ff21cce7b-bab5-4e01-98ef-55b2b9bc0451.jpg?alt=media",
-    },
-    {
-      id: 3,
-      image:
-        "https://cdn.pixabay.com/photo/2016/06/03/17/35/shoes-1433925__340.jpg",
-    },
-    {
-      id: 4,
-      image:
-        "https://cdn.pixabay.com/photo/2016/03/27/22/16/fashion-1284496__340.jpg",
-    },
-  ],
-};
-
 export const product_tabs = [
   { id: 0, name: "Chi tiết" },
   { id: 1, name: "Cửa hàng" },
   { id: 2, name: "Bình luận" },
+];
+
+export const roles = [
+  { id: 1, name: "ROLE_USER" },
+  { id: 2, name: "ROLE_SALER" },
+  { id: 3, name: "ROLE_ADMIN" },
 ];
 
 // export const typeList = [
@@ -237,5 +204,28 @@ export const newListProduct = [
     },
     created_at: "2023-05-24T16:40:05",
     updated_at: "2023-05-24T16:40:05",
+  },
+];
+
+export const shop_manager_promo = [
+  {
+    id: 1,
+    no: 1,
+    title: "Quản lí sản phẩm",
+    description:
+      "Cập nhật số lượng, tình trạng, giá cả của các sản phẩm trong shop của bạn ",
+  },
+  {
+    id: 2,
+    no: 1,
+    title: "Quản lí thông tin",
+    description:
+      "Cập nhật thông tin, địa chỉ, link shop để người dùng dễ dàng tìm đến bạn",
+  },
+  {
+    id: 3,
+    no: 1,
+    title: "Thêm sản phẩm mới",
+    description: "Hãy thêm sản phẩm mới vào shop của bạn",
   },
 ];

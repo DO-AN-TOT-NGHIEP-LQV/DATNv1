@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { validatorLogin } from "../ultils/validations";
-import { showError, showSuccess } from "../ultils/helperFunction";
+import { showError, showSuccess } from "../ultils/messageFunction";
 import actions from "../redux/actions";
 import { LoginImg } from "../public/assets";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -17,8 +17,6 @@ import CustomButton from "../components/CustomButton/index.js";
 import { useNavigation } from "@react-navigation/native";
 import { Color } from "../constans";
 import validator from "../ultils/validations";
-
-
 
 const LoginScreen = ({}) => {
   const [state, setState] = useState({
@@ -149,4 +147,3 @@ const styles = StyleSheet.create({
     backgroundColor: Color.mainTheme,
   },
 });
-

@@ -19,7 +19,7 @@ import {
   DELETE_SUB_DISCUSSION,
   GET_PRODUCT_DISCUSSION,
 } from "../../config/urls";
-import { showError, showSuccess } from "../../ultils/helperFunction";
+import { showError, showSuccess } from "../../ultils/messageFunction";
 import Icons, { icons } from "../Icons";
 import moment from "moment";
 import { checkStringEmpty } from "../../ultils/validations";

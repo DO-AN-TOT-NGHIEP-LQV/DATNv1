@@ -33,14 +33,12 @@ public class ShopController {
     private UserService userService;
 
 
-    @GetMapping(value = "/sale/shop/getShop",
-            consumes = {MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<?> searchPostByImage()
+    @GetMapping(value = "/sale/shop/getShop")
+    public ResponseEntity<?> searchPostByImage(@RequestParam("shopId") int shopId)
     {
         try {
 
-            Shop responeList = shopService.getById(2);
+            Shop responeList = shopService.getById(shopId);
             return ResponseEntity.ok().body(responeList);
         } catch (Exception e) {
             System.out.println(e);

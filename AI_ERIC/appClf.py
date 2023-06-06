@@ -26,7 +26,7 @@ class_names = ['Boots - Ankle',
 # import matplotlib.pyplot as plt
 
 
-app = Flask(__name__)  
+# app = Flask(__name__)  
     
     
 @app.route("/ai", methods=['GET'])    
@@ -67,5 +67,5 @@ def extract_feature():
 
 
 
-if __name__ == '__main__':
-    app.run( host= '0.0.0.0')
+# if __name__ == '__main__':
+#     app.run( host= '0.0.0.0')
