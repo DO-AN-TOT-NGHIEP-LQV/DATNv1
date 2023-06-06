@@ -38,10 +38,14 @@ dataGenerator = ImageDataGenerator(
     fill_mode='nearest'  # phương thức điền giá trị vào các điểm ảnh trống
 )
 
-model = get_extract_model()
-model = load_model('extract_model.h5')
-# vectors = pickle.load(open("./vectors.pkl","rb"))
-# paths = pickle.load(open("./paths.pkl","rb"))
+
+extract_model_path = 'extract_model.h5'
+if os.path.exists(extract_model_path):
+    model = load_model(extract_model_path)
+else:
+    model = get_extract_model()
+    # model.save(extract_model_path)
+
 
 cred = credentials.Certificate('./serviceAccount.json')
 app = firebase_admin.initialize_app(cred)
