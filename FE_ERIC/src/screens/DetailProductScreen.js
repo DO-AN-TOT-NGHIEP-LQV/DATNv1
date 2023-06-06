@@ -79,7 +79,6 @@ const DetailProductScreen = ({ route }) => {
   useEffect(() => {
     const listener = scrollY.addListener(({ value }) => {
       // Tính toán màu nền mới dựa trên giá trị cuộn
-      // const newColor = interpolateColor(value);
       const [colorGround, colorIconBColor] = interpolateColor(value);
 
       setHomeBarColor(colorGround);

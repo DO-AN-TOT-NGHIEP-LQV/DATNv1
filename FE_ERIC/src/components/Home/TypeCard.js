@@ -9,19 +9,20 @@ import React from "react";
 import { FONTS, SIZES } from "../../constans/Theme";
 import Color from "../../constans/Color";
 
-const TypeCard = ({ type, containerStyle }) => {
+const TypeCard = ({ type, containerStyle, onPress, textStyle, imageStyle }) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <ImageBackground
         source={type?.thumbnail}
-        imageStyle={{ borderRadius: SIZES.radius }}
+        imageStyle={{ borderRadius: SIZES.radius, ...imageStyle }}
         resizeMode="cover"
+        
         style={{
           ...style.containerStyle,
           ...containerStyle,
         }}
       >
-        <Text style={style.title}>{type?.value}</Text>
+        <Text style={{ ...style.title, ...textStyle }}>{type?.value}</Text>
       </ImageBackground>
     </TouchableOpacity>
   );

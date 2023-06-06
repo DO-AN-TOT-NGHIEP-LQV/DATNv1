@@ -50,6 +50,7 @@ public class SearchController {
                          MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> searchPostByImage(@RequestPart("fileSearchImg") MultipartFile fileSearchImg)
     {
+
         try {
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
@@ -65,6 +66,8 @@ public class SearchController {
             body.add("fileSearchImg", resource);
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
             String url = "http://127.0.0.1:5000/ai/api/product/searchByImg";
+
+
             ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -90,15 +93,13 @@ public class SearchController {
                     }
                     catch (Exception e){
                     }
-
                 }
-
             }
             return ResponseEntity.ok().body(responeList);
 
         } catch (Exception e) {
-            System.out.println(e);
-            return ResponseEntity.badRequest().body(e);
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
         }
     }
 
@@ -176,7 +177,7 @@ public class SearchController {
             @RequestParam(required = false) int page) {
 
         try{   // Co phan trang
-            Pageable pageable = PageRequest.of(page, 10);
+            Pageable pageable = PageRequest.of(page, 30);
             Page<Product> productsListPage = productService.searchAndFilterProducts(keyword, types, brands, minPrice, maxPrice , pageable);
             List<Product> productsList = productsListPage.getContent();
             return ResponseEntity.ok().body(productsList);
@@ -190,7 +191,7 @@ public class SearchController {
 
     @GetMapping(value = "/search/products/SearchByText")
     public ResponseEntity searchProductByText(@RequestParam("searchText") String searchText, @RequestParam("page") int page) {
-        Pageable pageable = PageRequest.of(page, 10);
+        Pageable pageable = PageRequest.of(page, 30);
         Page<Product> productsListPage = productService.searchByText(searchText, pageable);
         List<Product> productsList = productsListPage.getContent();
         return ResponseEntity.ok().body(productsList);

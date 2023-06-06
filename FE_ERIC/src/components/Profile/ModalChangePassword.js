@@ -6,11 +6,6 @@ import {
   Animated,
   Dimensions,
   TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
-  FlatList,
-  Pressable,
-  Switch,
 } from "react-native";
 import React, { useState } from "react";
 import { useEffect } from "react";
@@ -126,8 +121,6 @@ const ModalChangePassword = ({ isVisible, onClose }) => {
 
         <FlashMessage ref={flashMessageRef} position="top" />
       </View>
-
-      {/* <--- here as last local ref component */}
     </Modal>
   );
 };
@@ -138,8 +131,8 @@ const ChangePasswordContent = ({ onClose, showError, showSuccess }) => {
   const [state, setState] = useState({
     isLoading: false,
     currentPass: "",
-    newPass: "11111111",
-    confirmPass: "11111111",
+    newPass: "",
+    confirmPass: "",
   });
   const { isLoading, currentPass, newPass, confirmPass } = state;
   const updateState = (data) => setState(() => ({ ...state, ...data }));
@@ -163,10 +156,6 @@ const ChangePasswordContent = ({ onClose, showError, showSuccess }) => {
       updateState({ isLoading: true });
 
       try {
-        console.log(currentPass);
-        console.log(newPass);
-        console.log(confirmPass);
-
         const res = await apiPost(
           CHANGE_PASSWORD,
           {

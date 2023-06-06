@@ -49,6 +49,15 @@ db = firestore.client()
 
 app = Flask(__name__)   
 
+
+@app.route("/ai", methods=['GET'])    
+def test():
+    name = []
+    name.append("sads")
+    name.append("dsds")
+    return jsonify(name)  
+
+
 @app.route("/ai/api/product/searchByImg", methods=['POST'])
 def extract_feature():
     try:
@@ -256,3 +265,5 @@ def seedData33ImgTest():
 
 if __name__ == '__main__':
     app.run( host= '0.0.0.0')
+# if __name__ == '__main__':
+#     app.run()

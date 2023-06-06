@@ -35,7 +35,7 @@ import {
 import hideTabBar from "../hookFuntion/hideTabBar ";
 import * as ImagePicker from "expo-image-picker";
 import actions from "../redux/actions";
-import { showError } from "../ultils/helperFunction";
+import { showError } from "../ultils/messageFunction";
 import MasonryListProducts from "../components/Search/MasonryListProducts";
 import ScanImageEffect from "../components/Search/ScanImageEffect";
 
@@ -46,10 +46,7 @@ const windowHeight = Dimensions.get("window").height;
 
 const MIN_HEIGHT = Platform.OS === "ios" ? 90 : 65;
 const MAX_HEIGHT = 200;
-const product_details_tabs = product_tabs.map((product_details_tab) => ({
-  ...product_details_tab,
-  ref: React.createRef(),
-}));
+
 
 const SearchImageScreen = () => {
   /// Cac state reder chon Image
@@ -88,33 +85,84 @@ const SearchImageScreen = () => {
 
   /// State
   const [pickedImagePath, setPickedImagePath] = useState(null);
+
   const [listSearch, setListSearch] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (pickedImagePath) {
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (pickedImagePath) {
+  //       try {
+  //         setListSearch([]);
+  //         setIsLoading(true);
+  //         const startTime = new Date().getTime();
+
+  //         const res = await actions.searchWithImage(pickedImagePath);
+  //         setListSearch(res.data);
+  //         const endTime = new Date().getTime(); // Thời gian kết thúc request
+  //         const elapsedTime = endTime - startTime;
+  //         console.log("Da render lai ham Search Image");
+  //         console.log(elapsedTime / 1000);
+  //         setIsLoading(false);
+  //       } catch (error) {
+  //         setListSearch([]);
+  //         showError(error.error_message);
+  //         setIsLoading(false);
+  //       }
+  //     }
+  //   };
+
+  //   if (
+  //     pickedImagePath &&
+  //     pickedImagePath !== null &&
+  //     pickedImagePath !== undefined
+  //   )
+  //     fetchData();
+  // }, [pickedImagePath]);
+
+  //     if (pickedImagePath) {
+  //       try {
+  //         setListSearch([]);
+  //         setIsLoading(true);
+  //         const startTime = new Date().getTime();
+
+  //         const res = await actions.searchWithImage(pickedImagePath);
+  //         setListSearch(res.data);
+  //         const endTime = new Date().getTime(); // Thời gian kết thúc request
+  //         const elapsedTime = endTime - startTime;
+  //         console.log("Da render lai ham Search Image");
+  //         console.log(elapsedTime / 1000);
+  //         setIsLoading(false);
+  //       } catch (error) {
+  //         setListSearch([]);
+  //         showError(error.error_message);
+  //         setIsLoading(false);
+  //       }
+  //     }
+
+  const fetchData = async (pickedImagePathInput) => {
+    if (pickedImagePathInput) {
+      try {
+        setPickedImagePath(pickedImagePathInput);
+
+        setListSearch([]);
+        setIsLoading(true);
         const startTime = new Date().getTime();
-        try {
-          setListSearch([]);
-          setIsLoading(true);
-          const res = await actions.searchWithImage(pickedImagePath);
-          setListSearch(res.data);
-          console.log(res.data);
-          setIsLoading(false);
-        } catch (error) {
-          setListSearch([]);
-          showError(error.error_message);
-          setIsLoading(false);
-        }
+        const res = await actions.searchWithImage(pickedImagePathInput);
+        setListSearch(res.data);
         const endTime = new Date().getTime(); // Thời gian kết thúc request
         const elapsedTime = endTime - startTime;
+        console.log("Da render lai ham Search Image");
         console.log(elapsedTime / 1000);
+        setIsLoading(false);
+      } catch (error) {
+        setListSearch([]);
+        showError(error.error_message);
+        setIsLoading(false);
       }
-    };
-    fetchData();
-  }, [pickedImagePath]);
+    }
+  };
 
   function renderMainImage() {
     return (
@@ -186,8 +234,7 @@ const SearchImageScreen = () => {
       });
 
       if (!result.canceled) {
-        console.log(result.assets);
-        setPickedImagePath(result.assets[0].uri);
+        fetchData(result.assets[0].uri);
       }
     };
 
@@ -208,7 +255,8 @@ const SearchImageScreen = () => {
         quality: 1,
       });
       if (!result.canceled) {
-        setPickedImagePath(result.assets[0].uri);
+        // setPickedImagePath(result.assets[0].uri);
+        fetchData(result.assets[0].uri);
       }
     };
     return (

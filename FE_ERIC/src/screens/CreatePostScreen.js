@@ -19,13 +19,13 @@ import Color from "../constans/Color";
 import CustomButton from "../components/CustomButton/index.js";
 import { ActivityIndicator, Button } from "react-native-paper";
 import InputFieldCustom from "../components/InputFieldCustom";
-import { showError, showSuccess } from "../ultils/helperFunction";
+import { showError, showSuccess } from "../ultils/messageFunction";
 import { validatorCreatePost } from "../ultils/validations";
 import { apiPost } from "../ultils/utilsApi";
-import { CREATE_POST } from "../config/urls";
-// import CustomGradient from "../components/CustomGradient";
+import { CREATE_NEW_PRODUCT, CREATE_POST } from "../config/urls";
 import * as Progress from "react-native-progress";
 import Icons, { icons } from "../components/Icons";
+import { getFileExtension } from "../ultils/helperFunction";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -43,13 +43,13 @@ const CreatePostScreen = () => {
   // });
 
   const [post, setPost] = useState({
-    name: "dsd",
-    description: "324343",
+    name: "Fila 2",
+    description: "Fila den dovien trang chinh hang",
     quantity: 100,
     price: 56000,
     type: "AB",
     brand: "Adidas",
-    shop_id: 1
+    shop_id: 1,
   });
   const { content, size, type, price, title } = post;
   const updatePost = (data) => setPost(() => ({ ...post, ...data }));
@@ -99,7 +99,6 @@ const CreatePostScreen = () => {
   };
 
   const addMoreImage = async () => {
-    // Ask the user for the permission to access the media library
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
@@ -127,8 +126,6 @@ const CreatePostScreen = () => {
         .filter((asset) => !imageUris.includes(asset.uri))
         .map((asset) => asset.uri);
       setImageUris([...imageUris, ...newUris]);
-      // setImageUris(newUris)
-      console.log(imageUris);
 
       if (imageUris.length + result.assets.length > 5) {
         alert("You can select up to 5 images.");
@@ -179,35 +176,39 @@ const CreatePostScreen = () => {
   //   }
   // };
 
-    const createNewPost = () => {
-      const checkValid = isValidData();
-      if (checkValid) {
-        setLoading(true);
-        // fetch API
-        var formData = new FormData();
-        formData.append("product", JSON.stringify(post));
-        formData.append("fileImage", {
-          uri: pickedImagePath, // Đường dẫn đến file
-          type: "image/jpeg", // Loại file
-          name: "name", // Tên file
+  const createNewPost = () => {
+    const checkValid = isValidData();
+    if (checkValid) {
+      setLoading(true);
+      // fetch API
+
+      const fileUri = pickedImagePath;
+      const fileName = fileUri.split("/").pop(); // Lấy tên tệp từ đường dẫn
+      const fileExtension = getFileExtension(fileName);
+
+      var formData = new FormData();
+      formData.append("product", JSON.stringify(post));
+      formData.append("fileImage", {
+        uri: fileUri, // Đường dẫn đến file
+        type: `image/${fileExtension}`,
+        name: fileName, // Tên file
+      });
+
+      var headers = {
+        "Content-type": "multipart/form-data",
+      };
+
+      apiPost(CREATE_NEW_PRODUCT, formData, headers, true)
+        .then((res) => {
+          setLoading(false);
+          showSuccess("Success!");
+        })
+        .catch((error) => {
+          showError(error.error_message);
+          setLoading(false);
         });
-
-        var headers = {
-          "Content-type": "multipart/form-data",
-        };
-
-        apiPost(CREATE_POST, formData, headers, true)
-          .then((res) => {
-            console.log(res.data);
-            setLoading(false);
-            showSuccess("Đã tải anh thành công");
-          })
-          .catch((error) => {
-            showError(error.error_message);
-            setLoading(false);
-          });
-      }
-    };
+    }
+  };
 
   const renderAddButton = () => {
     return (

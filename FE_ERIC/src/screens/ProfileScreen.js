@@ -8,6 +8,7 @@ import {
   Alert,
   ImageBackground,
   Image,
+  FlatList,
 } from "react-native";
 import { useSelector } from "react-redux";
 import actions from "../redux/actions";
@@ -26,6 +27,7 @@ import {
 import LineDivider from "../components/LineDivider";
 import Icons, { icons } from "../components/Icons";
 import { useNavigation } from "@react-navigation/native";
+import { hasSalerRole } from "../ultils/helperFunction";
 
 const ProfileScreen = () => {
   const detailUser = useSelector((state) => state.auth.detailUser);
@@ -62,8 +64,6 @@ const ProfileScreen = () => {
 
     setLoading(false);
 
-    console.log("Xong");
-
     // setIsProcessing(false);
   };
 
@@ -75,10 +75,6 @@ const ProfileScreen = () => {
     );
   }
 
-  function hasSalerRole(roles) {
-    if (roles.some((role) => role.name == "ROLE_SALER")) return true;
-    else false;
-  }
   function renderProfileCard() {
     const getHighestRole = (roles) => {
       let highestRole = ""; // Vai trò mặc định nếu không tìm thấy
@@ -105,7 +101,7 @@ const ProfileScreen = () => {
             paddingHorizontal: SIZES.radius,
             paddingVertical: 20,
             borderRadius: SIZES.radius,
-            backgroundColor: "#2d2d44",
+            backgroundColor: Color.blackOpacity,
           }}
         >
           <TouchableOpacity
@@ -344,7 +340,6 @@ const ProfileScreen = () => {
   );
 };
 
-// define your styles
 const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
@@ -376,7 +371,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: SIZES.radius,
     borderColor: Color.textLight,
-    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    backgroundColor: Color.whileOpacity,
   },
 });
 

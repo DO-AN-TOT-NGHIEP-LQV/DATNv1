@@ -32,7 +32,6 @@ export const setIsLogin = (data) => {
   });
 };
 
-
 export function login(data) {
   return new Promise(async (resolve, reject) => {
     const header = {
@@ -44,41 +43,18 @@ export function login(data) {
       await setCredentials(loginResponse.data);
       await saveUserData(loginResponse.data);
 
-      // console.log("Loi o ham login 7");
       const detailUsersResponse = await apiGet(GET_DETAIL_USERS, {}, {}, true);
-      // console.log(error, "Loi o ham login 6");
       console.log("GET_DETAIL_USERS");
       saveDetailUser(detailUsersResponse.data);
 
       resolve(loginResponse);
     } catch (error) {
-      console.log("Loi o ham login9");
       logout();
       reject(error);
     }
   });
 }
 
-// export function refreshToken(refresh_token) {
-//   return new Promise(async (resolve, reject) => {
-//     const header = {
-//       authorization: "Bearer " + `${refresh_token}`,
-//     };
-//     return apiGet(REFRESH_TOKEN, {}, header, {}, false)
-//       .then((res) => {
-//         console.log("REFRESH_TOKEN 1");
-//         setCredentials(res.data).then(() => {
-//           resolve(res);
-//           saveUserData(res.data);
-//         });
-//       })
-//       .catch((error) => {
-//         console.log("Loi khong the refresh token refreshToken");
-//         logout();
-//         reject(error);
-//       });
-//   });
-// }
 
 export function getDetailUser() {
   return new Promise(async (resolve, reject) => {

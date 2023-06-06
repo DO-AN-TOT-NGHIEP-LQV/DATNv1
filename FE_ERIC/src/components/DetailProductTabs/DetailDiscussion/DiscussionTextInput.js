@@ -14,10 +14,9 @@ import {
   CREATE_NEW_DISCUSSION,
   CREATE_NEW_SUB_DISCUSSION,
 } from "../../../config/urls";
-import { showError } from "../../../ultils/helperFunction";
+import { showError } from "../../../ultils/messageFunction";
 import moment from "moment";
 import { useState } from "react";
-
 
 const DiscussionTextInput = ({
   handleEffect,
@@ -29,7 +28,6 @@ const DiscussionTextInput = ({
   const [discussionValue, setDiscussionValue] = useState("");
 
   const saveDiscussion = async () => {
-    console.log("saveDiscussion");
     if (!checkStringEmpty(discussionValue)) {
       if (
         mainDiscussionId == undefined &&
@@ -59,7 +57,6 @@ const DiscussionTextInput = ({
       })
       .catch((error) => {
         showError(error.error_message);
-        console.log(error);
       });
   };
 
@@ -75,7 +72,6 @@ const DiscussionTextInput = ({
       })
       .catch((error) => {
         showError(error.error_message);
-        console.log(error);
       });
   };
 

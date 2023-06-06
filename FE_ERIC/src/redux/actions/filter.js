@@ -2,7 +2,7 @@ import { SEARCH_AND_FILTER_PRODUCTS } from "../../config/urls";
 import store from "../store";
 import types from "../types";
 import { apiGet, apiPost } from "../../ultils/utilsApi";
-import { calculateDisplayValue } from "../../ultils/calculate";
+import { calculateDisplayValue } from "../../ultils/helperFunction";
 const { dispatch } = store;
 
 export const changeFilter = () => {
@@ -97,7 +97,6 @@ export const searchAndFilterProducts = (
         resolve(res);
       })
       .catch((error) => {
-        console.log(error.error_message);
         reject(error);
       });
   });

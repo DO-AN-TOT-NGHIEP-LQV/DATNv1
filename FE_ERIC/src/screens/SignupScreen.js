@@ -3,7 +3,7 @@ import { Image, ImageBackground, StyleSheet, View } from "react-native";
 import { Surface, TextInput, Text } from "react-native-paper";
 import { LoginImg } from "../public/assets";
 import { showMessage } from "react-native-flash-message";
-import { showError, showSuccess } from "../ultils/helperFunction";
+import { showError, showSuccess } from "../ultils/messageFunction";
 import CustomButton from "../components/CustomButton/index.js";
 import validator from "../ultils/validations";
 import actions from "../redux/actions";
@@ -47,7 +47,6 @@ export default function SignupScreen({ navigation }) {
         updateState({ isLoading: false });
         navigation.goBack();
       } catch (error) {
-        // console.log("error raised")
         showError(error.error_message);
         updateState({ isLoading: false });
       }

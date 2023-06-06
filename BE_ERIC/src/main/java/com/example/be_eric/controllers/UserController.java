@@ -140,17 +140,17 @@ public class UserController {
     }
 
 
-    @PostMapping("/role/save")
-    public ResponseEntity<Role> saveRole(@RequestBody Role role){
-        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
-        return ResponseEntity.created(uri).body(userService.saveRole(role));
-    }
-
-    @PostMapping("/role/addtouser")
-    public ResponseEntity<?> addRoleToUser( @RequestBody RoleToUserForm form){
-        userService.addRoleToUser(form.getUsername(), form.getRoleName());
-        return ResponseEntity.ok().build();
-    }
+//    @PostMapping("/role/save")
+//    public ResponseEntity<Role> saveRole(@RequestBody Role role){
+//        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/role/save").toUriString());
+//        return ResponseEntity.created(uri).body(userService.saveRole(role));
+//    }
+//
+//    @PostMapping("/role/addtouser")
+//    public ResponseEntity<?> addRoleToUser( @RequestBody RoleToUserForm form){
+//        userService.addRoleToUser(form.getUsername(), form.getRoleName());
+//        return ResponseEntity.ok().build();
+//    }
 
 //    @GetMapping("/token/refresh")
 //    public void refreshToken( HttpServletRequest request, HttpServletResponse response)  {
@@ -212,7 +212,7 @@ public class UserController {
 
             String access_token = JWT.create()
                     .withSubject(user.getEmail())
-                    .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 2 * 60 * 60 * 1000))
                     .withIssuer(request.getRequestURL().toString())
                     .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                     .sign(algorithm);

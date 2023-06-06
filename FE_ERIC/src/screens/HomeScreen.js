@@ -16,7 +16,7 @@ import { HeroImage, ShoesFLas } from "../public/assets";
 import * as Animatable from "react-native-animatable";
 import actions from "../redux/actions";
 import { useSelector } from "react-redux";
-import { showError } from "../ultils/helperFunction";
+import { showError } from "../ultils/messageFunction";
 import Color from "../constans/Color";
 import { GET_DETAIL_USERS } from "../config/urls";
 import { saveDetailUser } from "../redux/actions/auth";
@@ -52,9 +52,7 @@ const HomeScreen = () => {
   const getAllUsses = async () => {
     try {
       const res = await actions.getAllUsers();
-      console.log(res.data);
     } catch (error) {
-      console.log("co loi");
       showError(error.error_message);
     }
   };
@@ -64,11 +62,8 @@ const HomeScreen = () => {
       .then((res) => {
         console.log("GET_DETAIL_USERS");
         saveDetailUser(res.data);
-        console.log(res.data);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
 
   function renderHeader() {
@@ -199,11 +194,7 @@ const HomeScreen = () => {
         >
           Chào mừng đến với
         </Text>
-        <Text
-          className="text-[#00BCC9] text-[30px] font-bold"
-        >
-          Shoes ERIC
-        </Text>
+        <Text className="text-[#00BCC9] text-[30px] font-bold">Shoes ERIC</Text>
 
         <Text className="text-[#3C6072]">
           Hãy để chúng tôi giúp bạn tìm sản phẩm mà bạn mong muốn

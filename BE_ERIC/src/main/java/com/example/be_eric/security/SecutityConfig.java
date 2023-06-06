@@ -46,15 +46,17 @@ public class SecutityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh", "/api/user/register",
-                                                       "/api/user/image", "/api/users/**", "api/search/**",
-                "/api/user/**"
+        http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh",
+                                                        "/api/users/**", "/api/search/**",
+                "/api/user/**", "/api/sale/shop/getShop"
                 ).permitAll();
 
-        http.authorizeRequests().antMatchers( GET,  "api/sale/shop/**" ).hasAnyAuthority("ROLE_USER");
-//        http.authorizeRequests().antMatchers( GET, "/api/users/**" ).hasAnyAuthority("ROLE_USER");
+//        http.authorizeRequests().antMatchers( GET,   ).hasAnyAuthority("ROLE_USER");
+        http.authorizeRequests().antMatchers( POST,   "/api/sale/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SALER");
+        http.authorizeRequests().antMatchers( GET,  "/api/sale/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SALER");
+
         http.authorizeRequests().antMatchers( POST, "/api/user/save/**", "/api/sale/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SALER");
-//        http.authorizeRequests().antMatchers( "GET", "/api/user/**").hasAnyAuthority("ROLE_MANAGER");
+//        http.authorizeRequests().antMatchers( GET, "/api/sale/shop/getProduct").hasAnyAuthority("ROLE_ADMIN");
 //        http.authorizeRequests().antMatchers( "GET", "/api/user/**").hasAnyAuthority("ROLE_SUPER_ADMIN");
 //        http.authorizeRequests().anyRequest().authenticated(); // bat buoc tat cac cac trong deu phai xac thuc
         http.addFilter(customAuthenticationFilter);

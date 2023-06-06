@@ -31,7 +31,7 @@ public class Shop {
     private String sStatus;
     private  String sLogo;
     private  String sAddress1;
-    private  String sAddress2;
+    private  String sLink;
     private  String sFax;
 
     @OneToOne
@@ -116,12 +116,12 @@ public class Shop {
         this.sAddress1 = sAddress1;
     }
 
-    public String getsAddress2() {
-        return sAddress2;
+    public String getsLink() {
+        return sLink;
     }
 
-    public void setsAddress2(String sAddress2) {
-        this.sAddress2 = sAddress2;
+    public void setsLink(String sLink) {
+        this.sLink = sLink;
     }
 
     public String getsFax() {

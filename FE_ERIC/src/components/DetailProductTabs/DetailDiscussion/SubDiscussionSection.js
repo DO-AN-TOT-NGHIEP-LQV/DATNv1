@@ -9,7 +9,7 @@ import {
 import React from "react";
 import moment from "moment";
 import { DELETE_SUB_DISCUSSION } from "../../../config/urls";
-import { showError, showSuccess } from "../../../ultils/helperFunction";
+import { showError, showSuccess } from "../../../ultils/messageFunction";
 import {
   Menu,
   MenuOptions,
@@ -32,7 +32,6 @@ const SubDiscussionSection = ({ subDisItem, mainDisId, handleEffect }) => {
       true
     )
       .then((res) => {
-        console.log(res.data);
         showSuccess("Xóa thành công");
       })
       .catch((error) => {

@@ -21,7 +21,7 @@ import actions from "../redux/actions";
 
 import MasonryListProducts from "../components/Search/MasonryListProducts";
 import { useSelector } from "react-redux";
-import { showError } from "../ultils/helperFunction";
+import { showError } from "../ultils/messageFunction";
 import FilterModal from "../components/Search/FilterModal";
 // import SearchInputHeader from "../components/Search/SearchInputHeader";
 import { spacing } from "../constans/Theme";
@@ -34,17 +34,11 @@ const windowHeight = Dimensions.get("window").height;
 
 const SearchTextScreen = () => {
   const navigation = useNavigation();
-  // const listSearch = useSelector((state) => state.search.listSearch);
   const [listSearch, setListSearch] = useState([]);
 
-  // const pageProduct = useSelector((state) => state.search.pageProduct);
-
-  // const [isLoading, setIsLoading] = useState(false);
-  // const searchText = useSelector((state) => state.search.searchText);
 
   const [searchText, setSearchText] = useState("");
 
-  // const showFilterModel = useSelector((state) => state.filter.showFilterModel); /////////////////////////
   const [showFilterModel, setShowFilterModel] = useState(false);
 
   const isApplyFilter = useSelector((state) => state.filter.isApplyFilter);
@@ -64,10 +58,7 @@ const SearchTextScreen = () => {
   /////////
   const renderCount = useRef(0);
 
-  useEffect(() => {
-    renderCount.current += 1;
-    console.log("Render count:", renderCount.current);
-  });
+
 
   //Search Input State
 
@@ -157,7 +148,6 @@ const SearchTextScreen = () => {
       setPageProduct((pre) => pre + 1);
       setLoadingEndScroll(false);
     } catch (error) {
-      console.log(error);
       showError(error.error_message);
       setLoadingEndScroll(false);
     }
@@ -178,7 +168,7 @@ const SearchTextScreen = () => {
   function searchInputHeader() {
     const onSearch = async () => {
       if (loadingEndScroll) return;
-      await firstRenderData();
+      firstRenderData();
     };
 
     return (
@@ -220,7 +210,6 @@ const SearchTextScreen = () => {
                     navigation.navigate("SearchTab", {
                       screen: "SearchImage",
                     });
-
                   }}
                 >
                   <View>
@@ -334,7 +323,6 @@ const SearchTextScreen = () => {
         <FilterModal
           isVisible={showFilterModel}
           onClose={() => setShowFilterModel(false)}
-     
         />
       )}
     </View>

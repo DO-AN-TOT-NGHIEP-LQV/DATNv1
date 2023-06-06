@@ -1,32 +1,39 @@
-import { showMessage } from "react-native-flash-message";
+export function calculateDisplayValue(value) {
+  const min = 0;
+  const max = 100;
+  const threshold = 70;
 
-const showError = (message) => {
-  showMessage({
-    type: "danger",
-    icon: "danger",
-    duration: 3000,
-    message,
-  });
-};
+  const maxPriceValue = 10000000;
+  const minPriceValue = 1000000;
 
-const showSuccess = (message) => {
-  showMessage({
-    type: "success",
-    icon: "success",
-    duration: 3000,
-    message,
-    backgroundColor: "#8BC34A",
-    color: "#FFFFFF",
-  });
-};
+  if (value <= threshold) {
+    // Phần đầu (0 - threshold)
+    const range = minPriceValue - min;
+    const adjustedValue = (value - min) / (threshold - min);
+    return Math.round(min + adjustedValue * range);
+  } else if (value <= 100) {
+    // Phần sau (threshold - max)
+    const range = maxPriceValue - minPriceValue;
+    const adjustedValue = (value - threshold) / (max - threshold);
+    return Math.round(minPriceValue + adjustedValue * range);
+  } else {
+    return undefined;
+  }
+}
 
-const showInfo = (message) => {
-  showMessage({
-    type: "danger",
-    icon: "danger",
-    duration: 5000,
-    message,
-  });
-};
+export function getFileExtension(fileName) {
+  const extension = fileName.split(".").pop();
+  return extension.toLowerCase();
+}
 
-export { showError, showSuccess };
+export function hasSalerRole(roles) {
+  if (roles.some((role) => role.name == "ROLE_SALER")) return true;
+  else false;
+}
+
+export function hasAdminRole(roles) {
+  if (roles.some((role) => role.name == "ROLE_ADMIN")) return true;
+  else false;
+
+
+}
