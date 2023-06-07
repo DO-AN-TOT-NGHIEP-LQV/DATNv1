@@ -82,8 +82,13 @@ public class FirebaseFileService {
 
             String fileUrl = "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/" + URLEncoder.encode(filePath, "UTF-8") + "?alt=media";
 
-            Image image = imageService.saveImage(new Image(null, imageName, fileUrl, false));
+            Image image = imageService.saveImage(new Image( imageName, fileUrl, false));
+            System.out.println("Bat dau luu product");
+            System.out.println("add hinh anh vao");
+            productService.save(product);
+
             productService.addImageToProduct( product, image );
+            System.out.println("Loi o viec luu db");
 
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
@@ -100,13 +105,15 @@ public class FirebaseFileService {
             body.add("product_id", product.getId());
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-            String url = "http://127.0.0.1:5000/ai/api/product/addNewImg";
+            String url = "http://103.197.185.34/ai/api/product/addNewImg";
             ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
             HttpStatus statusCode = response.getStatusCode();
             int statusCodeValue = statusCode.value();
 
+            System.out.println("Da luwu anh thanh cong");
             if (statusCodeValue == 500) {   // thi luu anh do vao DB. va upload anh le
                 boolean deleted = storage.delete(blobId);
+                System.out.println("loi 500 AI");
                 throw new UploadImageException();
             }
             return fileUrl;
@@ -116,6 +123,7 @@ public class FirebaseFileService {
             if (blobId != null) {
                 boolean deleted = storage.delete(blobId);
             }            boolean deleted = storage.delete(blobId);
+            System.out.println("Loi trong ham try chinh");
             throw new UploadImageException();
 
         }

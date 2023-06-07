@@ -15,8 +15,12 @@ public class ImageServiceImpl implements  ImageService {
 
 
     @Override
-    public Image saveImage(Image image) {
-        return imgRepo.save(image);
+    public Image saveImage(Image image) { try{
+       return  imgRepo.save(image);
+    }catch (Exception e){
+        System.out.println("Loi luu db image");
+        throw e;
+    }
     }
 
     @Override

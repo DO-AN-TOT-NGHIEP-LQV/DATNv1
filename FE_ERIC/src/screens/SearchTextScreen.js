@@ -28,14 +28,13 @@ import { spacing } from "../constans/Theme";
 import Icons, { icons } from "../components/Icons";
 import { useNavigation } from "@react-navigation/native";
 
-const width = Dimensions.get("window").width / 2 - 30;
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
+// const width = Dimensions.get("window").width / 2 - 30;
+// const windowWidth = Dimensions.get("window").width;
+// const windowHeight = Dimensions.get("window").height;
 
 const SearchTextScreen = () => {
   const navigation = useNavigation();
   const [listSearch, setListSearch] = useState([]);
-
 
   const [searchText, setSearchText] = useState("");
 
@@ -57,8 +56,6 @@ const SearchTextScreen = () => {
 
   /////////
   const renderCount = useRef(0);
-
-
 
   //Search Input State
 
@@ -154,10 +151,10 @@ const SearchTextScreen = () => {
   };
 
   ///// Effect render
-  useEffect(() => {
-    setPageProduct(0);
-    firstRenderData();
-  }, []);
+  // useEffect(() => {
+  //   setPageProduct(0);
+  //   // firstRenderData();
+  // }, []);
 
   const isChangeFilter = useSelector((state) => state.filter.isChangeFilter);
   useEffect(() => {

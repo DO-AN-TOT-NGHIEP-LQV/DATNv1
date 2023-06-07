@@ -26,12 +26,18 @@ public class Image {
     private String name;
     private String url;
 
-    @NotNull
-    private Boolean isProductImage = false;
-
+//    @NotNull
+    private Boolean isProductImage = true;
+//
     public Image(Long id, String name, String url) {
         this.id = id;
         this.name = name;
         this.url = url;
+    }
+
+    public Image( String name, String url, boolean isProductImage) {
+        this.name = name;
+        this.url = url;
+        this.isProductImage = isProductImage;
     }
 }

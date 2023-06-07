@@ -1,7 +1,7 @@
 import validator from "is_js";
 
 const checkEmpty = (val, key) => {
-  if (validator.empty(val.trim())) {
+  if (val == undefined || validator.empty(val.trim())) {
     return `${key}`;
   } else {
     return "";
@@ -140,14 +140,14 @@ export function validatorCreatePost(data) {
   const { pickedImagePath, content, size, type, count } = data;
 
   if (pickedImagePath !== undefined) {
-    let emptyImage = checkEmpty(pickedImagePath, "Image is required");
+    let emptyImage = checkEmpty(pickedImagePath, "Hãy chọn 1 ảnh");
     if (emptyImage !== "") {
       return emptyImage;
     }
   }
 
   if (content !== undefined) {
-    let emptyValidationText = checkEmpty(content, "Please enter content");
+    let emptyValidationText = checkEmpty(content, "Hãy nhập nội dung ");
     if (emptyValidationText !== "") {
       return emptyValidationText;
     } else {
@@ -157,4 +157,84 @@ export function validatorCreatePost(data) {
       }
     }
   }
+}
+
+export function validatorCreateProduct(data) {
+  const {
+    pickedImagePath,
+    name,
+    description,
+    price,
+    quantity,
+    type,
+    brand,
+    link,
+  } = data;
+
+  let resValid = "Hãy nhập tên sản phẩm";
+  if (name !== undefined) {
+    let emptyValidationText = checkEmpty(name, resValid);
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    }
+  } else return resValid;
+
+  resValid = "Hãy chọn 1 ảnh";
+  if (pickedImagePath !== undefined) {
+    let emptyImage = checkEmpty(pickedImagePath, resValid);
+    if (emptyImage !== "") {
+      return emptyImage;
+    }
+  } else return resValid;
+
+  resValid = "Hãy nhập miêu tả sản phẩm: >20 ký tự";
+  if (description !== undefined) {
+    let emptyValidationText = checkEmpty(description, resValid);
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    } else {
+      let minLengthValidation = checkMinLength(description, 20, "content");
+      if (minLengthValidation !== "") {
+        return resValid;
+      }
+    }
+  } else return resValid;
+
+  resValid = "Hãy nhập giá sản phẩm";
+  if (price !== undefined) {
+    if (price > 50000000) return resValid + "Hãy nhập giá sản phẩm < 50 triệu";
+
+    if (price < 0) return resValid;
+  } else return resValid;
+
+  resValid = "Hãy nhập số lượng sản phẩm";
+  if (quantity !== undefined) {
+    if (quantity > 1000000) return resValid + "Hãy nhập giá sản phẩm < triệu";
+
+    if (quantity < 0) return resValid;
+  } else return resValid;
+
+  resValid = "Hãy nhập kiểu dáng";
+  if (type !== undefined) {
+    let emptyValidationText = checkEmpty(type, resValid);
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    }
+  } else return resValid;
+
+  resValid = "Hãy nhập nhãn hàng";
+  if (name !== undefined) {
+    let emptyValidationText = checkEmpty(brand, resValid);
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    }
+  } else return resValid;
+
+  resValid = "Hãy nhập link sản phẩm";
+  if (link !== undefined) {
+    let emptyValidationText = checkEmpty(link, resValid);
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    }
+  } else return resValid;
 }

@@ -156,6 +156,13 @@ public class ResourceController {
             }
 
 
+            if (productMap.containsKey("link") && productMap.get("link") != null) {
+                newProduct.setType((String) productMap.get("link"));
+            } else {
+                throw new InValidException("Invalid link");
+            }
+
+
             if (productMap.containsKey("type") && productMap.get("type") != null) {
                 newProduct.setType((String) productMap.get("type"));
             } else {
@@ -176,7 +183,7 @@ public class ResourceController {
             } else {
                 throw new InValidException("Invalid shop id");
             }
-            System.out.println();
+            System.out.println("goi uploadImage_saveVector" );
             String fileName = firebaseFileService.uploadImage_saveVector(fileImage, newProduct  );
             return ResponseEntity.ok().build();
 

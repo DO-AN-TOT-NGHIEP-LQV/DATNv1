@@ -3,6 +3,11 @@ from flask import jsonify, request, make_response
 import os
 import threading
 import numpy as np
+from flask import Flask
+from flask import jsonify, request, make_response
+import os
+import threading
+import numpy as np
 from numpy.linalg import norm
 from PIL import Image
 from numpy.linalg import norm
@@ -16,6 +21,10 @@ from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input
 from tensorflow.keras.models import  Model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import load_model
+
+from PIL import Image
+import pickle
+import numpy as np
 
 from PIL import Image
 import pickle
@@ -40,19 +49,17 @@ dataGenerator = ImageDataGenerator(
 
 
 extract_model_path = 'extract_model.h5'
-if os.path.exists(extract_model_path):
-    model = load_model(extract_model_path)
-else:
-    model = get_extract_model()
+#if os.path.exists(extract_model_path):
+model = load_model(extract_model_path)
+#else:
+#    model = get_extract_model()
     # model.save(extract_model_path)
-
 
 cred = credentials.Certificate('./serviceAccount.json')
 app = firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 app = Flask(__name__)   
-
 
 @app.route("/ai", methods=['GET'])    
 def test():
@@ -268,6 +275,6 @@ def seedData33ImgTest():
 
 
 if __name__ == '__main__':
-    app.run( host= '0.0.0.0')
+    app.run( host= '0.0.0.0', port=5000)
 # if __name__ == '__main__':
 #     app.run()

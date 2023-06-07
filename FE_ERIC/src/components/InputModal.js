@@ -28,7 +28,7 @@ const InputModal = ({
 
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
-      <SafeAreaView style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }}>
+      <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }}>
         <Animated.View
           style={{
             ...styles.sessionPopup,
@@ -49,17 +49,18 @@ const InputModal = ({
               {label}
             </Text>
 
-            <View
-              style={{
-                // flex: 1,
-                marginRight: 10,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <CustomButton label="Lưu" onPress={onPress} />
-            </View>
-            {/* close brand popup */}
+            {onPress && (
+              <View
+                style={{
+                  marginRight: 10,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CustomButton label="Lưu" onPress={onPress} />
+              </View>
+            )}
+
             <TouchableOpacity onPress={onClose}>
               <View style={styles.closeButton}>
                 <Icons
@@ -74,7 +75,7 @@ const InputModal = ({
 
           {children}
         </Animated.View>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 };

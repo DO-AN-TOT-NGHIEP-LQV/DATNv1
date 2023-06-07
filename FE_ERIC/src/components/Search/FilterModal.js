@@ -24,7 +24,7 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import Icons, { icons } from "../Icons";
 import CustomButton from "../CustomButton/index.js";
-import { typeList } from "../../constans/raw";
+import { suggestions, typeList } from "../../constans/raw";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -33,20 +33,19 @@ const FilterModal = ({ isVisible, onClose }) => {
   const isApplyFilter = useSelector((state) => state.filter.isApplyFilter);
 
   const [switchToggle, setSwitchToggle] = useState(isApplyFilter);
-
   const modalAnimatedValue = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (isVisible) {
       Animated.timing(modalAnimatedValue, {
         toValue: 1,
-        duration: 500,
+        duration: 1000,
         useNativeDriver: false,
       }).start();
     } else {
       Animated.timing(modalAnimatedValue, {
         toValue: 0,
-        duration: 500,
+        duration: 1000,
         useNativeDriver: false,
       }).start(onClose());
     }
@@ -61,26 +60,26 @@ const FilterModal = ({ isVisible, onClose }) => {
     let isAnyVariableChanged = false;
     onClose();
     if (sliderValue !== nowRangeMinMaxPrice) {
-      await actions.nowRangeMinMaxPrice(sliderValue);
+      actions.nowRangeMinMaxPrice(sliderValue);
       isAnyVariableChanged = true;
     }
 
     if (selectedTypeTags !== typeSelectedList) {
-      await actions.typeSelectedList(selectedTypeTags);
+      actions.typeSelectedList(selectedTypeTags);
       isAnyVariableChanged = true;
     }
 
     if (selectedBrandTags !== brandSelectedList) {
-      await actions.brandSelectedList(selectedBrandTags);
+      actions.brandSelectedList(selectedBrandTags);
       isAnyVariableChanged = true;
     }
 
     if (isApplyFilter !== switchToggle) {
-      await actions.updateApplyFilter(switchToggle);
+      actions.updateApplyFilter(switchToggle);
       isAnyVariableChanged = true;
     }
 
-    if (isAnyVariableChanged) await actions.changeFilter();
+    if (isAnyVariableChanged) actions.changeFilter();
   };
 
   /////////////////////////////////////
@@ -160,28 +159,6 @@ const FilterModal = ({ isVisible, onClose }) => {
   };
 
   function renderAutocompleteScreen() {
-    const suggestions = [
-      { value: "Adidas" },
-      { value: "Nike" },
-      { value: "Puma" },
-      { value: "Converse" },
-      { value: "New Balance" },
-      { value: "ASICS" },
-      { value: "Skechers" },
-      { value: "Timberland" },
-      { value: "Dr. Martens" },
-      { value: "Salomon" },
-      { value: "Merrell" },
-      { value: "Fila" },
-      { value: "Adidas" },
-      { value: "Nike" },
-      { value: "Puma" },
-      { value: "Converse" },
-      { value: "New Balance" },
-      { value: "ASICS" },
-      { value: "Skechers" },
-      { value: "Timberland" },
-    ];
     const [data, setData] = useState([]);
 
     const [newTag, setNewTag] = useState("");
@@ -243,7 +220,6 @@ const FilterModal = ({ isVisible, onClose }) => {
                 </View>
               </TouchableOpacity>
             </View>
-
             <View style={{ ...styles.selectedTagsContainer }}>
               {selectedBrandTags.map((tag) => (
                 <TouchableOpacity
@@ -282,7 +258,7 @@ const FilterModal = ({ isVisible, onClose }) => {
                         paddingVertical: 10,
                         borderColor: Color.textLight,
                         borderWidth: 1,
-                        paddingHorizontal: 1,
+                        paddingHorizontal: 10,
                         width: "80%",
                         borderRadius: 5,
                         height: 45,
@@ -562,17 +538,14 @@ const FilterModal = ({ isVisible, onClose }) => {
                 <TouchableOpacity
                   onPress={() => openPopup()}
                   style={{
-                    borderWidth: 1,
-                    height: 50,
                     ...styles.newTagInput,
-                    justifyContent: "center",
                   }}
                 >
                   <Text style={{ opacity: 0.2 }}>Nhập nhãn hiệu muốn tìm</Text>
                 </TouchableOpacity>
 
                 {renderAutocompleteScreen()}
-                
+
                 <View style={styles.selectedTagsContainer}>
                   {selectedBrandTags.map((tag) => (
                     <TouchableOpacity
@@ -721,7 +694,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 12,
+    marginHorizontal: 14,
     marginTop: 8,
+    borderWidth: 1,
+    height: 50,
+    justifyContent: "center",
   },
   addButton: {
     backgroundColor: "#2196f3",

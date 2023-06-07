@@ -49,6 +49,7 @@ const CreatePostScreen = () => {
     price: 56000,
     type: "AB",
     brand: "Adidas",
+    link: "https://shoppe",
     shop_id: 1,
   });
   const { content, size, type, price, title } = post;

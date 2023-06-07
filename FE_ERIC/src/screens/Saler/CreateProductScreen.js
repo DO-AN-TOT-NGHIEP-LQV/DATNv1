@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import * as Progress from "react-native-progress";
 import { useNavigation } from "@react-navigation/native";
 import { ActivityIndicator, Button, Modal } from "react-native-paper";
@@ -24,12 +24,19 @@ import { ProfileValue } from "../../components/Profile";
 import LineDivider from "../../components/LineDivider";
 import { SIZES } from "../../constans/Theme";
 import ProductValue from "../../components/SalerManager/ProductValue";
-import ModalText from "../../components/SalerManager/ModalText";
+import ModalInputText from "../../components/SalerManager/ModalInputText";
 import ModalInputNumber from "../../components/SalerManager/ModalInputNumber";
 import openWebLink from "../../hookFuntion/openWebLink";
 import InputModal from "../../components/InputModal";
 import { typeList } from "../../constans/raw";
 import { TypeCard } from "../../components/Home";
+import { showError, showSuccess } from "../../ultils/messageFunction";
+import ModalInputBrand from "../../components/SalerManager/ModalInputBrand";
+import { CREATE_NEW_PRODUCT } from "../../config/urls";
+import { validatorCreateProduct } from "../../ultils/validations";
+import { error } from "is_js";
+import { getFileExtension } from "../../ultils/helperFunction";
+import { apiPost } from "../../ultils/utilsApi";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -39,14 +46,15 @@ const CreateProductScreen = () => {
   const [pickedImagePath, setPickedImagePath] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const [name, setName] = useState("dasdadlsa");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
-  const [link, setLink] = useState("");
-  const [type, setType] = useState("");
+  const [name, setName] = useState("FFX-007034");
+  const [description, setDescription] = useState(
+    "Mieu ta so lươc xfsdkfsokfsdp"
+  );
+  const [price, setPrice] = useState(100000);
+  const [link, setLink] = useState("https://shopee.vn/ruby_store.88");
+  const [type, setType] = useState("Sandals");
   const [quantity, setQuantity] = useState(0);
-
-  const [brand, setBrand] = useState("");
+  const [brand, setBrand] = useState("Ad");
 
   const [nameModal, setNameModal] = useState(false);
   const [descriptionModal, setDescriptionModal] = useState(false);
@@ -63,9 +71,64 @@ const CreateProductScreen = () => {
   }, []);
 
   function renderHeader() {
-    const createNewProduct = () => {
-      setLoading(true);
+    const product = {
+      name,
+      description,
+      price,
+      quantity,
+      type,
+      brand,
+      link,
+      pickedImagePath,
+      shop_id: 2,
     };
+    const isValidData = () => {
+      const error = validatorCreateProduct(product);
+      if (error) {
+        showError(error);
+        return false;
+      }
+      return true;
+    };
+
+    const createNewProduct = async () => {
+      setLoading(true);
+      const checkValid = isValidData();
+      try {
+        if (checkValid) {
+          const fileUri = pickedImagePath;
+          const fileName = fileUri.split("/").pop(); // Lấy tên tệp từ đường dẫn
+          const fileExtension = getFileExtension(fileName);
+
+          var formData = new FormData();
+          formData.append("product", JSON.stringify(product));
+          formData.append("fileImage", {
+            uri: fileUri, // Đường dẫn đến file
+            type: `image/${fileExtension}`,
+            name: fileName, // Tên file
+          });
+
+          var headers = {
+            "Content-type": "multipart/form-data",
+          };
+
+          await apiPost(CREATE_NEW_PRODUCT, formData, headers, true)
+            .then((res) => {
+              setLoading(false);
+              showSuccess("Success!");
+            })
+            .catch((error) => {
+              showError(error.error_message);
+              setLoading(false);
+            });
+        }
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    };
+
     return (
       <View style={[styles.headerWrapper, styles.shadowTouch]}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -103,7 +166,7 @@ const CreateProductScreen = () => {
 
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        // allowsEditing: true,
+        allowsEditing: true,
         aspect: [4, 3],
         quality: 1,
       });
@@ -111,7 +174,6 @@ const CreateProductScreen = () => {
       if (!result.canceled) {
         console.log(result.assets);
         setPickedImagePath(result.assets[0].uri);
-        // updateState({ username })
       }
     };
 
@@ -260,8 +322,8 @@ const CreateProductScreen = () => {
           <LineDivider />
 
           <ProductValue
-            label={"Hãng/ Brand/ Quốc Gia"}
-            value={name}
+            label={"Nhãn hàng"}
+            value={brand}
             onPress={() => {
               setBrandModal(true);
             }}
@@ -274,7 +336,6 @@ const CreateProductScreen = () => {
   function renderTagType() {
     const handleTypeTagPress = (tag) => {
       if (type === tag) {
-        // Hủy chọn tag nếu đã được chọn trước đó
         setType("");
       } else {
         setType(tag);
@@ -282,70 +343,33 @@ const CreateProductScreen = () => {
     };
 
     return (
-      //   <View style={styles.selectedTagsContainer}>
-      //     {typeList.map((tag, index) => (
-      //       <TouchableOpacity
-      //         key={tag?.value + index}
-      //         style={[
-      //           styles.tagType,
-      //           tag?.value == type && styles.selectedTagType,
-      //         ]}
-      //         onPress={() => handleTypeTagPress(tag?.value)}
-      //       >
-      //         <TypeCard
-      //           type={tag}
-      //           containerStyle={{
-      //             // height: "100%",
-      //             width: "100%",
-      //             paddingVertical: SIZES.base,
-      //             paddingHorizontal: SIZES.radius,
-      //             justifyContent: "flex-end",
-      //           }}
-      //         />
-      //         <Text
-      //           style={{
-      //             color: Color.black,
-      //             fontSize: 13,
-      //             padding: 10,
-      //           }}
-      //         >
-      //           {tag?.value}
-      //         </Text>
-      //       </TouchableOpacity>
-      //     ))}
-      //   </View>
       <View style={styles.selectedTagsContainer}>
         {typeList.map((tag, index) => (
-          <TypeCard
-            type={tag}
-            onPress={() => handleTypeTagPress(tag?.value)}
-            imageStyle={{
-              opacity: type == tag.value ? 1 : 0.1,
-              marginRight: 15,
-              paddingRight: 15,
-            }}
-            containerStyle={{
-              //   borderWidth: 2,
-              height: 40,
-              //   height: 80,
-              width: "100%",
-              paddingVertical: 0,
-              paddingHorizontal: 0,
-              marginRight: 15,
-              justifyContent: "flex-end",
-              //   alignItems: "center",
-              ...styles.tagType,
-              //   paddingHorizontal: 10,
-              paddingRight: 10,
-            }}
-            textStyle={{
-              //   borderWidth: 2,
-              color: Color.black,
-              fontSize: 16,
-              //   paddingLeft: 5,
-              //   marginRight: 10,
-            }}
-          />
+          <Fragment key={index}>
+            <TypeCard
+              type={tag}
+              onPress={() => handleTypeTagPress(tag?.value)}
+              imageStyle={{
+                opacity: type == tag.value ? 1 : 0.1,
+                marginRight: 15,
+                paddingRight: 15,
+              }}
+              containerStyle={{
+                height: 40,
+                width: "100%",
+                paddingVertical: 0,
+                paddingHorizontal: 0,
+                marginRight: 15,
+                justifyContent: "flex-end",
+                ...styles.tagType,
+                paddingRight: 10,
+              }}
+              textStyle={{
+                color: Color.black,
+                fontSize: 16,
+              }}
+            />
+          </Fragment>
         ))}
       </View>
     );
@@ -385,6 +409,9 @@ const CreateProductScreen = () => {
             }}
           >
             <ActivityIndicator size="large" color="white" />
+            <Text style={{ color: Color.mainColor, alignItems: "center" }}>
+              Quá trình này có thể mất vài phút, xin hãy giữ kết nối
+            </Text>
           </View>
         </>
       )}
@@ -399,7 +426,7 @@ const CreateProductScreen = () => {
       {renderDetailField()}
 
       {nameModal && (
-        <ModalText
+        <ModalInputText
           isVisible={nameModal}
           label={"Tên sản phẩm"}
           onClose={() => setNameModal(false)}
@@ -409,7 +436,7 @@ const CreateProductScreen = () => {
       )}
 
       {descriptionModal && (
-        <ModalText
+        <ModalInputText
           isVisible={descriptionModal}
           label={"Mô tả sản phẩm"}
           onClose={() => setDescriptionModal(false)}
@@ -431,22 +458,17 @@ const CreateProductScreen = () => {
       )}
 
       {linkModal && (
-        <ModalText
+        <ModalInputText
           isVisible={linkModal}
           label={"Link sản phẩm"}
           onClose={() => setLinkModal(false)}
-          value={link || "https://shopee.vn/ruby_store.88"}
-          onPress={(link) => setLink(link)}
-        >
-          <View>
-            <CustomButton
-              label={"Kiểm tra"}
-              onPress={() => {
-                openWebLink(link);
-              }}
-            />
-          </View>
-        </ModalText>
+          // value={link || "https://shopee.vn/ruby_store.88"}
+          value={link || "https://"}
+          maxLength={500}
+          onPress={(link) => {
+            setLink(link);
+          }}
+        />
       )}
 
       {typeModal && (
@@ -455,15 +477,16 @@ const CreateProductScreen = () => {
           label={"Loại giày"}
           onClose={() => setTypeModal(false)}
           styleContainer={{
-            height: "100%",
-            top: (windowHeight * 1) / 10,
-            width: "100%",
-            right: 0,
-            left: 0,
+            height: 600,
           }}
-          onPress={(type) => setType(type)}
         >
-          <View>{renderTagType()}</View>
+          <View
+            styleContainer={{
+              borderWidth: 2,
+            }}
+          >
+            {renderTagType()}
+          </View>
         </InputModal>
       )}
 
@@ -475,6 +498,16 @@ const CreateProductScreen = () => {
           value={quantity}
           onPress={(quantity) => setQuantity(quantity)}
           isInteger={true}
+        />
+      )}
+
+      {brandModal && (
+        <ModalInputBrand
+          isVisible={brandModal}
+          label={"Nhãn hiệu"}
+          value={brand}
+          onClose={() => setBrandModal(false)}
+          onPress={(value) => setBrand(value)}
         />
       )}
     </SafeAreaView>
@@ -572,6 +605,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     marginTop: 15,
+    // justifyContent: "flex-end",
+    alignItems: "baseline",
   },
   tagType: {
     // paddingHorizontal: 2,
