@@ -12,7 +12,6 @@ import React from "react";
 import Icons, { icons } from "./Icons";
 import { Color } from "../constans";
 import CustomButton from "./CustomButton/index.js";
-import hideTabBar from "../hookFuntion/hideTabBar ";
 
 const windowHeight = Dimensions.get("window").height;
 
@@ -24,8 +23,6 @@ const InputModal = ({
   children,
   styleContainer,
 }) => {
-  hideTabBar();
-
   return (
     <Modal animationType="fade" transparent={true} visible={isVisible}>
       <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)" }}>

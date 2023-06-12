@@ -29,9 +29,6 @@ const CustomButton = ({
     </Button>
   );
 };
-{
-  /* <Text className=" text-center text-[16px] text-[#fff] ">{label}</Text> */
-}
 
 const styles = StyleSheet.create({
   defaultClassname: {
@@ -50,6 +47,7 @@ const styles = StyleSheet.create({
   textStyle: {
     alignItems: "center",
     color: "white",
+    lineHeight: 18,
   },
 });
 

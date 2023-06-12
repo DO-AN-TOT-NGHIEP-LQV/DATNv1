@@ -4,45 +4,47 @@ import MasonryList from "@react-native-seoul/masonry-list";
 import Color from "../../constans/Color";
 import Icons, { icons } from "../Icons";
 import { v4 as uuidv4 } from "uuid";
-import { useNavigation } from "@react-navigation/core";
 import { FONTS } from "../../constans/Theme";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 
 const MasonryListProducts = ({ data }) => {
   return (
     <MasonryList
       data={data}
-      keyExtractor={(item) => uuidv4()}
+      keyExtractor={(item) => item.id}
       numColumns={2}
-      // spacing={2}
       imageContainerStyle={{ borderRadius: 8 }}
       showsVerticalScrollIndicator={false}
-      renderItem={({ item, i }) => <CardItem data={item} i={i} />}
+      renderItem={({ item }) => <CardItem data={item} />}
     />
   );
 };
 
-const CardItem = ({ data, i }) => {
+const CardItem = ({ data }) => {
   const navigation = useNavigation();
-  //
+
   return (
-    <View
-      className="bg-[#111] rounded-md"
-      style={style.cardItemView}
-      onPress={() =>
-        navigation.navigate("SearchTab", {
-          screen: "DetailProduct",
-          params: { dataProduct: data },
-        })
-      }
-    >
+    <View className="bg-[#111] rounded-md" style={style.cardItemView}>
       <View style={style.card}>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("SearchTab", {
-              screen: "DetailProduct",
-              params: { dataProduct: data },
-            })
-          }
+          // onPress={() =>
+          //   navigation.navigate("SearchTab", {
+          //     screen: "DetailProduct",
+          //     params: { dataProduct: data },
+          //   })
+          // }
+          // onPress={() =>
+          //   navigation.navigate("DetailProduct", {
+          //     params: { dataProduct: data },
+          //   })
+          // }
+          onPress={() => {
+            navigation.navigate("DetailProduct", {
+              dataProduct: data,
+            });
+          }}
           style={{
             borderRadius: 3,
             width: "100%",

@@ -4,7 +4,13 @@ import Color from "../../constans/Color";
 import Icons, { icons } from "../Icons";
 import { FONTS, SIZES } from "../../constans/Theme";
 
-export default function ProductValue({ label, value, onPress, children }) {
+export default function ProductValue({
+  label,
+  value,
+  onPress,
+  children,
+  isChosen = false,
+}) {
   return (
     <TouchableOpacity style={styles.touchableContainer} onPress={onPress}>
       <View style={{ flex: 1, marginLeft: SIZES.radius }}>
@@ -25,12 +31,14 @@ export default function ProductValue({ label, value, onPress, children }) {
       {children}
 
       {onPress && (
-        <Icons
-          size={16}
-          name={"right"}
-          icon={icons.AntDesign}
-          color={Color.black}
-        />
+        <View style={{ transform: [{ rotate: isChosen ? "90deg" : "0deg" }] }}>
+          <Icons
+            size={16}
+            name={"right"}
+            icon={icons.AntDesign}
+            color={Color.black}
+          />
+        </View>
       )}
     </TouchableOpacity>
   );

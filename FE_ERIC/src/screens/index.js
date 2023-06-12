@@ -14,6 +14,10 @@ export { default as ProfileScreen } from "./ProfileScreen";
 // Saler Manager
 export { default as ShopMainScreen } from "./Saler/ShopMainScreen";
 export { default as CreateProductScreen } from "./Saler/CreateProductScreen";
+export { default as UpdateProductScreen } from "./Saler/UpdateProductScreen";
 export { default as ProfileShopScreen } from "./Saler/ProfileShopScreen";
 export { default as ManagerProductScreen } from "./Saler/ManagerProductScreen";
+
+// Admin
+export { default as AdminMainScreen } from "./Admin/AdminMainScreen";
 export { default as Feeds } from "./Feeds";

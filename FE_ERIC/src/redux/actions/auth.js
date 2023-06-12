@@ -55,7 +55,6 @@ export function login(data) {
   });
 }
 
-
 export function getDetailUser() {
   return new Promise(async (resolve, reject) => {
     const header = {

@@ -21,23 +21,16 @@ import {
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 // import Color from "../constans/Color";
 import { Color } from "../constans";
-import { product_tabs } from "../constans/raw";
 
 import Icons, { icons } from "../components/Icons";
 import { useNavigation } from "@react-navigation/core";
-import LineDivider from "../components/LineDivider";
 
-import {
-  DetailProduct,
-  DetailShop,
-  DetailDiscussion,
-} from "../components/DetailProductTabs";
-import hideTabBar from "../hookFuntion/hideTabBar ";
 import * as ImagePicker from "expo-image-picker";
 import actions from "../redux/actions";
 import { showError } from "../ultils/messageFunction";
 import MasonryListProducts from "../components/Search/MasonryListProducts";
 import ScanImageEffect from "../components/Search/ScanImageEffect";
+import { statusbarHeight } from "../constans/Theme";
 
 // const { width, height } = Dimensions.get("window");
 const width = Dimensions.get("window").width / 2 - 30;
@@ -46,7 +39,6 @@ const windowHeight = Dimensions.get("window").height;
 
 const MIN_HEIGHT = Platform.OS === "ios" ? 90 : 65;
 const MAX_HEIGHT = 200;
-
 
 const SearchImageScreen = () => {
   /// Cac state reder chon Image
@@ -417,6 +409,7 @@ const styles = StyleSheet.create({
     flex: 1,
     position: "relative",
     backgroundColor: Color.mainColor,
+    ...statusbarHeight,
   },
   image: {
     height: MAX_HEIGHT,

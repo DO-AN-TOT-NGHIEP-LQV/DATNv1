@@ -65,7 +65,8 @@ public class SearchController {
             };
             body.add("fileSearchImg", resource);
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-            String url = "http://103.197.185.34/ai/api/product/searchByImg";
+//            String url = "http://103.197.185.34/ai/api/product/searchByImg";
+            String url = "http://127.0.0.1:5000/ai/api/product/searchByImg";
 
 
             ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
@@ -169,7 +170,7 @@ public class SearchController {
 
     @GetMapping(value = "/search/products/searchAndFilterProducts")   // Co phan trang
     public ResponseEntity searchAndFilterProducts(
-            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false,  defaultValue = "") String keyword,
             @RequestParam(required = false) String[] types,
             @RequestParam(required = false) String[] brands,
             @RequestParam(required = false, defaultValue = "0") Double minPrice,
@@ -190,10 +191,26 @@ public class SearchController {
     }
 
     @GetMapping(value = "/search/products/SearchByText")
-    public ResponseEntity searchProductByText(@RequestParam("searchText") String searchText, @RequestParam("page") int page) {
+    public ResponseEntity searchProductByText(@RequestParam(name = "searchText",required = false, defaultValue = "") String searchText, @RequestParam("page") int page) {
         Pageable pageable = PageRequest.of(page, 30);
         Page<Product> productsListPage = productService.searchByText(searchText, pageable);
         List<Product> productsList = productsListPage.getContent();
         return ResponseEntity.ok().body(productsList);
+    }
+
+
+    @GetMapping(value = "/search/products/shopId")
+    public ResponseEntity searchProductByShop(@RequestParam("shopId") Long shopId, @RequestParam( name = "keyword", required = false, defaultValue = "") String keyword) {
+
+
+        try{
+            List<Product> productsList = productService.findProductsByShopIdAndKeyword(shopId, keyword);
+            return ResponseEntity.ok().body(productsList);
+        }
+         catch (Exception e){
+             System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
     }
 }

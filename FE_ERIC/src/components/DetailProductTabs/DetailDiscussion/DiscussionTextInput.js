@@ -15,7 +15,6 @@ import {
   CREATE_NEW_SUB_DISCUSSION,
 } from "../../../config/urls";
 import { showError } from "../../../ultils/messageFunction";
-import moment from "moment";
 import { useState } from "react";
 
 const DiscussionTextInput = ({
@@ -90,17 +89,14 @@ const DiscussionTextInput = ({
         value={discussionValue}
         onChangeText={setDiscussionValue}
       />
-      {/* TouchableWithoutFeedback */}
       {/* <TouchableWithoutFeedback */}
       <TouchableOpacity
         style={{
           width: 60,
           height: 60,
-          // borderWidth: 5,
           alignSelf: "center",
           justifyContent: "center",
           alignItems: "center",
-          // marginHorizontal: 10,
         }}
         onPress={() => {
           saveDiscussion();

@@ -1,3 +1,4 @@
+import { StatusBar } from "react-native";
 import { Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
@@ -23,7 +24,6 @@ export const SIZES = {
 
   body: 14,
   caption: 12,
-  // radius: 16,
 };
 
 export const spacing = {
@@ -31,6 +31,11 @@ export const spacing = {
   m: 18,
   l: 24,
   xl: 40,
+  statusbarHeight: StatusBar.currentHeight,
+};
+
+export const statusbarHeight = {
+  marginTop: StatusBar.currentHeight,
 };
 
 export const FONTS = {
@@ -80,7 +85,18 @@ export const shadow = {
       height: 2,
     },
   },
+
+  shadow: {
+    shadowColor: "#7F5DF0",
+    shadowOffset: {
+      width: 2,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
+    elevation: 2,
+  },
 };
 
-const appTheme = { SIZES, FONTS, spacing };
+const appTheme = { SIZES, FONTS, spacing, shadow };
 export default appTheme;

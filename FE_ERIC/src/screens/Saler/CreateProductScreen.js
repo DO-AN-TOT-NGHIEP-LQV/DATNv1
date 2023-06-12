@@ -20,7 +20,6 @@ import Color from "../../constans/Color";
 import { ShoesFLas } from "../../public/assets";
 import Icons, { icons } from "../../components/Icons";
 import CustomButton from "../../components/CustomButton/index.js";
-import { ProfileValue } from "../../components/Profile";
 import LineDivider from "../../components/LineDivider";
 import { SIZES } from "../../constans/Theme";
 import ProductValue from "../../components/SalerManager/ProductValue";
@@ -37,19 +36,20 @@ import { validatorCreateProduct } from "../../ultils/validations";
 import { error } from "is_js";
 import { getFileExtension } from "../../ultils/helperFunction";
 import { apiPost } from "../../ultils/utilsApi";
+import Header from "../../components/Header";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const CreateProductScreen = () => {
+const CreateProductScreen = ({ route }) => {
+  const shopId = route.params?.shopId;
+
   const navigation = useNavigation();
   const [pickedImagePath, setPickedImagePath] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [name, setName] = useState("FFX-007034");
-  const [description, setDescription] = useState(
-    "Mieu ta so lươc xfsdkfsokfsdp"
-  );
+  const [description, setDescription] = useState("Mieu ta so lươc");
   const [price, setPrice] = useState(100000);
   const [link, setLink] = useState("https://shopee.vn/ruby_store.88");
   const [type, setType] = useState("Sandals");
@@ -65,6 +65,10 @@ const CreateProductScreen = () => {
   const [brandModal, setBrandModal] = useState(false);
 
   useEffect(() => {
+    if (!shopId) {
+      showError("Khong tim thay id Shop");
+      navigation.goBack();
+    }
     return () => {
       setPickedImagePath("");
     };
@@ -80,7 +84,7 @@ const CreateProductScreen = () => {
       brand,
       link,
       pickedImagePath,
-      shop_id: 2,
+      shop_id: shopId,
     };
     const isValidData = () => {
       const error = validatorCreateProduct(product);
@@ -112,6 +116,8 @@ const CreateProductScreen = () => {
             "Content-type": "multipart/form-data",
           };
 
+          console.log(product);
+
           await apiPost(CREATE_NEW_PRODUCT, formData, headers, true)
             .then((res) => {
               setLoading(false);
@@ -130,26 +136,43 @@ const CreateProductScreen = () => {
     };
 
     return (
-      <View style={[styles.headerWrapper, styles.shadowTouch]}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <View style={styles.headerLeft}>
-            <Icons
-              icon={icons.Feather}
-              size={12}
-              color={Color.black}
-              name={"chevron-left"}
-            />
-          </View>
-        </TouchableOpacity>
-
-        <View style={styles.headerRight}>
+      <Header
+        leftComponent={
+          <TouchableOpacity
+            style={{
+              width: 40,
+              height: 40,
+              alignItems: "center",
+              justifyContent: "center",
+              borderWidth: 1,
+              borderColor: Color.textLight,
+              borderRadius: SIZES.radius,
+              backgroundColor: Color.whileOpacity,
+            }}
+            onPress={() =>
+              navigation.navigate("SalerTab", { screen: "ShopMainScreen" })
+            }
+          >
+            <View style={styles.headerLeft}>
+              <Icons
+                icon={icons.Feather}
+                size={12}
+                color={Color.black}
+                name={"chevron-left"}
+              />
+            </View>
+          </TouchableOpacity>
+        }
+        rightComponent={
           <CustomButton
             loading={loading}
             label="Hoàn tất"
             onPress={() => createNewProduct()}
+            // styleContainer={{ height: 35 }}
+            textStyle={{ lineHeight: 18 }}
           />
-        </View>
-      </View>
+        }
+      ></Header>
     );
   }
 
@@ -391,14 +414,14 @@ const CreateProductScreen = () => {
             borderColor={Color.blueMain}
             color={Color.blueMain}
             height={4}
-            style={{ position: "absolute" }}
+            style={{ position: "absolute", zIndex: 10 }}
             borderRadius={0}
             borderWidth={0}
           />
           <View
             style={{
               position: "absolute",
-              top: 4,
+              top: 3,
               left: 0,
               right: 0,
               bottom: 0,
@@ -409,7 +432,7 @@ const CreateProductScreen = () => {
             }}
           >
             <ActivityIndicator size="large" color="white" />
-            <Text style={{ color: Color.mainColor, alignItems: "center" }}>
+            <Text style={{ color: Color.white, alignItems: "center" }}>
               Quá trình này có thể mất vài phút, xin hãy giữ kết nối
             </Text>
           </View>
@@ -522,7 +545,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 10,
-    // paddingVertical: 5,
     borderRadius: 16,
     backgroundColor: Color.white,
     height: Dimensions.get("window").height / 15,
@@ -531,7 +553,7 @@ const styles = StyleSheet.create({
   },
   headerLeft: {
     borderColor: Color.textLight,
-    borderWidth: 2,
+    borderWidth: 1,
     padding: 12,
     borderRadius: 10,
   },
@@ -550,24 +572,23 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     elevation: 2,
   },
-  textInput: {
-    //delete
-    backgroundColor: Color.white,
-    borderRadius: 25,
-    color: "#14171A",
-    fontSize: 16,
-    height: 120,
-    marginBottom: 10,
-    marginTop: 10,
-    marginHorizontal: 5,
-    paddingLeft: 15,
-    paddingRight: 15,
-    paddingTop: 10,
-    paddingBottom: 10,
-    textAlignVertical: "top",
-    borderColor: "#E1E8ED",
-    borderWidth: 2,
-  },
+  // textInput: {
+  //   backgroundColor: Color.white,
+  //   borderRadius: 25,
+  //   color: "#14171A",
+  //   fontSize: 16,
+  //   height: 120,
+  //   marginBottom: 10,
+  //   marginTop: 10,
+  //   marginHorizontal: 5,
+  //   paddingLeft: 15,
+  //   paddingRight: 15,
+  //   paddingTop: 10,
+  //   paddingBottom: 10,
+  //   textAlignVertical: "top",
+  //   borderColor: "#E1E8ED",
+  //   borderWidth: 2,
+  // },
 
   header: {
     height: 75,
@@ -598,24 +619,18 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderColor: Color.darkGray,
     borderWidth: 1,
-    backgroundColor: "#c0c0c0", // Color.white,
+    backgroundColor: "#c0c0c0",
     backgroundColor: "rgba(0, 0, 0, 0.2)",
   },
   selectedTagsContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
     marginTop: 15,
-    // justifyContent: "flex-end",
     alignItems: "baseline",
   },
   tagType: {
-    // paddingHorizontal: 2,
     margin: 2,
-    // backgroundColor: Color.white,
     borderRadius: 8,
-    // borderWidth: 1,
-    // borderColor: Color.textLight,
-    // paddingVertical: 0,
   },
   selectedTagType: {
     paddingHorizontal: 4,
@@ -627,8 +642,3 @@ const styles = StyleSheet.create({
     borderColor: Color.mainColor,
   },
 });
-
-//  style={[
-//               styles.tagType,
-//               tag?.value == type && styles.selectedTagType,
-//             ]}

@@ -63,7 +63,7 @@ public class DataSeeder implements CommandLineRunner {
         userService.addRoleToUser("Samiel", "ROLE_SALER" );
 
         shopService.save(new Shop("Shop2", "0905202332","Quang Nam", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop1.png?alt=media", userService.getUserByEmail("2@gmail.com")));
-        shopService.save(new Shop("Shop5", "0905202332","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop2.png?alt=media", userService.getUserByEmail("5@gmail.com")));
+        shopService.save(new Shop("Shop5", "0905202332","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop2.png?alt=media", userService.getUserByEmail("4@gmail.com")));
         shopService.save(new Shop("Shop3", "7709446333","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop3.png?alt=media", userService.getUserByEmail("5@gmail.com")));
 
         postService.savePost(new Post(1L, "Sadds", "adasd", userService.getUserByEmail("1@gmail.com")));

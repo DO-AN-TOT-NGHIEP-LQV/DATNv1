@@ -6,6 +6,8 @@ import MainStack from "./MainStack";
 import AuthStack from "./AuthStack";
 import { useSelector } from "react-redux";
 import FlashMessage from "react-native-flash-message";
+import { DetailProductScreen } from "../screens";
+import { statusbarHeight } from "../constans/Theme";
 
 const Stack = createNativeStackNavigator();
 
@@ -21,14 +23,11 @@ const Routes = () => {
         {/* {!!tokenData && tokenData?.access_token */}
         {/* MainStack(Stack) */}
         {MainStack(Stack)}
-        {AuthStack(Stack)}
-        {/* {!!detailUser?.email ? MainStack(Stack) : AuthStack(Stack)} */}
-        {/* {loginRequired ? MainStack(Stack) : AuthStack(Stack)} */}
       </Stack.Navigator>
       <FlashMessage
         refs={flashMessageRef}
         position="top"
-        style={{ zIndex: 100 }}
+        style={{ zIndex: 100, ...statusbarHeight }}
       />
     </NavigationContainer>
   );

@@ -15,7 +15,7 @@ import actions from "../redux/actions";
 import CustomButton from "../components/CustomButton/index.js.js";
 import Color from "../constans/Color";
 import AuthRequired from "../components/AuthRequired";
-import { FONTS, SIZES } from "../constans/Theme";
+import { FONTS, SIZES, statusbarHeight } from "../constans/Theme";
 import { bg1, bg2 } from "../public/assets/image";
 import { LoginImg } from "../public/assets";
 import { useEffect } from "react";
@@ -26,7 +26,7 @@ import {
 } from "../components/Profile";
 import LineDivider from "../components/LineDivider";
 import Icons, { icons } from "../components/Icons";
-import { useNavigation } from "@react-navigation/native";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import { hasSalerRole } from "../ultils/helperFunction";
 
 const ProfileScreen = () => {
@@ -50,17 +50,23 @@ const ProfileScreen = () => {
   };
 
   const logout = async () => {
+    console.log("sadoasdaps");
     if (isLoading) {
       return; // Nếu đang xử lý, không làm gì
     }
-    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
     // setIsProcessing(true);
     setLoading(true);
 
-    // await delay(5000); // Đợi 5 giây
-
     await actions.logout();
+
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "Login" }],
+      })
+    );
 
     setLoading(false);
 
@@ -346,6 +352,7 @@ const styles = StyleSheet.create({
     paddingVertical: SIZES.padding,
     paddingHorizontal: SIZES.radius,
     justifyContent: "space-between",
+    ...statusbarHeight,
   },
   contentContainerStyle: {
     paddingHorizontal: SIZES.padding,

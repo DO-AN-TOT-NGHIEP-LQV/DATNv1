@@ -48,13 +48,12 @@ public class Product {
 
     private String brand;
 
-//    private String status;
-
-    @Column(name = "count_views", columnDefinition = "bigint default 0")
-    private Long  countViews;
-
-//    Not null
     private String link;
+
+    private  boolean status = false;
+
+    private  boolean isFeatured = false;
+
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(

@@ -65,7 +65,7 @@ const ModalInputBrand = ({
         />
 
         <Text style={{ alignSelf: "flex-end", marginTop: -10 }}>
-          {text.length}/{maxLength}
+          {text?.length || 0}/{maxLength}
         </Text>
 
         {text && suggesList.length > 0 ? (

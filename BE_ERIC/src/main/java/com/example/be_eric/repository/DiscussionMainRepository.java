@@ -1,6 +1,7 @@
 package com.example.be_eric.repository;
 
 import com.example.be_eric.models.Comment.ProductMainDiscussion;
+import com.example.be_eric.models.Product.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +20,7 @@ public interface DiscussionMainRepository extends JpaRepository<ProductMainDiscu
         "WHERE mc.product.id = :productId " +
         "ORDER BY mc.updated_at DESC")
        List<Object[]> findProductMainDiscussionsByProduct(@Param("productId") Long productId);
+
+       @Query("SELECT pm.id  FROM ProductMainDiscussion pm WHERE pm.product.id = :productId ")
+       List<Long> findProductMainDiscussionIdsByProductId(@Param("productId") Long productId);
 }

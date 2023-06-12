@@ -21,7 +21,7 @@ from tensorflow.keras.applications.vgg16 import VGG16, preprocess_input
 from tensorflow.keras.models import  Model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import load_model
-
+from numpy import dot
 from PIL import Image
 import pickle
 import numpy as np
@@ -91,6 +91,7 @@ def extract_feature():
         results = [] 
 
         docs = collection_ref.stream()
+        threshold = 0.5 
         for doc in docs:
             data = doc.to_dict()
             vector = np.array(data['feature_vector'])
@@ -99,18 +100,26 @@ def extract_feature():
             
             doc_id = doc_id[:doc_id.rindex("_")]
             distance = np.linalg.norm(vector - search_vector)
-            results.append((doc_id, distance))
+            cosine_similarity = dot(vector, search_vector) / (norm(vector) * norm(search_vector))
+            
+            if cosine_similarity > threshold:
+                results.append((doc_id, cosine_similarity, distance ))
+            
+            # results.append((doc_id, distance))
         
-        nearest_image = sorted(results, key=lambda x: x[1])
+        nearest_image = sorted(results, key=lambda x: x[1], reverse=True)
+        
+        
         
         K = 1
-        df = pd.DataFrame(nearest_image, columns=["id_product", "distance"])
+        df = pd.DataFrame(nearest_image, columns=["id_product", "cosine_similarity", "distance"])
         df = df.drop_duplicates(subset=["id_product"])  # loai bo trung lap
+        print(df)
         nearest_image[:K] = [(row["id_product"]) for _, row in df.iterrows()]
 
         nearest_path  = nearest_image
         nearest_path = [(row["id_product"]) for _, row in df.iterrows()]
-        print(nearest_path)
+       
         return  jsonify(nearest_path)
     except Exception as e:
         print(e)

@@ -23,7 +23,11 @@ import { FONTS } from "../constans/Theme";
 import { product_tabs } from "../constans/raw";
 
 import Icons, { icons } from "../components/Icons";
-import { useNavigation } from "@react-navigation/native";
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import LineDivider from "../components/LineDivider";
 
 import {
@@ -31,9 +35,9 @@ import {
   DetailShop,
   DetailDiscussion,
 } from "../components/DetailProductTabs";
-import hideTabBar from "../hookFuntion/hideTabBar ";
 import AuthRequired from "../components/AuthRequired";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 const { width, height } = Dimensions.get("window");
 
@@ -46,18 +50,21 @@ const product_details_tabs = product_tabs.map((product_details_tab) => ({
 }));
 
 const DetailProductScreen = ({ route }) => {
-  const dataProduct = route.params.dataProduct;
+  // const dataProduct = route.params.dataProduct;
+  const { dataProduct, fromManagement, shopId } = route.params;
 
   // Cac state cho Home icon
   const navTitleView = useRef(null);
   const [scrollY] = useState(new Animated.Value(0));
   const [homeBarColor, setHomeBarColor] = useState("rgba(0,0,0,0.2)");
   const [homeIconBColor, setHomeIconColor] = useState(Color.textLight);
+
   const navigation = useNavigation();
+  // const route = useRoute();
+  // const fromManagement = route.params?.fromManagement || false;
+  // const shopId = route.params?.shopId || null;
 
   const isLogin = useSelector((state) => state.auth.isLogin);
-
-  hideTabBar();
 
   // Cac ref cho Tabs
   const flatListRef = useRef();
@@ -124,7 +131,17 @@ const DetailProductScreen = ({ route }) => {
         {/* Icon call back  */}
         <TouchableOpacity
           onPress={() => {
-            navigation.goBack();
+            if (fromManagement == true && shopId) {
+              console.log(fromManagement);
+              console.log(shopId);
+              navigation.navigate("ManagerProductScreen", {
+                shopId: shopId,
+              });
+            } else {
+              navigation.navigate("SearchTab", {
+                screen: "SearchText",
+              });
+            }
           }}
         >
           <Animated.View
@@ -253,7 +270,6 @@ const DetailProductScreen = ({ route }) => {
         maxHeight={expanded ? MAX_HEIGHT : MIN_HEIGHT}
         minHeight={MIN_HEIGHT}
         // maxOverlayOpacity={0.3}
-        // minOverlayOpacity={0.3}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           { useNativeDriver: false }
@@ -261,7 +277,7 @@ const DetailProductScreen = ({ route }) => {
         renderHeader={() => (
           <Image
             source={{
-              uri: dataProduct.images[0].url || null,
+              uri: dataProduct?.images[0].url || null,
               // uri: "https://dictionary.cambridge.org/vi/images/thumb/shoe_noun_002_33438.jpg?version=5.0.318",
               // uri: "https://sneakerdaily.vn/wp-content/uploads/2022/11/giay-chay-bo-nike-quest-5-black-grey-white-dd0204-001-2.jpg",
             }}
@@ -284,8 +300,8 @@ const DetailProductScreen = ({ route }) => {
             <Text style={styles.title}>Overview</Text>
             <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
               <FontAwesome name="star" size={16} color="#FF6347" />
-              <Text style={{ marginHorizontal: 2 }}>{dataProduct.price}</Text>
-              <Text>({dataProduct.quantity})</Text>
+              <Text style={{ marginHorizontal: 2 }}>{dataProduct?.price}</Text>
+              <Text>({dataProduct?.quantity})</Text>
             </View>
           </View>
         </TriggeringView>

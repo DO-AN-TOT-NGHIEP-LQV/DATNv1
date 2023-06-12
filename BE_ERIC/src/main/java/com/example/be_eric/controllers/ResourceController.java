@@ -1,9 +1,11 @@
 package com.example.be_eric.controllers;
 
+import com.example.be_eric.DTO.ProductDTO;
 import com.example.be_eric.models.Post;
 import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.models.User;
 import com.example.be_eric.service.*;
+import com.example.be_eric.ultils.Exception.DontExistException;
 import com.example.be_eric.ultils.Exception.InValidException;
 import com.example.be_eric.ultils.Exception.UploadImageException;
 import com.example.be_eric.ultils.Messenger.ErrorResponse;
@@ -11,6 +13,7 @@ import com.example.be_eric.ultils.Messenger.UploadImageResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -146,7 +149,6 @@ public class ResourceController {
                 throw new InValidException("Invalid quantity");
             }
 
-
             if (productMap.containsKey("price") && productMap.get("price") instanceof Number) {
                 Number priceObj = (Number) productMap.get("price");
                 double price = priceObj.doubleValue();
@@ -155,9 +157,8 @@ public class ResourceController {
                 throw new InValidException("Invalid price");
             }
 
-
             if (productMap.containsKey("link") && productMap.get("link") != null) {
-                newProduct.setType((String) productMap.get("link"));
+                newProduct.setLink((String) productMap.get("link"));
             } else {
                 throw new InValidException("Invalid link");
             }
@@ -229,7 +230,7 @@ public class ResourceController {
     // Xoa nhung id
     // Xoa nhung id hinh anh da train trong firebase
     // Xoa nhung id hinh anh
-    @PostMapping(value = "/api/sale/product/delete", name = "POST")
+    @DeleteMapping (value = "/api/sale/product/delete")
     public ResponseEntity deleteProduct(@RequestParam("IdDelete") Long IdDelete)
     {
         Product product =  productService.getById(IdDelete);
@@ -247,4 +248,82 @@ public class ResourceController {
         }
     }
 
+
+    @GetMapping(value = "/api/sale/product/getById", name = "GET")
+    public ResponseEntity getProductByIdOfaShop(@RequestParam("productId") Long productId, @RequestParam("shopId") Long shopId )
+    {
+
+        try {
+            System.out.println("productId" + productId );
+            System.out.println("shopId" + shopId );
+
+            Product product =  productService.getProductByIdOfaShop(shopId, productId );
+            if (product == null){
+                throw  new Exception( "Sản phẩm này không tồn tại");
+            }
+            System.out.println(product.getId());
+            return ResponseEntity.ok().body(product);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+
+    @PostMapping(value = "/api/sale/product/update", name = "POST",
+            consumes = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<?> updateProduct(@RequestBody ProductDTO updateProduct)
+    {
+        try {
+            Product product = productService.getById( updateProduct.getId() );
+            if( product == null)
+                throw new DontExistException("Sản phẩm không còn tồn tại");
+
+            product.setName(updateProduct.getName());
+            product.setDescription(updateProduct.getDescription());
+            product.setQuantity(updateProduct.getQuantity());
+
+            product.setLink(updateProduct.getLink());
+            product.setBrand(updateProduct.getBrand());
+            product.setType(updateProduct.getType());
+
+            product.setPrice(updateProduct.getPrice());
+            product.setOriginalPrice(updateProduct.getOriginalPrice());
+
+            productService.save(product);
+
+            return ResponseEntity.ok().body(product);
+
+        }
+        catch (DontExistException e){
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+
+    @PatchMapping(value = "/api/sale/product/feature")
+    public ResponseEntity<?> setFeature(@RequestParam(name = "productId", required = true) Long  productId,
+                                        @RequestParam(name = "shopId", required = true ) Long shopId,
+                                        @RequestParam(name = "isFeature", required = true ) boolean isFeature )
+    {
+        try {
+           productService.setProductFeatured(productId, shopId,isFeature);
+            return ResponseEntity.ok().build();
+
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
 }

@@ -4,6 +4,7 @@ import com.example.be_eric.DTO.MainDiscussionDTO;
 import com.example.be_eric.DTO.SubDiscussionDTO;
 import com.example.be_eric.models.Comment.ProductMainDiscussion;
 import com.example.be_eric.models.Comment.ProductSubDiscussion;
+import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.repository.DiscussionMainRepository;
 import com.example.be_eric.repository.DiscussionSubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,4 +115,15 @@ public class DiscussionServiceImpl implements  DiscussionService{
     public void delete(ProductSubDiscussion productSubDiscussion) {
          subDiscussionRepo.delete(productSubDiscussion);
     }
+
+    @Override
+    public void deleteAllMainDiscussion(Product product) {
+
+       List<Long> ids =  mainDiscussionRepo.findProductMainDiscussionIdsByProductId(product.getId());
+       mainDiscussionRepo.deleteAllById(ids);
+
+
+    }
+
+
 }

@@ -159,6 +159,85 @@ export function validatorCreatePost(data) {
   }
 }
 
+export function validatorUpdateProduct(data) {
+  const {
+    name,
+    description,
+    price,
+    originalPrice,
+    link,
+    type,
+    brand,
+    quantity,
+  } = data;
+
+  let resValid = "Hãy nhập tên sản phẩm";
+  if (name !== undefined) {
+    let emptyValidationText = checkEmpty(name, resValid);
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    }
+  } else return resValid;
+
+  resValid = "Hãy nhập miêu tả sản phẩm: >20 ký tự";
+  if (description !== undefined) {
+    let emptyValidationText = checkEmpty(description, resValid);
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    } else {
+      let minLengthValidation = checkMinLength(description, 20, "content");
+      if (minLengthValidation !== "") {
+        return resValid;
+      }
+    }
+  } else return resValid;
+
+  resValid = "Hãy nhập giá sản phẩm";
+  if (price !== undefined) {
+    if (price > 50000000) return resValid + "Hãy nhập giá sản phẩm < 50 triệu";
+
+    if (price < 0) return resValid;
+  } else return resValid;
+
+  resValid = "Hãy nhập giá gốc sản phẩm";
+  if (originalPrice !== undefined) {
+    if (originalPrice > 50000000)
+      return resValid + "Hãy nhập giá gốc sản phẩm < 50 triệu";
+
+    if (originalPrice < 0) return resValid;
+  } else return resValid;
+
+  resValid = "Hãy nhập số lượng sản phẩm";
+  if (quantity !== undefined) {
+    if (quantity > 1000000) return resValid + "Hãy nhập giá sản phẩm < triệu";
+
+    if (quantity < 0) return resValid;
+  } else return resValid;
+
+  resValid = "Hãy nhập kiểu dáng";
+  if (type !== undefined) {
+    let emptyValidationText = checkEmpty(type, resValid);
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    }
+  } else return resValid;
+
+  resValid = "Hãy nhập nhãn hàng";
+  if (name !== undefined) {
+    let emptyValidationText = checkEmpty(brand, resValid);
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    }
+  } else return resValid;
+
+  resValid = "Hãy nhập link sản phẩm";
+  if (link !== undefined) {
+    let emptyValidationText = checkEmpty(link, resValid);
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    }
+  } else return resValid;
+}
 export function validatorCreateProduct(data) {
   const {
     pickedImagePath,

@@ -1,15 +1,13 @@
 package com.example.be_eric.service;
 
+import com.example.be_eric.models.Comment.ProductMainDiscussion;
 import com.example.be_eric.models.Image;
 import com.example.be_eric.models.Post;
 import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.ultils.Exception.UploadImageException;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.WriteBatch;
-import com.google.cloud.firestore.WriteResult;
+import com.google.cloud.firestore.*;
 import com.google.cloud.storage.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,8 +34,10 @@ import java.util.UUID;
 public class FirebaseFileService {
     private Storage storage ;
 
+//    @Autowired
+//    private PostService postService;
     @Autowired
-    private PostService postService;
+    private DiscussionService discussionService;
 
     @Autowired
     private  ProductService productService;
@@ -68,6 +69,7 @@ public class FirebaseFileService {
 
         BlobId blobId = null;
         try {
+//            String imageName = "shop_" + product.getShop().getId() + "_p_" + product.getId() + "_name_" + generateFileName(fileImage.getOriginalFilename());
             String imageName = "shop_" + product.getShop().getId() + "_p_" + product.getId() + "_name_" + generateFileName(fileImage.getOriginalFilename());
             String folderName = "ImageProduct";
             String filePath = folderName + "/" + imageName;
@@ -129,39 +131,149 @@ public class FirebaseFileService {
         }
     }
 
+//    @Transactional
+//    public  boolean deleteProduct_removeVector(Product product) throws Exception {
+//
+//        try {
+//            WriteBatch batch = firestore.batch();
+//            for ( int i = 0 ; i < 10 ; i++){
+//
+//                DocumentReference docRef = firestore.collection("Image_Feature_Vector").document("product_" +  product.getId() + "_" + i);
+//                batch.delete(docRef);
+//                System.out.println("Xoa anh thanh cong anh  product_" +  product.getId() + i);
+//            }
+//
+//            List<Image> images = product.getImages();
+//            String folderName = "ImageProduct";
+//
+//            for (Image image : images) {
+//                String filePath = folderName + "/" + image.getName();
+//                BlobId blobId = BlobId.of("datnv1-34493.appspot.com", filePath);
+//
+//                if (storage.get(blobId) != null) {
+//                    boolean deleted = storage.delete(blobId);
+//                    if (deleted) {
+//                        System.out.println("File đã được xóa thành công");
+//                    } else {
+//                        System.out.println("Không thể xóa file");
+//                        throw new Exception("Error in the process of deleting photos");
+//                    }
+//                }
+//
+//                System.out.println("here");
+//                imageService.deleteImage(image);
+//
+//            };
+//
+//            System.out.println("here2");
+//            if( productService.deleteProduct(product)){
+//                ApiFuture<List<WriteResult>> future = batch.commit();
+//                future.get();
+//            }
+//
+//            return  true;
+//        }catch (Exception e){
+//            throw e;
+//        }
+//
+//    }
+
     @Transactional
     public  boolean deleteProduct_removeVector(Product product) throws Exception {
 
-        try {
-            WriteBatch batch = firestore.batch();
-            for ( int i = 0 ; i < 10 ; i++){
+        List<DocumentSnapshot> backupSnapshots = new ArrayList<>();
+        List<String> imagePaths = new ArrayList<>();
 
+        try {
+            for ( int i = 0 ; i < 10 ; i++){
                 DocumentReference docRef = firestore.collection("Image_Feature_Vector").document("product_" +  product.getId() + "_" + i);
-                batch.delete(docRef);
-                System.out.println("Xoa anh thanh cong anh  product_" +  product.getId() + i);
+                DocumentSnapshot snapshot = docRef.get().get();
+                backupSnapshots.add(snapshot);
             }
+
+
+            WriteBatch batch = firestore.batch();
+            for (int i = 0; i < 10; i++) {
+                DocumentReference docRef = firestore.collection("Image_Feature_Vector")
+                        .document("product_" + product.getId() + "_" + i);
+                batch.delete(docRef);
+            }
+
+
+//            List<Image> images = product.getImages();
+//            String folderName = "ImageProduct";
+
+//            for (Image image : images) {
+//                String filePath = folderName + "/" + image.getName();
+//                BlobId blobId = BlobId.of("datnv1-34493.appspot.com", filePath);
+//
+//                if (storage.get(blobId) != null) {
+//                    boolean deleted = storage.delete(blobId);
+//                    if (deleted) {
+//                        System.out.println("File đã được xóa thành công");
+//                    } else {
+//                        System.out.println("Không thể xóa file");
+//                        throw new Exception("Error in the process of deleting photos");
+//                    }
+//                }
+//                imageService.deleteImage(image);
+//
+//            };
 
             List<Image> images = product.getImages();
             String folderName = "ImageProduct";
-
             for (Image image : images) {
                 String filePath = folderName + "/" + image.getName();
                 BlobId blobId = BlobId.of("datnv1-34493.appspot.com", filePath);
-                boolean deleted = storage.delete(blobId);
-                if (deleted) {
-                    System.out.println("File đã được xóa thành công");
-                    imageService.deleteImage(image);
-                } else {
-                    System.out.println("Không thể xóa file");
-                    throw new  Exception("Error in the process of deleting photos");
-                }
-            };
 
-            productService.deleteProduct(product);
-            ApiFuture<List<WriteResult>> future = batch.commit();
-            future.get();
-            return  true;
+                if (storage.get(blobId) != null) {
+                    boolean deleted = storage.delete(blobId);
+                    if (deleted) {
+                        System.out.println("File đã được xóa thành công");
+                        imagePaths.add(filePath); // Lưu đường dẫn hình ảnh để xóa từ Firebase Storage sau này
+                    } else {
+                        System.out.println("Không thể xóa file");
+                        throw new Exception("Error in the process of deleting photos");
+                    }
+                }
+
+                System.out.println("here");
+                imageService.deleteImage(image);
+            }
+
+
+
+            discussionService.deleteAllMainDiscussion(product);
+
+            if( productService.deleteProduct(product)){
+                // Commit thay đổi vào Firestore
+                batch.commit().get();
+
+                for (String imagePath : imagePaths) {
+                    BlobId blobId = BlobId.of("datnv1-34493.appspot.com", imagePath);
+                    storage.delete(blobId);
+                }
+
+                return  true;
+
+
+            }
+            return  false;
+
+
         }catch (Exception e){
+            System.out.println("loi");
+            System.out.println(e.getMessage());
+
+            WriteBatch rollbackBatch = firestore.batch();
+            for (int i = 0; i < 10; i++) {
+                DocumentReference docRef = firestore.collection("Image_Feature_Vector")
+                        .document("product_" + product.getId() + "_" + i);
+                DocumentSnapshot backupSnapshot = backupSnapshots.get(i);
+                rollbackBatch.set(docRef, backupSnapshot.getData());
+            }
+            rollbackBatch.commit();
+
             throw e;
         }
 

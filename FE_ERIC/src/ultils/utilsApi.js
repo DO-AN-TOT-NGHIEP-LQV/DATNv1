@@ -42,7 +42,7 @@ export async function apiReq(
         });
 
         rej({
-          error_message: "The login session has expired. Please log in again.",
+          error_message: "Hãy đăng nhập lại",
         });
       }
     }
@@ -134,6 +134,10 @@ export function apiPut(endPoint, data, headers = {}, withAuth = false) {
   return apiReq(endPoint, data, "put", headers, withAuth);
 }
 
+export function apiPatch(endPoint, data, headers = {}, withAuth = false) {
+  return apiReq(endPoint, data, "patch", headers, withAuth);
+}
+
 ///////////////////////////////////////////////
 export async function getCredentials() {
   return new Promise(async (resolve, reject) => {
@@ -209,4 +213,3 @@ export async function getVerifiedUsers(tokenData) {
     return null;
   }
 }
-
