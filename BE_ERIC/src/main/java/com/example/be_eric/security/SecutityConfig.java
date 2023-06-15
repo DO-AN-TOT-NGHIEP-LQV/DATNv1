@@ -48,7 +48,7 @@ public class SecutityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests().antMatchers("/api/login/**", "/api/token/refresh",
                                                         "/api/users/**", "/api/search/**",
-                "/api/user/**", "/api/sale/shop/getShop"
+                "/api/user/**", "/api/sale/shop/getShop", "/api/user/product/getById"
                 ).permitAll();
 
 //        http.authorizeRequests().antMatchers( GET,   ).hasAnyAuthority("ROLE_USER");

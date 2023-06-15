@@ -2,7 +2,6 @@ package com.example.be_eric.service;
 
 import com.example.be_eric.models.Comment.ProductMainDiscussion;
 import com.example.be_eric.models.Image;
-import com.example.be_eric.models.Post;
 import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.ultils.Exception.UploadImageException;
 import com.google.api.core.ApiFuture;

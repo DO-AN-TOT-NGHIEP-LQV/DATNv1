@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigation, CommonActions } from "@react-navigation/native";
 
-const MasonryListProducts = ({ data }) => {
+const MasonryListProducts = ({ data, previousScreen }) => {
   return (
     <MasonryList
       data={data}
@@ -17,32 +17,26 @@ const MasonryListProducts = ({ data }) => {
       numColumns={2}
       imageContainerStyle={{ borderRadius: 8 }}
       showsVerticalScrollIndicator={false}
-      renderItem={({ item }) => <CardItem data={item} />}
+      containerStyle={{ backgroundColor: Color.mainTheme }}
+      renderItem={({ item }) => (
+        <CardItem data={item} previousScreen={previousScreen} />
+      )}
     />
   );
 };
 
-const CardItem = ({ data }) => {
+const CardItem = ({ data, previousScreen }) => {
   const navigation = useNavigation();
 
   return (
     <View className="bg-[#111] rounded-md" style={style.cardItemView}>
       <View style={style.card}>
         <TouchableOpacity
-          // onPress={() =>
-          //   navigation.navigate("SearchTab", {
-          //     screen: "DetailProduct",
-          //     params: { dataProduct: data },
-          //   })
-          // }
-          // onPress={() =>
-          //   navigation.navigate("DetailProduct", {
-          //     params: { dataProduct: data },
-          //   })
-          // }
           onPress={() => {
             navigation.navigate("DetailProduct", {
               dataProduct: data,
+              previousScreen: previousScreen,
+              productId: data.id,
             });
           }}
           style={{
@@ -59,9 +53,9 @@ const CardItem = ({ data }) => {
             className="w-full h-full object-cover"
             resizeMode="contain"
             style={{
-              borderWidth: 1,
+              // borderWidth: 1,
               borderRadius: 3,
-              borderColor: Color.textLight,
+              // borderColor: Color.textLight,
             }}
           />
         </TouchableOpacity>
@@ -182,12 +176,17 @@ const style = StyleSheet.create({
   priceSmall: {
     fontSize: 14,
     fontWeight: "300",
-    color: Color.red,
+    color: Color.blueMain,
+
+    // color: Color.blueSd,
     // color: Color.blueTheme,
   },
   priceBig: {
-    color: Color.red,
-    color: Color.red,
+    // color: Color.red,
+    // color: Color.red,
+    color: Color.blueMain,
+    color: Color.blueSd,
+
     fontFamily: "Roboto-Bold",
     fontSize: 16,
     fontWeight: "normal",
@@ -206,7 +205,7 @@ const style = StyleSheet.create({
   },
   cardItemView: {
     borderColor: Color.textLight,
-    borderWidth: 1,
+    // borderWidth: 1,
     height: Math.round(200),
     backgroundColor: Color.white,
     paddingHorizontal: 5,

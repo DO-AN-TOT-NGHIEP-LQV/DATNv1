@@ -12,6 +12,7 @@ export const SIZES = {
   radius: 12,
   title: 24,
   padding: 10,
+  maxRadius: 30,
 
   h1: 30,
   h2: 22,

@@ -47,9 +47,10 @@ export const UPDATE_PRODUCT = getApiUrl("/sale/product/update");
 export const DELETE_PRODUCT = getApiUrl("/sale/product/delete");
 export const GET_PRODUCT_DETAIL = getApiUrl("/sale/product/getById");
 export const CHANGE_FEATURE = getApiUrl("/sale/product/feature");
+export const GET_PRODUCT_BY_ID = getApiUrl("/user/product/getById");
 
 //Sale // Shop
 export const GET_DETAIL_SHOP = getApiUrl("/sale/shop/getShop");
 
-// axios.defaults.baseURL = "https://90d5-183-80-136-88.ap.ngrok.io/api";
+// axios.defaults.baseURL = "https://f48a-42-119-215-36.ngrok-free.app/api";
 axios.defaults.baseURL = "http://192.168.1.8:8080/api";

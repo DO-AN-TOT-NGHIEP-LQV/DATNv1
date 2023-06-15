@@ -1,11 +1,9 @@
 package com.example.be_eric.controllers;
 
 
-import com.example.be_eric.models.Post;
 import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.models.Shop;
 import com.example.be_eric.models.User;
-import com.example.be_eric.service.PostService;
 import com.example.be_eric.service.ProductService;
 import com.example.be_eric.service.ShopService;
 import com.example.be_eric.service.UserService;
@@ -22,8 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class ShopController {
 
-    @Autowired
-    private PostService postService;
+
     @Autowired
     private ProductService productService;
     @Autowired
@@ -79,34 +76,34 @@ public class ShopController {
     }
 
 
-    @GetMapping(value = "/sale/shop/getPost",
-            consumes = {MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<?> getPost()
-    {
-        try {
+//    @GetMapping(value = "/sale/shop/getPost",
+//            consumes = {MediaType.APPLICATION_JSON_VALUE,
+//                    MediaType.MULTIPART_FORM_DATA_VALUE })
+//    public ResponseEntity<?> getPost()
+//    {
+//        try {
+//
+//            Post responeList = postService.getPostById(1L);
+//            return ResponseEntity.ok().body(responeList);
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            return ResponseEntity.badRequest().body(e);
+//        }
+//    }
 
-            Post responeList = postService.getPostById(1L);
-            return ResponseEntity.ok().body(responeList);
-        } catch (Exception e) {
-            System.out.println(e);
-            return ResponseEntity.badRequest().body(e);
-        }
-    }
 
-
-    @GetMapping(value = "/sale/shop/getCountProductOfShop",
-            consumes = {MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<?> getCountProductOfShop()
-    {
-        try {
-
-            Post responeList = postService.getPostById(1L);
-            return ResponseEntity.ok().body(responeList);
-        } catch (Exception e) {
-            System.out.println(e);
-            return ResponseEntity.badRequest().body(e);
-        }
-    }
+//    @GetMapping(value = "/sale/shop/getCountProductOfShop",
+//            consumes = {MediaType.APPLICATION_JSON_VALUE,
+//                    MediaType.MULTIPART_FORM_DATA_VALUE })
+//    public ResponseEntity<?> getCountProductOfShop()
+//    {
+//        try {
+//
+//            Post responeList = postService.getPostById(1L);
+//            return ResponseEntity.ok().body(responeList);
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            return ResponseEntity.badRequest().body(e);
+//        }
+//    }
 }

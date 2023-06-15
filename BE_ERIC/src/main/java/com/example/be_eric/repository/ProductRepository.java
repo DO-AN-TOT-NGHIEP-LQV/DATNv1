@@ -24,7 +24,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 //    List<Product> findProductsByShopAndNameContaining(Shop shop, String keyword);
 
 
-    @Query("SELECT p FROM Product p WHERE p.shop.id = :shopId AND p.name LIKE %:keyword%")
+    @Query("SELECT p FROM Product p WHERE p.shop.id = :shopId AND p.name LIKE %:keyword% ORDER BY p.createdAt desc ")
     List<Product> findProductsByShopIdAndKeyword(@Param("shopId") Long shopId, @Param("keyword") String keyword);
 
     @Query("SELECT p FROM Product p WHERE p.shop.id = :shopId AND p.id = :productId ")

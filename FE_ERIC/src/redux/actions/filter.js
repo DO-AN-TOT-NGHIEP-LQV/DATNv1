@@ -118,7 +118,7 @@ export const searchProductByText = (page, searchText) => {
         page: page,
       },
     };
-    console.log(data);
+    // console.log(data);
     await apiGet(SEARCH_PRODUCT_B_TEXT, data, headers, false)
       .then((res) => {
         resolve(res);

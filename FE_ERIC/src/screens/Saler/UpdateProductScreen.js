@@ -138,6 +138,7 @@ const UpdateProductScreen = ({ route }) => {
       const res = await apiGet(GET_PRODUCT_DETAIL, data, headers, true);
 
       const resProduct = res.data;
+      console.log(resProduct);
       updateProductForm({
         id: resProduct.id,
         name: resProduct.name,
@@ -320,7 +321,7 @@ const UpdateProductScreen = ({ route }) => {
             return (
               <Pressable
                 style={{
-                  backgroundColor: Color.mainTheme,
+                  backgroundColor: Color.white,
                   ...styles.cartProductContainer,
                   marginRight: 3,
                   ...styles.shadow,
@@ -428,7 +429,8 @@ const UpdateProductScreen = ({ route }) => {
                         fontStyle: "italic",
                       }}
                     >
-                      {moment(product?.created_at).format("YYYY-MM-DD HH:mm")}
+                      {/* {moment(product?.createdAt).format("YYYY-MM-DD HH:mm")} */}
+                      {moment(product?.createdAt).format("YYYY-MM-DD HH:mm")}
                     </Text>
                   </View>
                 </View>
@@ -645,7 +647,7 @@ const UpdateProductScreen = ({ route }) => {
         backgroundColor: Color.mainTheme,
       }}
     >
-      {/* {loading && (
+      {loading && (
         <>
           <Progress.Bar
             progress={0.9}
@@ -654,7 +656,11 @@ const UpdateProductScreen = ({ route }) => {
             borderColor={Color.blueMain}
             color={Color.blueMain}
             height={4}
-            style={{ position: "absolute", zIndex: 10 }}
+            style={{
+              position: "absolute",
+              top: spacing.statusbarHeight,
+              zIndex: 10,
+            }}
           />
           <View
             style={{
@@ -675,7 +681,7 @@ const UpdateProductScreen = ({ route }) => {
             </Text>
           </View>
         </>
-      )} */}
+      )}
       {renderHeader()}
 
       {renderDetailContent()}
@@ -862,7 +868,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "80%",
     position: "absolute",
-    borderWidth: 1,
+    // borderWidth: 1,
     borderRadius: 12,
     borderColor: Color.black,
   },

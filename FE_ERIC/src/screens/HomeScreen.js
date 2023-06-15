@@ -32,6 +32,7 @@ import {
   SectionHome,
   TypeCard,
 } from "../components/Home";
+import LottieLoading from "../components/LottieLoading";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -148,6 +149,7 @@ const HomeScreen = () => {
   }
 
   return (
+    // <LottieLoading />
     <SafeAreaView
       // className="bg-red-100 flex-1 relative "
 

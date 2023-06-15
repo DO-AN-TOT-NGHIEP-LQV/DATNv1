@@ -55,10 +55,10 @@ public class User {
     private List<Role> roles =  new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true )
-    @JsonBackReference
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Post> posts = new ArrayList<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true )
+//    @JsonBackReference
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    private List<Post> posts = new ArrayList<>();
 
     @OneToOne(mappedBy = "user")
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
@@ -190,13 +190,13 @@ public class User {
         this.roles = roles;
     }
 
-    public List<Post> getPosts() {
-        return posts;
-    }
-
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
+//    public List<Post> getPosts() {
+//        return posts;
+//    }
+//
+//    public void setPosts(List<Post> posts) {
+//        this.posts = posts;
+//    }
 
     @JsonProperty("shop_id")
     public Shop getShop() {

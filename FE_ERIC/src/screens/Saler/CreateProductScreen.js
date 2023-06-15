@@ -21,7 +21,7 @@ import { ShoesFLas } from "../../public/assets";
 import Icons, { icons } from "../../components/Icons";
 import CustomButton from "../../components/CustomButton/index.js";
 import LineDivider from "../../components/LineDivider";
-import { SIZES } from "../../constans/Theme";
+import { SIZES, spacing } from "../../constans/Theme";
 import ProductValue from "../../components/SalerManager/ProductValue";
 import ModalInputText from "../../components/SalerManager/ModalInputText";
 import ModalInputNumber from "../../components/SalerManager/ModalInputNumber";
@@ -230,7 +230,12 @@ const CreateProductScreen = ({ route }) => {
         }}
       >
         {!pickedImagePath ? (
-          <TouchableOpacity style={styles.imagePickerStyle}>
+          <TouchableOpacity
+            style={{
+              ...styles.imagePickerStyle,
+              borderStyle: "dashed",
+            }}
+          >
             <ImageBackground
               source={ShoesFLas}
               resizeMode="contain"
@@ -251,23 +256,25 @@ const CreateProductScreen = ({ route }) => {
             flexDirection: "row",
             justifyContent: "center",
             marginVertical: 5,
+            marginTop: -25,
           }}
         >
           <Button
             icon="camera"
             mode="contained"
             onPress={() => openCamera()}
-            style={{ marginRight: 20 }}
+            style={{ marginRight: 20, backgroundColor: Color.mainColor }}
           >
-            Camera
+            Máy ảnh
           </Button>
           <Button
             icon="image-multiple"
             mode="outlined"
             onPress={() => showImagePicker()}
             style={{ backgroundColor: "white" }}
+            textColor={Color.mainColor}
           >
-            Gallery
+            Thư viện
           </Button>
         </View>
       </View>
@@ -414,14 +421,18 @@ const CreateProductScreen = ({ route }) => {
             borderColor={Color.blueMain}
             color={Color.blueMain}
             height={4}
-            style={{ position: "absolute", zIndex: 10 }}
+            style={{
+              position: "absolute",
+              top: spacing.statusbarHeight,
+              zIndex: 10,
+            }}
             borderRadius={0}
             borderWidth={0}
           />
           <View
             style={{
               position: "absolute",
-              top: 3,
+              top: spacing.statusbarHeight + 3,
               left: 0,
               right: 0,
               bottom: 0,
@@ -540,56 +551,12 @@ const CreateProductScreen = ({ route }) => {
 export default CreateProductScreen;
 
 const styles = StyleSheet.create({
-  headerWrapper: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 10,
-    borderRadius: 16,
-    backgroundColor: Color.white,
-    height: Dimensions.get("window").height / 15,
-    marginHorizontal: 5,
-    marginTop: 5,
-  },
   headerLeft: {
     borderColor: Color.textLight,
     borderWidth: 1,
     padding: 12,
     borderRadius: 10,
   },
-  headerRight: {
-    borderRadius: 10,
-  },
-
-  shadowTouch: {
-    borderRadius: 16,
-    shadowColor: Color.black,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 1,
-    elevation: 2,
-  },
-  // textInput: {
-  //   backgroundColor: Color.white,
-  //   borderRadius: 25,
-  //   color: "#14171A",
-  //   fontSize: 16,
-  //   height: 120,
-  //   marginBottom: 10,
-  //   marginTop: 10,
-  //   marginHorizontal: 5,
-  //   paddingLeft: 15,
-  //   paddingRight: 15,
-  //   paddingTop: 10,
-  //   paddingBottom: 10,
-  //   textAlignVertical: "top",
-  //   borderColor: "#E1E8ED",
-  //   borderWidth: 2,
-  // },
-
   header: {
     height: 75,
     width: "50%",
@@ -616,11 +583,10 @@ const styles = StyleSheet.create({
     alignContent: "center",
     width: (windowWidth * 4) / 5,
     height: (windowHeight * 1) / 5,
-    borderRadius: 15,
-    borderColor: Color.darkGray,
+    borderRadius: SIZES.radius,
     borderWidth: 1,
-    backgroundColor: "#c0c0c0",
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    backgroundColor: Color.white,
+    borderColor: Color.blueSd,
   },
   selectedTagsContainer: {
     flexDirection: "row",
@@ -631,14 +597,5 @@ const styles = StyleSheet.create({
   tagType: {
     margin: 2,
     borderRadius: 8,
-  },
-  selectedTagType: {
-    paddingHorizontal: 4,
-    margin: 2,
-    backgroundColor: Color.white,
-    color: Color.mainColor,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: Color.mainColor,
   },
 });

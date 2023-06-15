@@ -175,7 +175,7 @@ const SearchTextScreen = () => {
         )
         .then((res) => {
           setListSearch(res.data);
-          console.log(res.data);
+          // console.log(res.data);
         })
         .catch((error) => {
           setPageProduct(0);
@@ -186,7 +186,7 @@ const SearchTextScreen = () => {
       await actions
         .searchProductByText(0, searchText)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           setListSearch(res.data);
         })
         .catch((error) => {
@@ -198,7 +198,7 @@ const SearchTextScreen = () => {
 
     setPageProduct(0);
     setLoadingEndScroll(false);
-    console.log("done");
+    // console.log("done");
   };
 
   const fetchMoreDataSearch = async () => {
@@ -224,7 +224,7 @@ const SearchTextScreen = () => {
             }
           })
           .catch((error) => {
-            console.log(error);
+            // console.log(error);
             showError(error.error_message);
             setLoadingEndScroll(false);
           });
@@ -232,14 +232,14 @@ const SearchTextScreen = () => {
         await actions
           .searchProductByText(pageProduct + 1, searchText)
           .then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
             setListSearch([...listSearch, ...res.data]);
             if (res.data.length === 0) {
               setIsEndOfData(true);
             }
           })
           .catch((error) => {
-            console.log(error);
+            // console.log(error);
             showError(error.error_message);
             setLoadingEndScroll(false);
           });
@@ -259,7 +259,6 @@ const SearchTextScreen = () => {
   const isChangeFilter = useSelector((state) => state.filter.isChangeFilter);
 
   useEffect(() => {
-    // firstRenderData();
     setPageProduct(0);
     setListSearch([]);
   }, [isChangeFilter]);
@@ -275,12 +274,11 @@ const SearchTextScreen = () => {
       <View
         style={{
           backgroundColor: Color.mainTheme,
-          // ...spacing.statusbarHeight,
           ...statusbarHeight,
         }}
       >
         <View style={[style.headerWrapperHeader, style.shadowTouch]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <View style={style.headerLeft}>
               <Icons
                 icon={icons.Feather}
@@ -407,14 +405,12 @@ const SearchTextScreen = () => {
           <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
         }
       >
-        {listSearch ? <MasonryListProducts data={listSearch} /> : null}
-        {/* {listSearch ? (
+        {listSearch ? (
           <MasonryListProducts
-            data={listSearch.filter(
-              (item) => item.images[0].isProductImage === true
-            )}
+            data={listSearch}
+            previousScreen={"SearchText"}
           />
-        ) : null} */}
+        ) : null}
 
         {loadingEndScroll && (
           <View>
@@ -459,7 +455,7 @@ const style = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 16,
-    backgroundColor: Color.white, // "#ffffff",
+    backgroundColor: Color.white,
 
     height: Dimensions.get("window").height / 15,
     marginHorizontal: 5,
@@ -471,15 +467,12 @@ const style = StyleSheet.create({
     borderWidth: 2,
     padding: 12,
     borderRadius: 10,
-    // backgroundColor: "#ffffff",
   },
   headerRight: {
     height: "90%",
     flexGrow: 1,
     marginLeft: 8,
-    // marginVertical: 10,
-    backgroundColor: "#ffffff",
-    // borderRadius: 16,
+    backgroundColor: Color.white,
   },
 
   shadowTouch: {

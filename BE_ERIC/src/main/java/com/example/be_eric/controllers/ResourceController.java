@@ -1,7 +1,6 @@
 package com.example.be_eric.controllers;
 
 import com.example.be_eric.DTO.ProductDTO;
-import com.example.be_eric.models.Post;
 import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.models.User;
 import com.example.be_eric.service.*;
@@ -29,8 +28,7 @@ public class ResourceController {
     @Autowired
     private FirebaseFileService firebaseFileService;
 
-    @Autowired
-    private PostService postService;
+
 
     @Autowired
     private ProductService productService;
@@ -184,6 +182,7 @@ public class ResourceController {
             } else {
                 throw new InValidException("Invalid shop id");
             }
+
             System.out.println("goi uploadImage_saveVector" );
             String fileName = firebaseFileService.uploadImage_saveVector(fileImage, newProduct  );
             return ResponseEntity.ok().build();
@@ -260,6 +259,24 @@ public class ResourceController {
             Product product =  productService.getProductByIdOfaShop(shopId, productId );
             if (product == null){
                 throw  new Exception( "Sản phẩm này không tồn tại");
+            }
+            System.out.println(product.getId());
+            return ResponseEntity.ok().body(product);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    @GetMapping(value = "/api/user/product/getById", name = "GET")
+    public ResponseEntity getProductById(@RequestParam("productId") Long productId )
+    {
+        try {
+            Product product =  productService.getById( productId );
+            if (product == null){
+                throw  new Exception( "Sản phẩm này không còn tồn tại");
             }
             System.out.println(product.getId());
             return ResponseEntity.ok().body(product);

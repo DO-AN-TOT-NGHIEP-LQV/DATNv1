@@ -1,11 +1,11 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   HomeScreen,
-  DiscoverScreen,
-  DetailPostScreem,
-  Feeds,
+  // DiscoverScreen,
+  // DetailPostScreem,
+  // Feeds,
+  // SearchScreen,
   CreatePostScreen,
-  SearchScreen,
   SearchTextScreen,
   DetailProductScreen,
   SearchImageScreen,
@@ -19,21 +19,13 @@ import {
   UpdateProductScreen,
 } from "../screens/index";
 import ProfileScreen from "../screens/ProfileScreen";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-  Dimensions,
-} from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CustomTabBarIcon from "../components/CustomTabBarIcon";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { hasSalerRole } from "../ultils/helperFunction";
+import { Color } from "../constans";
 
 export default function (Stack) {
   return <Stack.Screen name="MainTab" component={MainTabs} />;
@@ -93,7 +85,7 @@ const MainTabs = () => {
         }}
       />
 
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="PostTab"
         component={CreatePostStackNavigator}
         options={{
@@ -107,9 +99,9 @@ const MainTabs = () => {
             />
           ),
         }}
-      />
+      /> */}
 
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="DiscoverTab"
         component={DiscoverStackNavigator}
         options={{
@@ -123,7 +115,7 @@ const MainTabs = () => {
             />
           ),
         }}
-      />
+      /> */}
 
       <BottomTab.Screen
         name="SettingTab"
@@ -258,15 +250,16 @@ const SearchStackNavigator = () => {
       initialRouteName="SearchText"
     >
       <SearchNavigator.Screen
-        name="SearchText"
-        component={SearchTextScreen}
-        options={{ tabBarStyle: { display: "none" } }}
-      />
-      <SearchNavigator.Screen
         name="SearchImage"
         component={SearchImageScreen}
         options={{ tabBarStyle: { display: "none" } }}
       />
+      <SearchNavigator.Screen
+        name="SearchText"
+        component={SearchTextScreen}
+        options={{ tabBarStyle: { display: "none" } }}
+      />
+
       {/* <SearchNavigator.Screen name="Search" component={SearchScreen} /> */}
       {/* <HomeNavigator.Screen
         name="DetailProduct"
@@ -276,19 +269,19 @@ const SearchStackNavigator = () => {
   );
 };
 
-const DiscoverNavigator = createNativeStackNavigator();
-const DiscoverStackNavigator = () => {
-  return (
-    <DiscoverNavigator.Navigator screenOptions={{ headerShown: false }}>
-      <DiscoverNavigator.Screen name="Discover" component={DiscoverScreen} />
-      <DiscoverNavigator.Screen
-        name="DetailPost"
-        component={DetailPostScreem}
-        // options={{ tabBarStyle: { display: "flex" } }}
-      />
-    </DiscoverNavigator.Navigator>
-  );
-};
+// const DiscoverNavigator = createNativeStackNavigator();
+// const DiscoverStackNavigator = () => {
+//   return (
+//     <DiscoverNavigator.Navigator screenOptions={{ headerShown: false }}>
+//       <DiscoverNavigator.Screen name="Discover" component={DiscoverScreen} />
+//       <DiscoverNavigator.Screen
+//         name="DetailPost"
+//         component={DetailPostScreem}
+//         // options={{ tabBarStyle: { display: "flex" } }}
+//       />
+//     </DiscoverNavigator.Navigator>
+//   );
+// };
 
 const CreatePostNavigator = createNativeStackNavigator();
 const CreatePostStackNavigator = () => {
@@ -359,26 +352,21 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   tabBarStyle: {
-    // position: "absolute",
-    // left: 0,
-    // right: 0,
     bottom: 0,
     position: "relative",
     borderTopColor: "#3333",
     borderTopWidth: 2,
     elevation: 0,
-    backgroundColor: "#ffffff",
-    // borderRadius: 15,
-    // height: 60
+    backgroundColor: Color.white,
   },
   customTabBarButton: {
     bottom: -10,
-    backgroundColor: "#ffffff",
+    backgroundColor: Color.white,
     width: 100,
     height: 100,
     borderRadius: 50,
     borderWidth: 2,
-    borderColor: "#ffffff",
+    borderColor: Color.white,
     borderTopColor: "#3333",
   },
 });
@@ -732,18 +720,15 @@ const styles = StyleSheet.create({
 //     borderTopColor: "#3333",
 //     borderTopWidth: 2,
 //     elevation: 0,
-//     backgroundColor: "#ffffff",
 //     // borderRadius: 15,
 //     // height: 60
 //   },
 //   customTabBarButton: {
 //     bottom: -10,
-//     backgroundColor: "#ffffff",
 //     width: 100,
 //     height: 100,
 //     borderRadius: 50,
 //     borderWidth: 2,
-//     borderColor: "#ffffff",
 //     borderTopColor: "#3333",
 //   },
 // });

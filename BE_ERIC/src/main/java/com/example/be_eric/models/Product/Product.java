@@ -102,9 +102,9 @@ public class Product {
 
     // Thêm thuộc tính created_at và chú thích @CreationTimestamp
     @CreationTimestamp
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     // Thêm thuộc tính updated_at và chú thích @UpdateTimestamp
     @UpdateTimestamp
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 }
