@@ -21,8 +21,8 @@ import validator from "../ultils/validations";
 const LoginScreen = ({}) => {
   const [state, setState] = useState({
     isLoading: false,
-    username: "1@gmail.com",
-    password: "1",
+    username: "4@gmail.com",
+    password: "4",
     isSecure: true,
   });
   const { isLoading, username, password, isSecure } = state;

@@ -16,7 +16,6 @@ const TypeCard = ({ type, containerStyle, onPress, textStyle, imageStyle }) => {
         source={type?.thumbnail}
         imageStyle={{ borderRadius: SIZES.radius, ...imageStyle }}
         resizeMode="cover"
-        
         style={{
           ...style.containerStyle,
           ...containerStyle,

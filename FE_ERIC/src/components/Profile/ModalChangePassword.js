@@ -69,7 +69,7 @@ const ModalChangePassword = ({ isVisible, onClose }) => {
       duration: 3000,
       message,
       backgroundColor: "#8BC34A",
-      color: "#FFFFFF",
+      color: Color.white,
     });
   };
 

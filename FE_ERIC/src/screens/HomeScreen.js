@@ -7,6 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   ImageBackground,
+  StatusBar,
   FlatList,
 } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
@@ -31,6 +32,8 @@ import {
   SectionHome,
   TypeCard,
 } from "../components/Home";
+import LottieLoading from "../components/LottieLoading";
+
 const HomeScreen = () => {
   const navigation = useNavigation();
   const tokenData = useSelector((state) => state.auth.tokenData);
@@ -74,7 +77,8 @@ const HomeScreen = () => {
           marginTop: 15,
           paddingHorizontal: 10,
           position: "absolute",
-          top: 0,
+          top: 20,
+
           left: 0,
           right: 0,
           bottom: 0,
@@ -145,16 +149,21 @@ const HomeScreen = () => {
   }
 
   return (
+    // <LottieLoading />
     <SafeAreaView
       // className="bg-red-100 flex-1 relative "
-      style={{ backgroundColor: Color.mainTheme, flex: 1 }}
+
+      style={{
+        backgroundColor: Color.mainTheme,
+        flex: 1,
+      }}
     >
       {renderHeader()}
 
       {/* First Section DONE */}
       <View
         className="flex-row px-3 mt-3 mb-3 items-center space-x-2"
-        style={{ marginTop: 65 }}
+        style={{ marginTop: 50 }}
       >
         <View className="w-12 h-12 bg-black rounded-full items-center justify-center">
           <Text

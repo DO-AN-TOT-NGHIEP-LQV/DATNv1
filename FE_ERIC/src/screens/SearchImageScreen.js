@@ -1,15 +1,21 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   View,
   Text,
   Image,
   StyleSheet,
   Dimensions,
-  StatusBar,
   Platform,
   TouchableOpacity,
   Animated,
-  ScrollView,
+  ImageBackground,
+  StatusBar,
 } from "react-native";
 import { ActivityIndicator, Button } from "react-native-paper";
 
@@ -18,26 +24,21 @@ import {
   TriggeringView,
 } from "react-native-image-header-scroll-view";
 
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 // import Color from "../constans/Color";
 import { Color } from "../constans";
-import { product_tabs } from "../constans/raw";
 
 import Icons, { icons } from "../components/Icons";
 import { useNavigation } from "@react-navigation/core";
-import LineDivider from "../components/LineDivider";
 
-import {
-  DetailProduct,
-  DetailShop,
-  DetailDiscussion,
-} from "../components/DetailProductTabs";
-import hideTabBar from "../hookFuntion/hideTabBar ";
 import * as ImagePicker from "expo-image-picker";
 import actions from "../redux/actions";
 import { showError } from "../ultils/messageFunction";
 import MasonryListProducts from "../components/Search/MasonryListProducts";
 import ScanImageEffect from "../components/Search/ScanImageEffect";
+import { SIZES, spacing, statusbarHeight } from "../constans/Theme";
+import { ShoesFLas } from "../public/assets";
+import { ScrollView } from "react-native";
+import * as Animatable from "react-native-animatable";
 
 // const { width, height } = Dimensions.get("window");
 const width = Dimensions.get("window").width / 2 - 30;
@@ -47,41 +48,24 @@ const windowHeight = Dimensions.get("window").height;
 const MIN_HEIGHT = Platform.OS === "ios" ? 90 : 65;
 const MAX_HEIGHT = 200;
 
-
 const SearchImageScreen = () => {
   /// Cac state reder chon Image
-  const navTitleView = useRef(null);
   const [scrollY] = useState(new Animated.Value(0));
-  const [expanded, setExpanded] = useState(true);
-  const toggleExpand = () => {
-    setExpanded(!expanded);
-  };
 
   const [homeBarColor, setHomeBarColor] = useState("rgba(0,0,0,0.2)");
   const [homeIconBColor, setHomeIconColor] = useState(Color.textLight);
-  const interpolateColor = (value) => {
-    // Điều chỉnh các giá trị này để tùy chỉnh màu nền dựa trên giá trị cuộn
-    const startValue = 0;
-    const endValue = 200;
 
-    const startColorGround = "rgba(0,0,0,0.2)";
-    const endColorGround = "white";
-    const colorGround = scrollY.interpolate({
-      inputRange: [startValue, endValue],
-      outputRange: [startColorGround, endColorGround],
-      extrapolate: "clamp",
-    });
+  const opacityFunction = scrollY.interpolate({
+    inputRange: [0, MAX_HEIGHT - MIN_HEIGHT],
+    outputRange: [1, 0.1],
+    extrapolate: "clamp",
+  });
 
-    const startIconBColor = Color.textLight;
-    const endIconBColor = Color.mainColor;
-    const colorIconBColor = scrollY.interpolate({
-      inputRange: [startValue, endValue],
-      outputRange: [startIconBColor, endIconBColor],
-      extrapolate: "clamp",
-    });
-
-    return [colorGround, colorIconBColor];
-  };
+  const colorIconFunction = scrollY.interpolate({
+    inputRange: [0, MAX_HEIGHT - MIN_HEIGHT],
+    outputRange: [Color.textLight, Color.white],
+    extrapolate: "clamp",
+  });
 
   /// State
   const [pickedImagePath, setPickedImagePath] = useState(null);
@@ -89,57 +73,6 @@ const SearchImageScreen = () => {
   const [listSearch, setListSearch] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     if (pickedImagePath) {
-  //       try {
-  //         setListSearch([]);
-  //         setIsLoading(true);
-  //         const startTime = new Date().getTime();
-
-  //         const res = await actions.searchWithImage(pickedImagePath);
-  //         setListSearch(res.data);
-  //         const endTime = new Date().getTime(); // Thời gian kết thúc request
-  //         const elapsedTime = endTime - startTime;
-  //         console.log("Da render lai ham Search Image");
-  //         console.log(elapsedTime / 1000);
-  //         setIsLoading(false);
-  //       } catch (error) {
-  //         setListSearch([]);
-  //         showError(error.error_message);
-  //         setIsLoading(false);
-  //       }
-  //     }
-  //   };
-
-  //   if (
-  //     pickedImagePath &&
-  //     pickedImagePath !== null &&
-  //     pickedImagePath !== undefined
-  //   )
-  //     fetchData();
-  // }, [pickedImagePath]);
-
-  //     if (pickedImagePath) {
-  //       try {
-  //         setListSearch([]);
-  //         setIsLoading(true);
-  //         const startTime = new Date().getTime();
-
-  //         const res = await actions.searchWithImage(pickedImagePath);
-  //         setListSearch(res.data);
-  //         const endTime = new Date().getTime(); // Thời gian kết thúc request
-  //         const elapsedTime = endTime - startTime;
-  //         console.log("Da render lai ham Search Image");
-  //         console.log(elapsedTime / 1000);
-  //         setIsLoading(false);
-  //       } catch (error) {
-  //         setListSearch([]);
-  //         showError(error.error_message);
-  //         setIsLoading(false);
-  //       }
-  //     }
 
   const fetchData = async (pickedImagePathInput) => {
     if (pickedImagePathInput) {
@@ -164,58 +97,112 @@ const SearchImageScreen = () => {
     }
   };
 
-  function renderMainImage() {
+  function renderImageChose() {
     return (
-      <View
+      <Animated.View
         style={{
-          marginVertical: 5,
           alignItems: "center",
-          borderWidth: 2,
-          height: MAX_HEIGHT,
-          paddingVertical: 5,
           paddingHorizontal: 5,
-          margin: 20,
-          backgroundColor: Color.mainColor,
-          justifyContent: "center",
-          // alignItems: "center",
+          height: MAX_HEIGHT,
+          opacity: opacityFunction,
         }}
       >
         {!pickedImagePath ? (
-          <Image
-            source={require("../public/assets/splashShoe.png")}
+          <TouchableOpacity
             style={{
-              height: MAX_HEIGHT / 2,
-              width: MAX_HEIGHT / 2,
-              alignSelf: "center",
-              resizeMode: "cover",
+              ...styles.imagePickerStyle,
+              borderStyle: "dashed",
+              borderColor: Color.blueTheme,
             }}
-          />
+          >
+            <ImageBackground
+              source={ShoesFLas}
+              resizeMode="contain"
+              imageStyle={{
+                width: "100%",
+                height: "100%",
+                
+              }}
+              style={styles.header}
+            />
+            <Text style={{}}>Chọn ảnh cần tìm</Text>
+          </TouchableOpacity>
         ) : isLoading ? (
           <ScanImageEffect
             pickedImagePath={pickedImagePath}
-            style={{
-              height: MAX_HEIGHT,
-              width: width,
-              alignSelf: "stretch",
-              resizeMode: "cover",
-            }}
+            style={styles.imagePickerStyle}
           />
         ) : (
           <Image
             source={{ uri: pickedImagePath }}
-            style={{
-              height: MAX_HEIGHT,
-              width: width,
-              alignSelf: "stretch",
-              resizeMode: "cover",
-            }}
+            style={styles.imagePickerStyle}
           />
         )}
-      </View>
+
+        {renderButton()}
+      </Animated.View>
     );
   }
 
-  function renderButtonChose() {
+  function renderHeader() {
+    return (
+      <Animated.View
+        style={{
+          ...styles.headerWrapperHeader,
+        }}
+      >
+        {/* Icon call back  */}
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("SearchTab", {
+              screen: "SearchText",
+            });
+          }}
+        >
+          <Animated.View
+            style={{
+              ...styles.backStyles,
+              backgroundColor: colorIconFunction,
+            }}
+          >
+            <Icons
+              icon={icons.Feather}
+              size={18}
+              color={Color.black}
+              name={"chevron-left"}
+            />
+          </Animated.View>
+        </TouchableOpacity>
+
+        <View style={{ flexDirection: "row" }}>
+          {/* Icon 2  */}
+          <TouchableOpacity
+            onPress={() => {
+              setPickedImagePath("");
+              setListSearch([]);
+            }}
+          >
+            <Animated.View
+              style={{
+                ...styles.rightHomeIconStyle,
+                backgroundColor: colorIconFunction,
+                // borderColor: homeIconBColor,
+              }}
+            >
+              <Icons
+                icon={icons.Feather}
+                size={20}
+                name="x"
+                color={Color.black}
+              />
+            </Animated.View>
+          </TouchableOpacity>
+        </View>
+      </Animated.View>
+    );
+  }
+
+  function renderButton() {
     const showImagePicker = async () => {
       // Ask the user for the permission to access the media library
       const permissionResult =
@@ -238,7 +225,6 @@ const SearchImageScreen = () => {
       }
     };
 
-    // This function is triggered when the "Open camera" button pressed
     const openCamera = async () => {
       // Ask the user for the permission to access the camera
       const permissionResult =
@@ -255,114 +241,38 @@ const SearchImageScreen = () => {
         quality: 1,
       });
       if (!result.canceled) {
-        // setPickedImagePath(result.assets[0].uri);
         fetchData(result.assets[0].uri);
       }
     };
+
     return (
       <View style={styles.buttonContainer}>
         <Button
           icon="camera"
           mode="contained"
           onPress={() => openCamera()}
-          style={{ marginRight: 20 }}
+          style={{ marginRight: 20, backgroundColor: Color.mainColor }}
         >
-          Camera
+          Máy ảnh
         </Button>
         <Button
           icon="image-multiple"
           mode="outlined"
           onPress={() => showImagePicker()}
           style={{ backgroundColor: "white" }}
+          textColor={Color.mainColor}
         >
-          Gallery
+          Thư viện
         </Button>
       </View>
     );
   }
 
-  function renderHeader() {
-    return (
-      <Animated.View
-        style={{
-          ...styles.headerWrapperHeader,
-        }}
-      >
-        {/* Icon call back  */}
-        <TouchableOpacity
-          onPress={() => {
-            // navigation.navigate('CommunityTab', { screen: 'CommunityReply',  params: {key: 'value'}});
-            navigation.navigate("SearchTab", {
-              screen: "SearchText",
-            });
-            // navigation.goBack();
-          }}
-        >
-          <Animated.View
-            style={{
-              ...styles.backStyles,
-              backgroundColor: homeBarColor,
-            }}
-          >
-            <Icons
-              icon={icons.Feather}
-              size={18}
-              color={Color.black}
-              name={"chevron-left"}
-            />
-          </Animated.View>
-        </TouchableOpacity>
-
-        <View style={{ flexDirection: "row" }}>
-          {/* Icon 1  */}
-          <TouchableOpacity>
-            <Animated.View
-              style={{
-                ...styles.rightHomeIconStyle,
-                backgroundColor: homeBarColor,
-                borderColor: homeIconBColor,
-              }}
-            >
-              <Icons
-                icon={icons.Feather}
-                size={20}
-                color={Color.mainColor}
-                name={"chevron-left"}
-              />
-            </Animated.View>
-          </TouchableOpacity>
-
-          {/* Icon 2  */}
-          <TouchableOpacity>
-            <Animated.View
-              style={{
-                ...styles.rightHomeIconStyle,
-                backgroundColor: homeBarColor,
-                borderColor: homeIconBColor,
-              }}
-            >
-              <Icons
-                icon={icons.Ionicons}
-                size={20}
-                name="ellipsis-vertical-outline"
-                color={Color.mainColor}
-              />
-            </Animated.View>
-          </TouchableOpacity>
-        </View>
-      </Animated.View>
-    );
-  }
-
   function renderContent() {
     return isLoading ? (
-      <ActivityIndicator color="#01c6b2" size="large" />
+      <ActivityIndicator style={{ marginTop: 5 }} />
     ) : (
-      <MasonryListProducts
-        data={listSearch.filter(
-          (item) => item.images[0].isProductImage === true
-        )}
-      />
+      <MasonryListProducts data={listSearch} previousScreen={"SearchImage"} />
     );
   }
 
@@ -370,41 +280,22 @@ const SearchImageScreen = () => {
     <View style={styles.container}>
       {renderHeader()}
       <ImageHeaderScrollView
-        maxHeight={expanded ? MAX_HEIGHT : MIN_HEIGHT}
+        maxHeight={MAX_HEIGHT}
         minHeight={MIN_HEIGHT}
-        // maxOverlayOpacity={0.3}
-        // minOverlayOpacity={0.3}
+        scrollViewBackgroundColor={Color.mainTheme}
+        renderTouchableFixedForeground={() => renderImageChose()}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollY } } }],
           { useNativeDriver: false }
         )}
-        renderHeader={() => renderMainImage()}
       >
         <TriggeringView
           style={{
-            ...styles.section,
-            borderTopColor: Color.darkGray,
-            borderTopWidth: 1,
+            marginTop: 5,
           }}
-          onHide={() => navTitleView.current.fadeInUp(200)}
-          onDisplay={() => navTitleView.current.fadeOut(100)}
         >
-          {renderButtonChose()}
+          {renderContent()}
         </TriggeringView>
-
-        {/* <TriggeringView
-          style={{
-            borderBottomWidth: 1,
-            borderBottomColor: Color.textLight,
-            backgroundColor: "white",
-            borderTopColor: Color.darkGray,
-            borderTopWidth: 1,
-            position: "relative",
-          }}
-        >
-         
-        </TriggeringView> */}
-        {renderContent()}
       </ImageHeaderScrollView>
     </View>
   );
@@ -415,41 +306,16 @@ export default SearchImageScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: "relative",
-    backgroundColor: Color.mainColor,
+    paddingTop: spacing.statusbarHeight,
+    backgroundColor: Color.mainTheme,
   },
   image: {
-    height: MAX_HEIGHT,
-    width: width,
-    alignSelf: "stretch",
-    resizeMode: "cover",
-    justifyContent: "center",
-    alignItems: "center",
+    width: "100%",
+    height: "100%",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
-  shadowTouch: {
-    borderRadius: 16,
-    shadowColor: Color.black,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 16,
-  },
-  section: {
-    padding: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: Color.textLight,
-    backgroundColor: "white",
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    // marginBottom: 3,
-    // bottom: 24,
-    top: -24,
-    backgroundColor: Color.mainColor,
-    borderWidth: 1,
-  },
+
   headerWrapperHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -461,7 +327,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     zIndex: 10,
     position: "absolute",
-    top: 0,
+    top: spacing.statusbarHeight,
     left: 0,
     right: 0,
   },
@@ -477,5 +343,31 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 50,
     borderColor: Color.textLight,
+  },
+  imagePickerStyle: {
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    width: "100%",
+    height: (MAX_HEIGHT * 9) / 10,
+    borderRadius: SIZES.radius,
+    borderColor: Color.textLight,
+    backgroundColor: Color.white,
+    borderWidth: 2,
+  },
+  header: {
+    height: 75,
+    width: "50%",
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignContent: "center",
+    alignItems: "center",
+    zIndex: 10,
   },
 });

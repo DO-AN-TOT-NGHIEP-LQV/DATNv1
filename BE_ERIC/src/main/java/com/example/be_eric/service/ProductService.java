@@ -20,13 +20,16 @@ public interface ProductService {
 
     List<Product> searchByTextNotPageable(String searchText);
 
-    boolean updateViews( Long idProduct);
+//    boolean updateViews( Long idProduct);
 
     Page<Product> searchAndFilterProducts(String keyword, String[] types, String[] brands, Double minPrice, Double maxPrice, Pageable pageable);
     List<Product> searchAndFilterProducts(String keyword, String[] types, String[] brands, Double minPrice, Double maxPrice);
 
+    List<Product> findProductsByShopIdAndKeyword(Long shopId, String keyword);
 
-    void deleteProduct(Product product);
+    boolean deleteProduct(Product product);
 
+    Product getProductByIdOfaShop( Long shopId, Long productId);
+    void setProductFeatured(Long idProduct, Long idShop, boolean isFeature) throws Exception;
 
 }

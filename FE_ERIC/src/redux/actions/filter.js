@@ -1,4 +1,7 @@
-import { SEARCH_AND_FILTER_PRODUCTS } from "../../config/urls";
+import {
+  SEARCH_AND_FILTER_PRODUCTS,
+  SEARCH_PRODUCT_B_TEXT,
+} from "../../config/urls";
 import store from "../store";
 import types from "../types";
 import { apiGet, apiPost } from "../../ultils/utilsApi";
@@ -92,6 +95,7 @@ export const searchAndFilterProducts = (
     }
     url += `page=${page}`;
     console.log(SEARCH_AND_FILTER_PRODUCTS);
+
     await apiGet(url, {}, headers, false)
       .then((res) => {
         resolve(res);
@@ -102,11 +106,7 @@ export const searchAndFilterProducts = (
   });
 };
 
-export const searchProductByText = (
-  searchText,
-  page,
-  endPoint = SEARCH_ALL_BY_TEXT
-) => {
+export const searchProductByText = (page, searchText) => {
   return new Promise(async (resolve, reject) => {
     var headers = {
       "Content-Type": "application/json",
@@ -118,8 +118,8 @@ export const searchProductByText = (
         page: page,
       },
     };
-
-    await apiGet(endPoint, data, headers, true)
+    // console.log(data);
+    await apiGet(SEARCH_PRODUCT_B_TEXT, data, headers, false)
       .then((res) => {
         resolve(res);
       })

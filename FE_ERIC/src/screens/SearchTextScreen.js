@@ -24,18 +24,17 @@ import { useSelector } from "react-redux";
 import { showError } from "../ultils/messageFunction";
 import FilterModal from "../components/Search/FilterModal";
 // import SearchInputHeader from "../components/Search/SearchInputHeader";
-import { spacing } from "../constans/Theme";
+import { SIZES, spacing, statusbarHeight } from "../constans/Theme";
 import Icons, { icons } from "../components/Icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-const width = Dimensions.get("window").width / 2 - 30;
-const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
+// const width = Dimensions.get("window").width / 2 - 30;
+// const windowWidth = Dimensions.get("window").width;
+// const windowHeight = Dimensions.get("window").height;
 
 const SearchTextScreen = () => {
   const navigation = useNavigation();
   const [listSearch, setListSearch] = useState([]);
-
 
   const [searchText, setSearchText] = useState("");
 
@@ -58,8 +57,6 @@ const SearchTextScreen = () => {
   /////////
   const renderCount = useRef(0);
 
-
-
   //Search Input State
 
   ///// State va func  Scroll
@@ -68,11 +65,13 @@ const SearchTextScreen = () => {
   const [isEndOfData, setIsEndOfData] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-    firstRenderData();
-    setIsEndOfData(false);
-    setIsRefreshing(false);
+  const handleRefresh = () => {
+    if (loadingEndScroll == false) {
+      setIsRefreshing(true);
+      firstRenderData();
+      setIsEndOfData(false);
+      setIsRefreshing(false);
+    }
   };
 
   const handleScroll = (event) => {
@@ -85,35 +84,121 @@ const SearchTextScreen = () => {
     }
   };
 
+  // const firstRenderData = () => {
+  //   // day la ham load lai dau tien
+  //   try {
+  //     setListSearch([]);
+  //     setLoadingEndScroll(true);
+  //     setIsEndOfData(false);
+
+  //     if (isApplyFilter) {
+  //       const res = actions.searchAndFilterProducts(
+  //         0,
+  //         searchText,
+  //         typeSelectedList,
+  //         brandSelectedList,
+  //         nowRangeMinMaxPrice[0],
+  //         nowRangeMinMaxPrice[1]
+  //       );
+  //       setListSearch(res.data);
+  //       console.log(res.data);
+  //     } else {
+  //       // const res = await actions.searchAndFilterProducts(0, searchText);
+  //       const res = actions.searchProductByText(0, searchText);
+  //       console.log(res.data);
+  //       setListSearch(res.data);
+  //     }
+
+  //     setPageProduct(0);
+  //     setLoadingEndScroll(false);
+  //     console.log("done");
+  //   } catch (error) {
+  //     setPageProduct(0);
+  //     setLoadingEndScroll(false);
+  //     showError(error.error_message);
+  //   }
+  // };
+
+  // const fetchMoreDataSearch = () => {
+  //   // Hay featch data cho van de scroll
+  //   try {
+  //     setLoadingEndScroll(true);
+
+  //     if (isApplyFilter) {
+  //       const res = actions.searchAndFilterProducts(
+  //         pageProduct + 1,
+  //         searchText,
+  //         typeSelectedList,
+  //         brandSelectedList,
+  //         nowRangeMinMaxPrice[0],
+  //         nowRangeMinMaxPrice[1]
+  //       );
+  //       console.log(res.data);
+  //       setListSearch([...listSearch, ...res.data]);
+  //       if (res.data.length === 0) {
+  //         setIsEndOfData(true);
+  //       }
+  //     } else {
+  //       const res = actions.searchProductByText(pageProduct + 1, searchText);
+  //       console.log(res.data);
+  //       setListSearch([...listSearch, ...res.data]);
+  //       if (res.data.length === 0) {
+  //         setIsEndOfData(true);
+  //       }
+  //     }
+
+  //     setPageProduct((pre) => pre + 1);
+  //     setLoadingEndScroll(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //     showError(error.error_message);
+  //     setLoadingEndScroll(false);
+  //   }
+  // };
+
   const firstRenderData = async () => {
     // day la ham load lai dau tien
-    try {
-      setListSearch([]);
-      setLoadingEndScroll(true);
-      setIsEndOfData(false);
+    // try {
+    setListSearch([]);
+    setLoadingEndScroll(true);
+    setIsEndOfData(false);
 
-      if (isApplyFilter) {
-        const res = await actions.searchAndFilterProducts(
+    if (isApplyFilter) {
+      await actions
+        .searchAndFilterProducts(
           0,
           searchText,
           typeSelectedList,
           brandSelectedList,
           nowRangeMinMaxPrice[0],
           nowRangeMinMaxPrice[1]
-        );
-        setListSearch(res.data);
-      } else {
-        const res = await actions.searchAndFilterProducts(0, searchText);
-        setListSearch(res.data);
-      }
-
-      setPageProduct(0);
-      setLoadingEndScroll(false);
-    } catch (error) {
-      setPageProduct(0);
-      setLoadingEndScroll(false);
-      showError(error.error_message);
+        )
+        .then((res) => {
+          setListSearch(res.data);
+          // console.log(res.data);
+        })
+        .catch((error) => {
+          setPageProduct(0);
+          setLoadingEndScroll(false);
+          showError(error.error_message);
+        });
+    } else {
+      await actions
+        .searchProductByText(0, searchText)
+        .then((res) => {
+          // console.log(res.data);
+          setListSearch(res.data);
+        })
+        .catch((error) => {
+          setPageProduct(0);
+          setLoadingEndScroll(false);
+          showError(error.error_message);
+        });
     }
+
+    setPageProduct(0);
+    setLoadingEndScroll(false);
+    // console.log("done");
   };
 
   const fetchMoreDataSearch = async () => {
@@ -122,59 +207,78 @@ const SearchTextScreen = () => {
       setLoadingEndScroll(true);
 
       if (isApplyFilter) {
-        const res = await actions.searchAndFilterProducts(
-          pageProduct + 1,
-          searchText,
-          typeSelectedList,
-          brandSelectedList,
-          nowRangeMinMaxPrice[0],
-          nowRangeMinMaxPrice[1]
-        );
-        setListSearch([...listSearch, ...res.data]);
-        if (res.data.length === 0) {
-          setIsEndOfData(true);
-        }
+        await actions
+          .searchAndFilterProducts(
+            pageProduct + 1,
+            searchText,
+            typeSelectedList,
+            brandSelectedList,
+            nowRangeMinMaxPrice[0],
+            nowRangeMinMaxPrice[1]
+          )
+          .then((res) => {
+            console.log(res.data);
+            setListSearch([...listSearch, ...res.data]);
+            if (res.data.length === 0) {
+              setIsEndOfData(true);
+            }
+          })
+          .catch((error) => {
+            // console.log(error);
+            showError(error.error_message);
+            setLoadingEndScroll(false);
+          });
       } else {
-        const res = await actions.searchAndFilterProducts(
-          pageProduct + 1,
-          searchText
-        );
-        setListSearch([...listSearch, ...res.data]);
-        if (res.data.length === 0) {
-          setIsEndOfData(true);
-        }
+        await actions
+          .searchProductByText(pageProduct + 1, searchText)
+          .then((res) => {
+            // console.log(res.data);
+            setListSearch([...listSearch, ...res.data]);
+            if (res.data.length === 0) {
+              setIsEndOfData(true);
+            }
+          })
+          .catch((error) => {
+            // console.log(error);
+            showError(error.error_message);
+            setLoadingEndScroll(false);
+          });
       }
 
       setPageProduct((pre) => pre + 1);
       setLoadingEndScroll(false);
-    } catch (error) {
-      showError(error.error_message);
-      setLoadingEndScroll(false);
-    }
+    } catch (error) {}
   };
 
-  ///// Effect render
+  /// Effect render
   useEffect(() => {
     setPageProduct(0);
     firstRenderData();
   }, []);
 
   const isChangeFilter = useSelector((state) => state.filter.isChangeFilter);
+
   useEffect(() => {
-    firstRenderData();
+    setPageProduct(0);
+    setListSearch([]);
   }, [isChangeFilter]);
   ///////////////
 
   function searchInputHeader() {
-    const onSearch = async () => {
+    const onSearch = () => {
       if (loadingEndScroll) return;
       firstRenderData();
     };
 
     return (
-      <View style={{ backgroundColor: Color.mainTheme }}>
+      <View
+        style={{
+          backgroundColor: Color.mainTheme,
+          ...statusbarHeight,
+        }}
+      >
         <View style={[style.headerWrapperHeader, style.shadowTouch]}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <View style={style.headerLeft}>
               <Icons
                 icon={icons.Feather}
@@ -229,18 +333,27 @@ const SearchTextScreen = () => {
                   onPress={() => setShowFilterModel(true)}
                 >
                   <View>
-                    <Icons
-                      icon={icons.Ionicons}
-                      size={20}
-                      name="md-filter-outline"
-                    />
+                    {isApplyFilter ? (
+                      <Icons
+                        icon={icons.Ionicons}
+                        size={20}
+                        name="md-filter-outline" //isApplyFilter
+                      />
+                    ) : (
+                      <Icons
+                        icon={icons.MaterialCommunityIcons}
+                        size={20}
+                        name={"filter-variant-remove"}
+                      />
+                    )}
                   </View>
                 </TouchableOpacity>
 
                 {/* Search Button */}
                 <TouchableOpacity
                   style={style.filter}
-                  onPress={async () => await onSearch()}
+                  // onPress={async () => await onSearch()}
+                  onPress={() => onSearch()}
                 >
                   <View>
                     <Icons
@@ -294,9 +407,8 @@ const SearchTextScreen = () => {
       >
         {listSearch ? (
           <MasonryListProducts
-            data={listSearch.filter(
-              (item) => item.images[0].isProductImage === true
-            )}
+            data={listSearch}
+            previousScreen={"SearchText"}
           />
         ) : null}
 
@@ -343,7 +455,7 @@ const style = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 16,
-    backgroundColor: Color.white, // "#ffffff",
+    backgroundColor: Color.white,
 
     height: Dimensions.get("window").height / 15,
     marginHorizontal: 5,
@@ -355,15 +467,12 @@ const style = StyleSheet.create({
     borderWidth: 2,
     padding: 12,
     borderRadius: 10,
-    // backgroundColor: "#ffffff",
   },
   headerRight: {
     height: "90%",
     flexGrow: 1,
     marginLeft: 8,
-    // marginVertical: 10,
-    backgroundColor: "#ffffff",
-    // borderRadius: 16,
+    backgroundColor: Color.white,
   },
 
   shadowTouch: {

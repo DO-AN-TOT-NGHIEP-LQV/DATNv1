@@ -1,13 +1,13 @@
 export default {
-  mainColor: "#7179f7", // #AD40AF
-  // mainColor: "#00BCC9", //, // #AD40AF
+  mainColor: "#7179f7",
+  // mainColor: "#00BCC9",
   backGround: "#FEE2E2",
   mainTheme: "#F2F1FD",
   heard: "#f54",
   heardDark: "#f54",
   accent: "#7fc",
   blue: "#5555ff",
-  white: "#fff",
+  white: "#ffff",
   whileOpacity: "rgba(255, 255, 255, 0.5)",
   black: "#000",
   blackOpacity: "#2d2d44",
@@ -25,6 +25,7 @@ export default {
   blueTheme: "#bfd9f0",
   greenTheme: "#EDFFEF",
   pinkTheme: "#ffeded",
+  purple: "#AD40AF",
 
   transparent: "transparent",
 };

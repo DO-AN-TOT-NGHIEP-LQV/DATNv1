@@ -21,7 +21,7 @@ import { useState } from "react";
 
 const windowHeight = Dimensions.get("window").height;
 
-const ModalText = ({
+const ModalInputText = ({
   isVisible,
   onClose,
   label,
@@ -29,6 +29,7 @@ const ModalText = ({
   onPress,
   maxLength = 224,
   children,
+  textInputStyle,
 }) => {
   const [text, setText] = useState(value);
 
@@ -52,7 +53,7 @@ const ModalText = ({
     >
       <View>
         <TextInput
-          style={styles.textInput}
+          style={{ ...styles.textInput, ...textInputStyle }}
           placeholder={label}
           value={text}
           multiline={true}
@@ -71,7 +72,7 @@ const ModalText = ({
   );
 };
 
-export default ModalText;
+export default ModalInputText;
 
 const styles = StyleSheet.create({
   textInput: {

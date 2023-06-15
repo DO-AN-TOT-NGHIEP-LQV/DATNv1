@@ -13,7 +13,7 @@ import {
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { bg1, bg2 } from "../../public/assets/image";
 import Colors from "../../constans/Color";
-import { SIZES, FONTS } from "../../constans/Theme";
+import { SIZES, FONTS, statusbarHeight } from "../../constans/Theme";
 import { useSelector } from "react-redux";
 import { apiGet } from "../../ultils/utilsApi";
 import { GET_DETAIL_SHOP } from "../../config/urls";
@@ -64,6 +64,7 @@ const ShopMainScreen = () => {
           width: "100%",
           height: 200,
           ...styles.shadow,
+          ...statusbarHeight,
         }}
       >
         <ImageBackground
@@ -84,11 +85,9 @@ const ShopMainScreen = () => {
               Shop của bạn
             </Text>
           </View>
+
           <ImageBackground style={styles.imgBg}>
             <TouchableOpacity
-              onPress={() => {
-                firstLoad();
-              }}
               style={{
                 width: 80,
                 height: 80,
@@ -163,15 +162,35 @@ const ShopMainScreen = () => {
     const [promoTags, setPromoTags] = useState(shop_manager_promo);
 
     const navigateCreateProductScreen = () => {
-      navigation.navigate("SalerTab", { screen: "CreateProductScreen" });
+      // navigation.navigate("SalerTab", {
+      //   screen: "CreateProductScreen",
+      //   params: { shopId: shopDetail.id },
+      // });
+
+      navigation.navigate("CreateProductScreen", {
+        shopId: shopDetail.id,
+      });
     };
 
     const navigateProfileShopScreen = () => {
-      navigation.navigate("SalerTab", { screen: "ProfileShopScreen" });
+      // navigation.navigate("SalerTab", {
+      //   screen: "ProfileShopScreen",
+      //   params: { shopId: shopDetail.id },
+      // });
+      navigation.navigate("ProfileShopScreen", {
+        shopId: shopDetail.id,
+      });
     };
 
     const navigateManagerProduct = () => {
-      navigation.navigate("SalerTab", { screen: "ManagerProductScreen" });
+      // navigation.navigate("SalerTab", {
+      //   screen: "ManagerProductScreen",
+      //   params: { shopId: shopDetail.id },
+      // });
+
+      navigation.navigate("ManagerProductScreen", {
+        shopId: shopDetail.id,
+      });
     };
 
     return (

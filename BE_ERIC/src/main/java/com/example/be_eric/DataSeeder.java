@@ -19,8 +19,8 @@ public class DataSeeder implements CommandLineRunner {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private  PostService postService;
+//    @Autowired
+//    private  PostService postService;
 
     @Autowired
     private  ImageService imageService;
@@ -63,49 +63,49 @@ public class DataSeeder implements CommandLineRunner {
         userService.addRoleToUser("Samiel", "ROLE_SALER" );
 
         shopService.save(new Shop("Shop2", "0905202332","Quang Nam", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop1.png?alt=media", userService.getUserByEmail("2@gmail.com")));
-        shopService.save(new Shop("Shop5", "0905202332","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop2.png?alt=media", userService.getUserByEmail("5@gmail.com")));
+        shopService.save(new Shop("Shop5", "0905202332","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop2.png?alt=media", userService.getUserByEmail("4@gmail.com")));
         shopService.save(new Shop("Shop3", "7709446333","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop3.png?alt=media", userService.getUserByEmail("5@gmail.com")));
 
-        postService.savePost(new Post(1L, "Sadds", "adasd", userService.getUserByEmail("1@gmail.com")));
-        postService.savePost(new Post(2L, "sdasd", "3223423", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(3L, "ewr", "dsd", userService.getUserByEmail("1@gmail.com")));
-        postService.savePost(new Post(4L, "ẻ", "ưer", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(5L, "sdasd", "df", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(6L, "sdasd", "asdasd", userService.getUserByEmail("1@gmail.com")));
-        postService.savePost(new Post(7L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(8L, "ưe435", "sde", userService.getUserByEmail("2@gmail.com")));
-        postService.savePost(new Post(9L, "sdasd", "dsf", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(10L, "345fd", "asdasd", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(11L, "sdasd", "asdasd", userService.getUserByEmail("2@gmail.com")));
-        postService.savePost(new Post(12L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(13L, "sdasd", "dưe", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(14L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(15L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(16L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(17L, "sdasd", "asdasd", userService.getUserByEmail("1@gmail.com")));
-        postService.savePost(new Post(18L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(19L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(20L, "sdasd", "asdasd", userService.getUserByEmail("1@gmail.com")));
-        postService.savePost(new Post(21L, "fdsf", "adasd", userService.getUserByEmail("1@gmail.com")));
-        postService.savePost(new Post(22L, "sdasd", "sd", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(23L, "ewr", "dsd", userService.getUserByEmail("1@gmail.com")));
-        postService.savePost(new Post(24L, "ẻ", "ưer", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(25L, "sdasd", "df", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(26L, "sdf", "dsf", userService.getUserByEmail("1@gmail.com")));
-        postService.savePost(new Post(27L, "dsf", "asdasd", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(28L, "ưe435", "sde", userService.getUserByEmail("2@gmail.com")));
-        postService.savePost(new Post(29L, "sdf", "dsf", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(30L, "345fd", "sdf", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(31L, "sdasd", "sdf", userService.getUserByEmail("2@gmail.com")));
-        postService.savePost(new Post(32L, "sdasd", "745234", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(33L, "sdtasd", "dưe", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(34L, "gt", "g", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(35L, "sdasd", "ahgsdasd", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(36L, "24", "56", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(37L, "sdasd", "as456dasd", userService.getUserByEmail("1@gmail.com")));
-        postService.savePost(new Post(38L, "3234", "asdasd", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(39L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
-        postService.savePost(new Post(40L, "sd23asd", "asdasd", userService.getUserByEmail("1@gmail.com")));
+//        postService.savePost(new Post(1L, "Sadds", "adasd", userService.getUserByEmail("1@gmail.com")));
+//        postService.savePost(new Post(2L, "sdasd", "3223423", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(3L, "ewr", "dsd", userService.getUserByEmail("1@gmail.com")));
+//        postService.savePost(new Post(4L, "ẻ", "ưer", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(5L, "sdasd", "df", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(6L, "sdasd", "asdasd", userService.getUserByEmail("1@gmail.com")));
+//        postService.savePost(new Post(7L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(8L, "ưe435", "sde", userService.getUserByEmail("2@gmail.com")));
+//        postService.savePost(new Post(9L, "sdasd", "dsf", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(10L, "345fd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(11L, "sdasd", "asdasd", userService.getUserByEmail("2@gmail.com")));
+//        postService.savePost(new Post(12L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(13L, "sdasd", "dưe", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(14L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(15L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(16L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(17L, "sdasd", "asdasd", userService.getUserByEmail("1@gmail.com")));
+//        postService.savePost(new Post(18L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(19L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(20L, "sdasd", "asdasd", userService.getUserByEmail("1@gmail.com")));
+//        postService.savePost(new Post(21L, "fdsf", "adasd", userService.getUserByEmail("1@gmail.com")));
+//        postService.savePost(new Post(22L, "sdasd", "sd", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(23L, "ewr", "dsd", userService.getUserByEmail("1@gmail.com")));
+//        postService.savePost(new Post(24L, "ẻ", "ưer", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(25L, "sdasd", "df", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(26L, "sdf", "dsf", userService.getUserByEmail("1@gmail.com")));
+//        postService.savePost(new Post(27L, "dsf", "asdasd", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(28L, "ưe435", "sde", userService.getUserByEmail("2@gmail.com")));
+//        postService.savePost(new Post(29L, "sdf", "dsf", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(30L, "345fd", "sdf", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(31L, "sdasd", "sdf", userService.getUserByEmail("2@gmail.com")));
+//        postService.savePost(new Post(32L, "sdasd", "745234", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(33L, "sdtasd", "dưe", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(34L, "gt", "g", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(35L, "sdasd", "ahgsdasd", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(36L, "24", "56", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(37L, "sdasd", "as456dasd", userService.getUserByEmail("1@gmail.com")));
+//        postService.savePost(new Post(38L, "3234", "asdasd", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(39L, "sdasd", "asdasd", userService.getUserByEmail("3@gmail.com")));
+//        postService.savePost(new Post(40L, "sd23asd", "asdasd", userService.getUserByEmail("1@gmail.com")));
 
 
 

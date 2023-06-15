@@ -48,13 +48,12 @@ public class Product {
 
     private String brand;
 
-//    private String status;
-
-    @Column(name = "count_views", columnDefinition = "bigint default 0")
-    private Long  countViews;
-
-//    Not null
     private String link;
+
+    private  boolean status = false;
+
+    private  boolean isFeatured = false;
+
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
@@ -103,9 +102,9 @@ public class Product {
 
     // Thêm thuộc tính created_at và chú thích @CreationTimestamp
     @CreationTimestamp
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     // Thêm thuộc tính updated_at và chú thích @UpdateTimestamp
     @UpdateTimestamp
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 }

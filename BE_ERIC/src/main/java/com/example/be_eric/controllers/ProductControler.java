@@ -25,27 +25,27 @@ public class ProductControler {
     @Autowired
     private ProductService productService;
 
-    @PutMapping ("/user/product/updateView")
-    public ResponseEntity<?> updateView(@RequestParam Long productId) {
-        try {
-
-            boolean result =  productService.updateViews(productId);
-            if(result)
-                return ResponseEntity.ok().build();
-            else
-                return ResponseEntity.badRequest()
-                    .body(new ErrorResponse("Không thể cập nhật lượt View"));
-        }
-        catch (ObjectOptimisticLockingFailureException ox){
-            System.out.println(ox.getMessage());
-
-            return ResponseEntity.badRequest()
-                    .body(new ErrorResponse("Lỗi xung đột dữ liệu"));
-        }catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(new ErrorResponse(e.getMessage()));
-        }
-    }
+//    @PutMapping ("/user/product/updateView")
+//    public ResponseEntity<?> updateView(@RequestParam Long productId) {
+//        try {
+//
+//            boolean result =  productService.updateViews(productId);
+//            if(result)
+//                return ResponseEntity.ok().build();
+//            else
+//                return ResponseEntity.badRequest()
+//                    .body(new ErrorResponse("Không thể cập nhật lượt View"));
+//        }
+//        catch (ObjectOptimisticLockingFailureException ox){
+//            System.out.println(ox.getMessage());
+//
+//            return ResponseEntity.badRequest()
+//                    .body(new ErrorResponse("Lỗi xung đột dữ liệu"));
+//        }catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            return ResponseEntity.badRequest()
+//                    .body(new ErrorResponse(e.getMessage()));
+//        }
+//    }
 
 }

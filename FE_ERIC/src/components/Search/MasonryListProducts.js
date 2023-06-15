@@ -4,45 +4,41 @@ import MasonryList from "@react-native-seoul/masonry-list";
 import Color from "../../constans/Color";
 import Icons, { icons } from "../Icons";
 import { v4 as uuidv4 } from "uuid";
-import { useNavigation } from "@react-navigation/core";
 import { FONTS } from "../../constans/Theme";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useNavigation, CommonActions } from "@react-navigation/native";
 
-const MasonryListProducts = ({ data }) => {
+const MasonryListProducts = ({ data, previousScreen }) => {
   return (
     <MasonryList
       data={data}
-      keyExtractor={(item) => uuidv4()}
+      keyExtractor={(item) => item.id}
       numColumns={2}
-      // spacing={2}
       imageContainerStyle={{ borderRadius: 8 }}
       showsVerticalScrollIndicator={false}
-      renderItem={({ item, i }) => <CardItem data={item} i={i} />}
+      containerStyle={{ backgroundColor: Color.mainTheme }}
+      renderItem={({ item }) => (
+        <CardItem data={item} previousScreen={previousScreen} />
+      )}
     />
   );
 };
 
-const CardItem = ({ data, i }) => {
+const CardItem = ({ data, previousScreen }) => {
   const navigation = useNavigation();
-  //
+
   return (
-    <View
-      className="bg-[#111] rounded-md"
-      style={style.cardItemView}
-      onPress={() =>
-        navigation.navigate("SearchTab", {
-          screen: "DetailProduct",
-          params: { dataProduct: data },
-        })
-      }
-    >
+    <View className="bg-[#111] rounded-md" style={style.cardItemView}>
       <View style={style.card}>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("SearchTab", {
-              screen: "DetailProduct",
-              params: { dataProduct: data },
-            })
-          }
+          onPress={() => {
+            navigation.navigate("DetailProduct", {
+              dataProduct: data,
+              previousScreen: previousScreen,
+              productId: data.id,
+            });
+          }}
           style={{
             borderRadius: 3,
             width: "100%",
@@ -57,9 +53,9 @@ const CardItem = ({ data, i }) => {
             className="w-full h-full object-cover"
             resizeMode="contain"
             style={{
-              borderWidth: 1,
+              // borderWidth: 1,
               borderRadius: 3,
-              borderColor: Color.textLight,
+              // borderColor: Color.textLight,
             }}
           />
         </TouchableOpacity>
@@ -180,12 +176,17 @@ const style = StyleSheet.create({
   priceSmall: {
     fontSize: 14,
     fontWeight: "300",
-    color: Color.red,
+    color: Color.blueMain,
+
+    // color: Color.blueSd,
     // color: Color.blueTheme,
   },
   priceBig: {
-    color: Color.red,
-    color: Color.red,
+    // color: Color.red,
+    // color: Color.red,
+    color: Color.blueMain,
+    color: Color.blueSd,
+
     fontFamily: "Roboto-Bold",
     fontSize: 16,
     fontWeight: "normal",
@@ -204,7 +205,7 @@ const style = StyleSheet.create({
   },
   cardItemView: {
     borderColor: Color.textLight,
-    borderWidth: 1,
+    // borderWidth: 1,
     height: Math.round(200),
     backgroundColor: Color.white,
     paddingHorizontal: 5,

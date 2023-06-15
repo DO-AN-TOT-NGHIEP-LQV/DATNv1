@@ -6,5 +6,5 @@ export { default as Restaurants } from "./restaurants.png";
 export { default as NotFound } from "./NotFound.png";
 export { default as LoginImg } from "./login.png";
 export { default as ShoesFLas } from "./splashShoe.png";
-export { default as FilterIcon } from "./filterIcon.png";
+// export { default as FilterIcon } from "./filterIcon.png";
 // export { default as SVG } from "./g";
