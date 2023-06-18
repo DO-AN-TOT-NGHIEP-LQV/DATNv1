@@ -9,6 +9,7 @@ import {
   Platform,
   TouchableOpacity,
   Animated,
+  ScrollView,
 } from "react-native";
 
 import {
@@ -40,11 +41,12 @@ import { useSelector } from "react-redux";
 
 import LottieLoading from "../components/LottieLoading";
 import { ActivityIndicator } from "react-native";
+import { Fragment } from "react";
 
 const { width, height } = Dimensions.get("window");
 
-const MIN_HEIGHT = Platform.OS === "ios" ? 90 : 65;
-const MAX_HEIGHT = 200;
+const MIN_HEIGHT = (Platform.OS === "ios" ? 90 : 65) + spacing.statusbarHeight;
+const MAX_HEIGHT = 200 + spacing.statusbarHeight;
 
 const product_details_tabs = product_tabs.map((product_details_tab) => ({
   ...product_details_tab,
@@ -68,27 +70,27 @@ const DetailProductScreen = ({ route }) => {
   const flatListRef = useRef();
 
   // useEffect(() => {
-  // const fetchData = async () => {
-  //   setLoading(true);
-  //   var headers = {
-  //     "Content-Type": "application/json",
-  //   };
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     var headers = {
+  //       "Content-Type": "application/json",
+  //     };
 
-  //   var data = {
-  //     params: {
-  //       productId: productId,
-  //     },
-  //   };
-  //   await apiGet(GET_PRODUCT_BY_ID, data, headers, false)
-  //     .then((res) => {
-  //       setDataProduct(res.data);
-  //     })
-  //     .catch((error) => {
-  //       showError(error.error_message);
-  //     });
+  //     var data = {
+  //       params: {
+  //         productId: productId,
+  //       },
+  //     };
+  //     await apiGet(GET_PRODUCT_BY_ID, data, headers, false)
+  //       .then((res) => {
+  //         // setDataProduct(res.data);
+  //       })
+  //       .catch((error) => {
+  //         showError(error.error_message);
+  //       });
 
-  //   setLoading(false);
-  // };
+  //     setLoading(false);
+  //   };
 
   //   fetchData();
   // }, [productId]);
@@ -103,16 +105,21 @@ const DetailProductScreen = ({ route }) => {
   });
 
   // Phong to thu nho hinh anh
-  const [expanded, setExpanded] = useState(true);
-  const toggleExpand = () => {
-    setExpanded(!expanded);
-  };
+  // const [expanded, setExpanded] = useState(true);
+  // const toggleExpand = () => {
+  //   setExpanded(!expanded);
+  // };
 
   const gpPreviousScreen = () => {
     if (fromManagement == true && shopId) {
       navigation.navigate("ManagerProductScreen", {
         shopId: shopId,
       });
+      return;
+    }
+
+    if (fromManagement == true && previousScreen) {
+      navigation.navigate("ManagerProductScreen");
       return;
     }
 
@@ -228,15 +235,20 @@ const DetailProductScreen = ({ route }) => {
           )}
           renderItem={({ item, index }) => {
             return (
-              <View style={{ width, position: "relative" }}>
+              <ScrollView style={{ width }}>
                 {index == 0 && (
-                  <DetailProduct
-                    dataProduct={dataProduct}
-                    productId={dataProduct.id}
-                  />
+                  <View>
+                    <DetailProduct
+                      dataProduct={dataProduct}
+                      productId={dataProduct.id}
+                    />
+                  </View>
                 )}
                 {index == 1 && (
-                  <DetailShop dataProduct={dataProduct}></DetailShop>
+                  <DetailShop
+                    dataProduct={dataProduct}
+                    productId={dataProduct.id}
+                  ></DetailShop>
                 )}
                 {index == 2 &&
                   (isLogin ? (
@@ -244,7 +256,7 @@ const DetailProductScreen = ({ route }) => {
                   ) : (
                     <AuthRequired />
                   ))}
-              </View>
+              </ScrollView>
             );
           }}
         />
@@ -262,46 +274,43 @@ const DetailProductScreen = ({ route }) => {
       {loading ? (
         <LottieLoading />
       ) : (
-        <ImageHeaderScrollView
-          maxHeight={expanded ? MAX_HEIGHT : MIN_HEIGHT}
-          minHeight={MIN_HEIGHT}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-            { useNativeDriver: false }
-          )}
-          renderHeader={() =>
-            loading ? (
-              <LottieLoading />
-            ) : (
-              <View
-                style={{
-                  alignItems: "center",
-                  paddingHorizontal: 5,
-                  height: MAX_HEIGHT,
-                  width: "100%",
-                  backgroundColor: Color.mainTheme,
-                }}
-              >
+        <Fragment>
+          <ImageHeaderScrollView
+            // maxHeight={expanded ? MAX_HEIGHT : MIN_HEIGHT}
+            maxHeight={MAX_HEIGHT}
+            minHeight={MIN_HEIGHT}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+              { useNativeDriver: false }
+            )}
+            renderHeader={() =>
+              loading ? (
+                <LottieLoading />
+              ) : (
                 <Image
                   source={{
                     uri: dataProduct?.images[0].url,
                   }}
-                  style={[styles.image, styles.shadowTouch]}
+                  style={{
+                    height: MAX_HEIGHT,
+                    width: "100%",
+                    resizeMode: "contain",
+                  }}
                 />
-              </View>
-            )
-          }
-        >
-          <TriggeringView
-            style={{
-              borderBottomColor: Color.textLight,
-              backgroundColor: "white",
-              position: "relative",
-            }}
+              )
+            }
           >
-            {loading ? <ActivityIndicator /> : renderContent()}
-          </TriggeringView>
-        </ImageHeaderScrollView>
+            <TriggeringView
+              style={{
+                borderBottomColor: Color.textLight,
+                backgroundColor: "white",
+                position: "relative",
+              }}
+            >
+              {loading ? <ActivityIndicator /> : renderContent()}
+            </TriggeringView>
+          </ImageHeaderScrollView>
+        </Fragment>
       )}
     </View>
   );
@@ -408,8 +417,8 @@ export default DetailProductScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: "relative",
-    paddingTop: spacing.statusbarHeight,
+    // position: "relative",
+    // paddingTop: spacing.statusbarHeight,
     backgroundColor: Color.mainTheme,
   },
   backStyles: {

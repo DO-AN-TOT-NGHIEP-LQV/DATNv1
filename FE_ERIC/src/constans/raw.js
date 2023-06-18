@@ -1,4 +1,15 @@
-import { bg1, bg2, bg3, bg4, bg5, bg6, bg7 } from "../public/assets/image";
+import {
+  bg1,
+  bg2,
+  bg3,
+  bg4,
+  bg5,
+  bg6,
+  bg7,
+  promoBg1,
+  promoBg2,
+  promoBg3,
+} from "../public/assets/image";
 
 export const product_tabs = [
   { id: 0, name: "Chi tiết" },
@@ -315,6 +326,7 @@ export const shop_manager_promo = [
     title: "Quản lí sản phẩm",
     description:
       "Cập nhật số lượng, tình trạng, giá cả của các sản phẩm trong shop của bạn ",
+    thumbnail: bg1,
   },
   {
     id: 2,
@@ -322,11 +334,40 @@ export const shop_manager_promo = [
     title: "Quản lí thông tin",
     description:
       "Cập nhật thông tin, địa chỉ, link shop để người dùng dễ dàng tìm đến bạn",
+    thumbnail: bg1,
   },
   {
     id: 3,
     no: 1,
     title: "Thêm sản phẩm mới",
     description: "Hãy thêm sản phẩm mới vào shop của bạn",
+    thumbnail: bg1,
+  },
+];
+
+
+export const shop_main_promo = [
+  {
+    id: 1,
+    no: 1,
+    title: "Quản lí sản phẩm",
+    description:
+      "Cập nhật số lượng, tình trạng, giá cả của các sản phẩm trong shop của bạn ",
+    thumbnail: promoBg1,
+  },
+  {
+    id: 2,
+    no: 1,
+    title: "Quản lí thông tin",
+    description:
+      "Cập nhật thông tin, địa chỉ, link shop để người dùng dễ dàng tìm đến bạn",
+    thumbnail: promoBg2,
+  },
+  {
+    id: 3,
+    no: 1,
+    title: "Thêm sản phẩm mới",
+    description: "Hãy thêm sản phẩm mới vào shop của bạn",
+    thumbnail: promoBg3,
   },
 ];

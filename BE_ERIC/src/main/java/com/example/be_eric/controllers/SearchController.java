@@ -1,5 +1,6 @@
 package com.example.be_eric.controllers;
 
+import com.example.be_eric.DTO.ShopProductDetailDTO;
 import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.service.ProductService;
 import com.example.be_eric.service.ShopService;
@@ -182,18 +183,94 @@ public class SearchController {
     }
 
 
+//    @GetMapping(value = "/search/products/shopId")
+//    public ResponseEntity searchProductByShop(@RequestParam("shopId") Long shopId, @RequestParam( name = "keyword", required = false, defaultValue = "") String keyword) {
+//        try{
+//            List<Product> productsList = productService.findProductsByShopIdAndKeyword(shopId, keyword);
+//            return ResponseEntity.ok().body(productsList);
+//        }
+//         catch (Exception e){
+//             System.out.println(e.getMessage());
+//            return ResponseEntity.badRequest()
+//                    .body(new ErrorResponse(e.getMessage()));
+//        }
+//    }
+
+
     @GetMapping(value = "/search/products/shopId")
     public ResponseEntity searchProductByShop(@RequestParam("shopId") Long shopId, @RequestParam( name = "keyword", required = false, defaultValue = "") String keyword) {
-
-
         try{
-            List<Product> productsList = productService.findProductsByShopIdAndKeyword(shopId, keyword);
+            List<ShopProductDetailDTO> productsList = productService.findProductOfShopIdAndKeyword(shopId, keyword);
             return ResponseEntity.ok().body(productsList);
         }
-         catch (Exception e){
-             System.out.println(e.getMessage());
+        catch (Exception e){
+            System.out.println(e.getMessage());
             return ResponseEntity.badRequest()
                     .body(new ErrorResponse(e.getMessage()));
         }
     }
+
+    // Get product get all shop have a product
+    @GetMapping(value = "/search/products/getShops", name = "GET")
+    public ResponseEntity getShopsOfProducts(@RequestParam("productId") Long productId )
+    {
+        try {
+
+            Product product =  productService.getById( productId );
+            if (product == null){
+                throw  new Exception( "Sản phẩm này không còn tồn tại");
+            }
+//            System.out.println(product.getId());
+
+            List<ShopProductDetailDTO> dtoList  = shopService.getShopByProductId(productId);
+            return ResponseEntity.ok().body(dtoList);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    //    Get all product for admin manager
+    @GetMapping(value = "/search/products/getAll")
+    public ResponseEntity searchAllProduct( @RequestParam( name = "keyword", required = false, defaultValue = "") String keyword) {
+
+
+        try{
+            List<Product> productsList = productService.findAllProductByKeyword( keyword);
+            return ResponseEntity.ok().body(productsList);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    // get detail product for screen detail anh update
+    @GetMapping(value = "/search/products/getDetail")
+    public ResponseEntity searchGetProductDetail(@RequestParam("productId") Long productId) {
+        try {
+            Product product =  productService.getById( productId );
+            if (product == null){
+                throw  new Exception( "Sản phẩm này không còn tồn tại");
+            }
+            System.out.println(product.getId());
+            return ResponseEntity.ok().body(product);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+
+
+
+
+
+
+
 }

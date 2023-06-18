@@ -18,11 +18,11 @@ import { SwipeListView } from "react-native-swipe-list-view";
 
 import { showError } from "../../ultils/messageFunction";
 import { apiGet } from "../../ultils/utilsApi";
-import { GET_PRODUCT_BY_SHOP } from "../../config/urls";
+import { GET_ALL_PRODUCT } from "../../config/urls";
 import { ShoesFLas } from "../../public/assets";
 
 const ManagerProductScreen = ({ route }) => {
-  const shopId = route.params.shopId;
+  // const shopId = route.params.shopId;
   const navigation = useNavigation();
 
   const [listProduct, setListProduct] = useState([]);
@@ -31,7 +31,6 @@ const ManagerProductScreen = ({ route }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    console.log("sdad");
     fetchData();
   }, []);
 
@@ -55,11 +54,11 @@ const ManagerProductScreen = ({ route }) => {
 
     var data = {
       params: {
-        shopId: shopId,
+        // shopId: shopId,
         keyword: keyword,
       },
     };
-    await apiGet(GET_PRODUCT_BY_SHOP, data, headers, false)
+    await apiGet(GET_ALL_PRODUCT, data, headers, false)
       .then((res) => {
         setListProduct(res.data);
       })
@@ -85,7 +84,7 @@ const ManagerProductScreen = ({ route }) => {
               backgroundColor: Color.whileOpacity,
             }}
             onPress={() => {
-              navigation.navigate("ShopMainScreen");
+              navigation.navigate("AdminMainScreen");
             }}
           >
             <View
@@ -105,19 +104,20 @@ const ManagerProductScreen = ({ route }) => {
             </View>
           </TouchableOpacity>
         }
-        rightComponent={
-          <TouchableOpacity
-            style={{
-              width: 40,
-              height: 40,
-              alignItems: "center",
-              justifyContent: "center",
-              // : 1,
-              borderColor: Color.textLight,
-              borderRadius: SIZES.radius,
-            }}
-          ></TouchableOpacity>
-        }
+        // rightComponent={
+        //   <TouchableOpacity
+        //     style={{
+        //       width: 40,
+        //       height: 40,
+        //       alignItems: "center",
+        //       justifyContent: "center",
+        //       // : 1,
+        //       borderColor: Color.textLight,
+        //       borderRadius: SIZES.radius,
+        //     }}
+        //   ></TouchableOpacity>
+        // }
+        rightComponent={<View style={{ flex: 1 }}>{renderSearch()}</View>}
       >
         {/* {renderSearch()} */}
       </Header>
@@ -131,7 +131,7 @@ const ManagerProductScreen = ({ route }) => {
           flexDirection: "row",
           height: 40,
           alignItems: "center",
-          marginHorizontal: SIZES.padding,
+          marginLeft: SIZES.padding,
           marginVertical: SIZES.base,
           paddingHorizontal: SIZES.radius,
           borderRadius: SIZES.radius,
@@ -175,8 +175,6 @@ const ManagerProductScreen = ({ route }) => {
         keyExtractor={(item) => `${item?.id}-id`}
         contentContainerStyle={{
           paddingHorizontal: SIZES.padding,
-          // paddingBottom: SIZES.padding * 2,
-          // paddingBottom: 50,
         }}
         disableRightSwipe={true}
         rightOpenValue={-120}
@@ -188,7 +186,7 @@ const ManagerProductScreen = ({ route }) => {
             <Pressable
               style={{
                 height: 100,
-                backgroundColor: Color.mainTheme,
+                backgroundColor: Color.white,
                 // backgroundColor: rgb(242, 241, 253),
                 ...styles.cartProductContainer,
                 zIndex: 1,
@@ -200,7 +198,8 @@ const ManagerProductScreen = ({ route }) => {
               onPress={() =>
                 navigation.navigate("UpdateProductScreen", {
                   productId: item.id,
-                  shopId: shopId,
+
+                  // shopId: shopId,
                 })
               }
             >
@@ -269,13 +268,13 @@ const ManagerProductScreen = ({ route }) => {
                 </Text>
               </View>
 
-              <View
+              {/* <View
                 style={{
                   width: 50,
                   borderWidth: 2,
                   height: 36,
                 }}
-              ></View>
+              ></View> */}
             </Pressable>
           );
         }}
@@ -337,12 +336,12 @@ const ManagerProductScreen = ({ route }) => {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: Color.white }}>
+    <View style={{ flex: 1, backgroundColor: Color.mainTheme }}>
       {/* Header */}
       {renderHeader()}
 
       {/* Card list */}
-      {renderSearch()}
+      {/* {renderSearch()} */}
 
       {/* footer */}
       {renderCartList()}
@@ -364,7 +363,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "80%",
     position: "absolute",
-    borderWidth: 1,
+    borderWidth: 0,
     borderRadius: 12,
     borderColor: Color.black,
   },

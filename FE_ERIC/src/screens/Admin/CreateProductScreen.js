@@ -21,7 +21,7 @@ import { ShoesFLas } from "../../public/assets";
 import Icons, { icons } from "../../components/Icons";
 import CustomButton from "../../components/CustomButton/index.js";
 import LineDivider from "../../components/LineDivider";
-import { SIZES, spacing } from "../../constans/Theme";
+import { FONTS, SIZES, spacing } from "../../constans/Theme";
 import ProductValue from "../../components/SalerManager/ProductValue";
 import ModalInputText from "../../components/SalerManager/ModalInputText";
 import ModalInputNumber from "../../components/SalerManager/ModalInputNumber";
@@ -42,7 +42,7 @@ const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 const CreateProductScreen = ({ route }) => {
-  const shopId = route.params?.shopId;
+  // const shopId = route.params?.shopId;
 
   const navigation = useNavigation();
   const [pickedImagePath, setPickedImagePath] = useState("");
@@ -65,10 +65,10 @@ const CreateProductScreen = ({ route }) => {
   const [brandModal, setBrandModal] = useState(false);
 
   useEffect(() => {
-    if (!shopId) {
-      showError("Khong tim thay id Shop");
-      navigation.goBack();
-    }
+    // if (!shopId) {
+    //   showError("Khong tim thay id Shop");
+    //   navigation.goBack();
+    // }
     return () => {
       setPickedImagePath("");
     };
@@ -84,7 +84,6 @@ const CreateProductScreen = ({ route }) => {
       brand,
       link,
       pickedImagePath,
-      shop_id: shopId,
     };
     const isValidData = () => {
       const error = validatorCreateProduct(product);
@@ -149,8 +148,11 @@ const CreateProductScreen = ({ route }) => {
               borderRadius: SIZES.radius,
               backgroundColor: Color.whileOpacity,
             }}
+            // onPress={() =>
+            //   navigation.navigate("SalerTab", { screen: "ShopMainScreen" })
+            // }
             onPress={() =>
-              navigation.navigate("SalerTab", { screen: "ShopMainScreen" })
+              navigation.navigate("AdminTab", { screen: "AdminMainScreen" })
             }
           >
             <View style={styles.headerLeft}>
@@ -163,14 +165,21 @@ const CreateProductScreen = ({ route }) => {
             </View>
           </TouchableOpacity>
         }
+        centerComponent={
+          <View style={{ flex: 1, justifyContent: "center", marginLeft: 15 }}>
+            <Text style={{ ...FONTS.h3 }}>Tạo sản phẩm mới</Text>
+          </View>
+        }
         rightComponent={
-          <CustomButton
-            loading={loading}
-            label="Hoàn tất"
-            onPress={() => createNewProduct()}
-            // styleContainer={{ height: 35 }}
-            textStyle={{ lineHeight: 18 }}
-          />
+          <View style={{}}>
+            <CustomButton
+              loading={loading}
+              label="Hoàn tất"
+              onPress={() => createNewProduct()}
+              // styleContainer={{ height: 35 }}
+              textStyle={{ lineHeight: 18 }}
+            />
+          </View>
         }
       ></Header>
     );

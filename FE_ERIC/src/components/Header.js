@@ -16,6 +16,8 @@ const Header = ({
   leftComponent,
   rightComponent,
   children,
+  image,
+  centerComponent,
 }) => {
   // return (
   //   <ImageBackground
@@ -56,15 +58,16 @@ const Header = ({
 
   return (
     <ImageBackground
-      source={bg2}
+      source={image || bg2}
       resizeMode="cover"
       style={{
         alignItems: "center",
         borderRadius: 20,
         paddingVertical: 3,
+        paddingHorizontal: 5,
         ...containerStyle,
       }}
-      // imageStyle={{ ...shadow.shadow }}
+      imageStyle={{ opacity: 0.5 }}
     >
       {/* <View style={[styles.headerWrapper, styles.shadowTouch]}> */}
       <View
@@ -78,11 +81,13 @@ const Header = ({
         {leftComponent}
 
         {/* title */}
-        <View
+        {centerComponent}
+
+        {/* <View
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
         >
           <Text style={{ ...FONTS.h3 }}>{title}</Text>
-        </View>
+        </View> */}
 
         {/* right */}
         {rightComponent}
@@ -103,8 +108,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: Color.white,
     height: Dimensions.get("window").height / 15,
-    marginHorizontal: 5,
-    // marginTop: 5,
+    width: "100%",
     paddingVertical: 5,
   },
   shadowTouch: {

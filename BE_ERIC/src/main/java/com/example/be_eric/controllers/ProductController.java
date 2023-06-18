@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Map;
 
 @Controller
-public class ResourceController {
+public class ProductController {
 
     @Autowired
     private FirebaseFileService firebaseFileService;
@@ -176,12 +176,12 @@ public class ResourceController {
             }
 
 
-            if (productMap.containsKey("shop_id") && productMap.get("shop_id") != null) {
-                int idShop = (int) productMap.get("shop_id");
-                newProduct.setShop(  shopService.getById(idShop));
-            } else {
-                throw new InValidException("Invalid shop id");
-            }
+//            if (productMap.containsKey("shop_id") && productMap.get("shop_id") != null) {
+//                int idShop = (int) productMap.get("shop_id");
+//                newProduct.setShop(  shopService.getById(idShop));
+//            } else {
+//                throw new InValidException("Invalid shop id");
+//            }
 
             System.out.println("goi uploadImage_saveVector" );
             String fileName = firebaseFileService.uploadImage_saveVector(fileImage, newProduct  );
@@ -270,23 +270,23 @@ public class ResourceController {
         }
     }
 
-    @GetMapping(value = "/api/user/product/getById", name = "GET")
-    public ResponseEntity getProductById(@RequestParam("productId") Long productId )
-    {
-        try {
-            Product product =  productService.getById( productId );
-            if (product == null){
-                throw  new Exception( "Sản phẩm này không còn tồn tại");
-            }
-            System.out.println(product.getId());
-            return ResponseEntity.ok().body(product);
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(new ErrorResponse(e.getMessage()));
-        }
-    }
+//    @GetMapping(value = "/api/user/product/getById", name = "GET")
+//    public ResponseEntity getProductById(@RequestParam("productId") Long productId )
+//    {
+//        try {
+//            Product product =  productService.getById( productId );
+//            if (product == null){
+//                throw  new Exception( "Sản phẩm này không còn tồn tại");
+//            }
+//            System.out.println(product.getId());
+//            return ResponseEntity.ok().body(product);
+//        }
+//        catch (Exception e) {
+//            System.out.println(e.getMessage());
+//            return ResponseEntity.badRequest()
+//                    .body(new ErrorResponse(e.getMessage()));
+//        }
+//    }
 
 
     @PostMapping(value = "/api/sale/product/update", name = "POST",

@@ -12,7 +12,9 @@ export default {
   black: "#000",
   blackOpacity: "#2d2d44",
   gray: "#666",
-  darkGray: "#999",
+  darkGray: "#BBBDC1",
+  darkGray2: "#f8f8F8",
+
   red: "#F52A2A",
   light: "#F1F1F1",
   green: "#00B761",

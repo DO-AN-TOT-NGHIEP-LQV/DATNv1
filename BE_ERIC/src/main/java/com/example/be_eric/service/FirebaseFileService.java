@@ -69,7 +69,7 @@ public class FirebaseFileService {
         BlobId blobId = null;
         try {
 //            String imageName = "shop_" + product.getShop().getId() + "_p_" + product.getId() + "_name_" + generateFileName(fileImage.getOriginalFilename());
-            String imageName = "shop_" + product.getShop().getId() + "_p_" + product.getId() + "_name_" + generateFileName(fileImage.getOriginalFilename());
+            String imageName =   "p_" + product.getId() + "_name_" + generateFileName(fileImage.getOriginalFilename());
             String folderName = "ImageProduct";
             String filePath = folderName + "/" + imageName;
             System.out.println(imageName);

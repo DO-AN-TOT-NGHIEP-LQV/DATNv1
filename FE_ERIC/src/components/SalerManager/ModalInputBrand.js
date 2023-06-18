@@ -5,6 +5,7 @@ import {
   TextInput,
   View,
   FlatList,
+  ScrollView,
 } from "react-native";
 import React from "react";
 import InputModal from "../InputModal";
@@ -68,11 +69,11 @@ const ModalInputBrand = ({
           {text?.length || 0}/{maxLength}
         </Text>
 
-        {text && suggesList.length > 0 ? (
-          <View style={{ height: 400 }}>
+        <View style={{ height: 400 }}>
+          {text && suggesList.length > 0 ? (
             <FlatList
               data={suggesList}
-              contentContainerStyle={{ height: 200 }}
+              style={{ height: 400 }}
               showsVerticalScrollIndicator={true}
               renderItem={({ item, index }) => (
                 <Pressable
@@ -97,8 +98,8 @@ const ModalInputBrand = ({
               )}
               keyExtractor={(item, index) => item + index}
             />
-          </View>
-        ) : null}
+          ) : null}
+        </View>
       </View>
     </InputModal>
   );

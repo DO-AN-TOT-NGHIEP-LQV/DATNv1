@@ -2,6 +2,7 @@ package com.example.be_eric.models;
 
 
 import com.example.be_eric.models.Product.Product;
+import com.example.be_eric.models.Product.ShopProduct;
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -42,11 +45,14 @@ public class Shop {
     private User user;
 
 
-    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true )
-    @JsonBackReference
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Product> products = new ArrayList<>();
+//    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true )
+//    @JsonBackReference
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    private List<Product> products = new ArrayList<>();
 
+    @OneToMany(mappedBy = "shop", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<ShopProduct> shopProducts = new ArrayList<>();
 
     @CreationTimestamp
     private LocalDateTime created_at;
@@ -165,5 +171,11 @@ public class Shop {
         this.updated_at = updated_at;
     }
 
+    public List<ShopProduct> getShopProducts() {
+        return shopProducts;
+    }
 
+    public void setShopProducts(List<ShopProduct> shopProducts) {
+        this.shopProducts = shopProducts;
+    }
 }

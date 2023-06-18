@@ -9,16 +9,16 @@ import {
 import React from "react";
 import { FONTS, SIZES } from "../../constans/Theme";
 import { Color } from "../../constans";
-import { bg1 } from "../../public/assets/image";
+import { bg1, bg11 } from "../../public/assets/image";
 
 const ItemPromo = ({ item, onPress }) => {
   return (
     <TouchableOpacity style={styles.containStyle} onPress={() => onPress()}>
       <View style={styles.header}>
         <ImageBackground
-          source={bg1}
+          source={item?.thumbnail || bg11}
           resizeMode="cover"
-          imageStyle={styles.image}
+          imageStyle={{ ...styles.image, opacity: 0.1 }}
           style={styles.header}
         >
           <Text style={styles.headerText}>{item?.title}</Text>

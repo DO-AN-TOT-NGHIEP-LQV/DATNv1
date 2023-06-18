@@ -17,6 +17,7 @@ import { apiDelete, apiGet, apiPatch, apiPost } from "../../ultils/utilsApi";
 import {
   CHANGE_FEATURE,
   DELETE_PRODUCT,
+  GET_PRODUCT_BY_ID,
   GET_PRODUCT_DETAIL,
   UPDATE_PRODUCT,
 } from "../../config/urls";
@@ -24,7 +25,7 @@ import Header from "../../components/Header";
 import { FONTS, SIZES, spacing } from "../../constans/Theme";
 import { Color } from "../../constans";
 import Icons, { icons } from "../../components/Icons";
-import CustomButton from "../../components/CustomButton/index.js";
+import CustomButton from "../../components/CustomButton/index.js.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ShoesFLas } from "../../public/assets";
 import { showError, showSuccess } from "../../ultils/messageFunction";
@@ -43,12 +44,13 @@ import moment from "moment";
 import { ActivityIndicator } from "react-native-paper";
 import * as Progress from "react-native-progress";
 import { Alert } from "react-native";
+import LottieLoading from "../../components/LottieLoading";
 
 const windowWidth = Dimensions.get("window").width;
 
 const UpdateProductScreen = ({ route }) => {
   const productId = route.params.productId;
-  const shopId = route.params.shopId;
+  // const shopId = route.params.shopId;
 
   const navigation = useNavigation();
 
@@ -110,19 +112,20 @@ const UpdateProductScreen = ({ route }) => {
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingFirst, setLoadingFirst] = useState(false);
 
   //////////////////////////////////////////////
 
   useEffect(() => {
     firstLoad();
-    console.log(product);
 
     return () => {
       setProduct(null);
     };
-  }, [productId, shopId]);
+  }, [productId]);
 
   const firstLoad = async () => {
+    setLoadingFirst(true);
     try {
       var headers = {
         "Content-Type": "application/json",
@@ -131,14 +134,15 @@ const UpdateProductScreen = ({ route }) => {
       var data = {
         params: {
           productId: productId,
-          shopId: shopId,
+          // shopId: shopId,
         },
       };
 
-      const res = await apiGet(GET_PRODUCT_DETAIL, data, headers, true);
+      const res = await apiGet(GET_PRODUCT_BY_ID, data, headers, false);
 
       const resProduct = res.data;
-      console.log(resProduct);
+      // console.log(resProduct);
+
       updateProductForm({
         id: resProduct.id,
         name: resProduct.name,
@@ -152,11 +156,13 @@ const UpdateProductScreen = ({ route }) => {
       });
 
       setProduct(resProduct);
+      setLoadingFirst(false);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       showError(
         error.error_message || "Sản phẩm này không tồn tại, hãy thử lại"
       );
+      setLoadingFirst(false);
     }
   };
 
@@ -214,7 +220,7 @@ const UpdateProductScreen = ({ route }) => {
       showSuccess("Xóa thành công");
       setLoading(false);
       navigation.navigate("ManagerProductScreen", {
-        shopId: shopId,
+        // shopId: shopId,
         refresh: true,
       });
     } catch (error) {
@@ -237,9 +243,9 @@ const UpdateProductScreen = ({ route }) => {
         url += `productId=${productId}&`;
       } else throw { error_message: "Không tìm thấy id sản phẩm" };
 
-      if (shopId !== undefined) {
-        url += `shopId=${shopId}&`;
-      } else throw { error_message: "Không tìm thấy id của shop" };
+      // if (shopId !== undefined) {
+      //   url += `shopId=${shopId}&`;
+      // } else throw { error_message: "Không tìm thấy id của shop" };
 
       url += `isFeature=${!product?.featured}`;
 
@@ -261,7 +267,7 @@ const UpdateProductScreen = ({ route }) => {
             style={styles.leftComponent}
             onPress={() => {
               navigation.navigate("ManagerProductScreen", {
-                shopId: shopId,
+                // shopId: shopId,
               });
             }}
           >
@@ -371,7 +377,8 @@ const UpdateProductScreen = ({ route }) => {
                         navigation.navigate("DetailProduct", {
                           dataProduct: product,
                           fromManagement: true,
-                          shopId: shopId,
+                          previousScreen: "ManagerProductScreen",
+                          // shopId: shopId,
                         });
                       }}
                     >
@@ -640,7 +647,9 @@ const UpdateProductScreen = ({ route }) => {
     );
   }
 
-  return (
+  return loadingFirst ? (
+    <LottieLoading />
+  ) : (
     <View
       style={{
         flex: 1,
@@ -682,6 +691,7 @@ const UpdateProductScreen = ({ route }) => {
           </View>
         </>
       )}
+
       {renderHeader()}
 
       {renderDetailContent()}

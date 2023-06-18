@@ -13,9 +13,13 @@ import { Button } from "react-native-paper";
 import { useCallback } from "react";
 import { typeList } from "../../constans/raw";
 import { TypeCard } from "../Home";
+import CustomButton from "../CustomButton/index.js";
+import Icons, { icons } from "../Icons";
+import { useNavigation } from "@react-navigation/native";
 
 const DetailProduct = ({ dataProduct, productId }) => {
   // xem them
+  const navigation = useNavigation();
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -67,11 +71,54 @@ const DetailProduct = ({ dataProduct, productId }) => {
     />
   ) : (
     <Fragment>
-      <View style={styles.section}>
-        <Text style={styles.title}>
-          {product?.name}
-          <Text style={styles.name}></Text>
+      <View style={{ ...styles.section, flexDirection: "row", paddingTop: 20 }}>
+        <Text
+          numberOfLines={10}
+          style={{
+            ...styles.title,
+            flex: 1,
+          }}
+        >
+          {`${product?.name} `}
         </Text>
+
+        <TouchableOpacity
+          style={{
+            borderWidth: 1,
+            borderColor: Color.mainColor,
+            borderRadius: 4,
+            alignSelf: "flex-start",
+            borderRadius: 5,
+          }}
+          onPress={() =>
+           
+            navigation.navigate("ShopTab", {
+              screen: "ShopCreateProduct",
+              params: { productId: product?.id },
+            })
+          }
+        >
+          <Text
+            numberOfLines={1}
+            style={{ color: Color.mainColor, fontSize: 10, padding: 10 }}
+          >
+            Liên kết sản phẩm
+          </Text>
+
+          <Icons
+            icon={icons.Feather}
+            name={"link"}
+            size={14}
+            color={Color.mainColor}
+            style={{
+              backgroundColor: Color.darkGray2,
+              borderRadius: 50,
+              position: "absolute",
+              top: -7,
+              right: -7,
+            }}
+          />
+        </TouchableOpacity>
       </View>
 
       <View
@@ -196,8 +243,6 @@ export default DetailProduct;
 const styles = StyleSheet.create({
   section: {
     padding: 20,
-    // borderBottomWidth: 1,
-    // borderBottomColor: Color.textLight,
     backgroundColor: "white",
     borderTopWidth: 1,
     borderTopColor: Color.textLight,
@@ -215,5 +260,18 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: "bold",
+  },
+
+  customButtonGoTo: {
+    width: 90,
+    alignSelf: "flex-start",
+    backgroundColor: Color.white,
+    borderRadius: 0,
+    borderWidth: 1,
+    borderColor: Color.mainColor,
+  },
+  customTextStyleGoTo: {
+    fontSize: 12,
+    color: Color.mainColor,
   },
 });

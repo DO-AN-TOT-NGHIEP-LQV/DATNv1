@@ -317,3 +317,39 @@ export function validatorCreateProduct(data) {
     }
   } else return resValid;
 }
+
+export function validatorAddShopProduct(data) {
+  const { productId, shopId, price, link, quantity } = data;
+
+  let resValid = "Không tìm thấy Id của Shop hoặc Id sản phẩm này";
+
+  if (
+    productId == undefined ||
+    shopId == undefined ||
+    productId == null ||
+    shopId == null
+  )
+    return resValid;
+
+  resValid = "Hãy nhập giá sản phẩm";
+  if (price !== undefined) {
+    if (price > 50000000) return resValid + "Hãy nhập giá sản phẩm < 50 triệu";
+
+    if (price < 0) return resValid;
+  } else return resValid;
+
+  resValid = "Hãy nhập số lượng sản phẩm";
+  if (quantity !== undefined) {
+    if (quantity > 1000000) return resValid + "Hãy nhập giá sản phẩm < triệu";
+
+    if (quantity < 0) return resValid;
+  } else return resValid;
+
+  resValid = "Hãy nhập link sản phẩm";
+  if (link !== undefined) {
+    let emptyValidationText = checkEmpty(link, resValid);
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    }
+  } else return resValid;
+}
