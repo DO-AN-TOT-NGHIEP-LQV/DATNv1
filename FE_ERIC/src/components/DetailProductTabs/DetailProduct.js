@@ -5,8 +5,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { TriggeringView } from "react-native-image-header-scroll-view";
 import { FONTS, SIZES, spacing } from "../../constans/Theme";
-import { apiGet } from "../../ultils/utilsApi";
-import { GET_PRODUCT_BY_ID } from "../../config/urls";
 import { showError } from "../../ultils/messageFunction";
 import LottieLoading from "../LottieLoading";
 import { Button } from "react-native-paper";
@@ -17,39 +15,39 @@ import CustomButton from "../CustomButton/index.js";
 import Icons, { icons } from "../Icons";
 import { useNavigation } from "@react-navigation/native";
 
-const DetailProduct = ({ dataProduct, productId }) => {
+const DetailProduct = ({ dataProduct }) => {
   // xem them
   const navigation = useNavigation();
 
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState(dataProduct);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      var headers = {
-        "Content-Type": "application/json",
-      };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     var headers = {
+  //       "Content-Type": "application/json",
+  //     };
 
-      var data = {
-        params: {
-          productId: productId,
-        },
-      };
-      await apiGet(GET_PRODUCT_BY_ID, data, headers, false)
-        .then((res) => {
-          console.log("GET_PRODUCT_BY_ID");
-          setProduct(res.data);
-        })
-        .catch((error) => {
-          showError(error.error_message);
-        });
+  //     var data = {
+  //       params: {
+  //         productId: productId,
+  //       },
+  //     };
+  //     await apiGet(GET_PRODUCT_BY_ID, data, headers, false)
+  //       .then((res) => {
+  //         console.log("GET_PRODUCT_BY_ID");
+  //         setProduct(res.data);
+  //       })
+  //       .catch((error) => {
+  //         showError(error.error_message);
+  //       });
 
-      setLoading(false);
-    };
+  //     setLoading(false);
+  //   };
 
-    fetchData();
-  }, [productId]);
+  //   fetchData();
+  // }, [productId]);
 
   const [showMore, setTextShownMore] = useState(false);
   const [lengthMore, setLengthMore] = useState(false);
@@ -90,13 +88,12 @@ const DetailProduct = ({ dataProduct, productId }) => {
             alignSelf: "flex-start",
             borderRadius: 5,
           }}
-          onPress={() =>
-           
+          onPress={() => {
             navigation.navigate("ShopTab", {
               screen: "ShopCreateProduct",
               params: { productId: product?.id },
-            })
-          }
+            });
+          }}
         >
           <Text
             numberOfLines={1}
@@ -187,23 +184,6 @@ const DetailProduct = ({ dataProduct, productId }) => {
             />
           </View>
         </View>
-
-        {/* 
-        <Text numberOfLines={1}>
-          <Text numberOfLines={1} style={styles.priceSmall}>
-            đ
-          </Text>
-          <Text numberOfLines={1} style={styles.priceBig}>
-            {(product?.price || 0).toLocaleString("vi-VN")}
-          </Text>
-
-          {(product.originalPrice !== null ||
-            product.originalPrice !== undefined) && (
-            <Text numberOfLines={1} style={styles.originalPrice}>
-              đ{product.originalPrice}
-            </Text>
-          )}
-        </Text> */}
       </View>
 
       <View style={[styles.section]}>

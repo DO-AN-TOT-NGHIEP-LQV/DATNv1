@@ -4,16 +4,20 @@ import MasonryList from "@react-native-seoul/masonry-list";
 import Color from "../../constans/Color";
 import Icons, { icons } from "../Icons";
 import { useNavigation, CommonActions } from "@react-navigation/native";
+import { FlatList } from "react-native";
+import { Dimensions } from "react-native";
+import { SafeAreaView } from "react-native";
+
+const itemWidth = Dimensions.get("window").width / 2 - 10;
 
 const MasonryListProducts = ({ data, previousScreen }) => {
   return (
-    <MasonryList
-      data={data}
-      keyExtractor={(item) => item.id}
-      numColumns={2}
-      imageContainerStyle={{ borderRadius: 8 }}
+    <FlatList
+      scrollEnabled={false}
+      columnWrapperStyle={style.columnWrapperStyle}
       showsVerticalScrollIndicator={false}
-      containerStyle={{ backgroundColor: Color.mainTheme }}
+      numColumns={2}
+      data={data}
       renderItem={({ item }) => (
         <CardItem data={item} previousScreen={previousScreen} />
       )}
@@ -95,12 +99,12 @@ const CardItem = ({ data, previousScreen }) => {
               {(data?.price || 0).toLocaleString("vi-VN")}
             </Text>
 
-            {(data?.originalPrice !== null ||
+            {/* {(data?.originalPrice !== null ||
               data?.originalPrice !== undefined) && (
               <Text numberOfLines={1} style={style.originalPrice}>
                 đ{data?.originalPrice}
               </Text>
-            )}
+            )} */}
           </Text>
         </View>
 
@@ -193,11 +197,45 @@ const style = StyleSheet.create({
     alignContent: "center",
   },
   cardItemView: {
+    borderWidth: 1,
     borderColor: Color.textLight,
     // borderWidth: 1,
     height: Math.round(200),
     backgroundColor: Color.white,
     paddingHorizontal: 5,
     margin: 2,
+    width: itemWidth,
+  },
+  columnWrapperStyle: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 5,
   },
 });
+
+// <MasonryList
+//   data={data}
+//   keyExtractor={(item) => item.id}
+//   numColumns={2}
+//   imageContainerStyle={{ borderRadius: 8 }}
+//   showsVerticalScrollIndicator={false}
+//   containerStyle={{ backgroundColor: Color.mainTheme }}
+//   renderItem={({ item }) => (
+//     <CardItem data={item} previousScreen={previousScreen} />
+//   )}
+// />
+
+// <FlatList
+//   data={data}
+//   keyExtractor={(item) => item.id}
+//   renderItem={({ item }) => (
+//     <CardItem data={item} previousScreen={previousScreen} />
+//   )}
+//   numColumns={2}
+//   contentContainerStyle={{
+//     backgroundColor: Color.mainTheme,
+//     borderWidth: 1,
+//     paddingHorizontal: 5,
+//   }}
+// />

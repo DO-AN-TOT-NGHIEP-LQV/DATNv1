@@ -1,24 +1,14 @@
-import {
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TextInput,
-  Alert,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import Color from "../../constans/Color";
-import { apiDelete, apiGet, apiPost } from "../../ultils/utilsApi";
+import { apiGet } from "../../ultils/utilsApi";
 import { GET_PRODUCT_DISCUSSION } from "../../config/urls";
-import { showError, showSuccess } from "../../ultils/messageFunction";
+import { showError } from "../../ultils/messageFunction";
 
 import DiscussionTextInput from "./DetailDiscussion/DiscussionTextInput";
 import MainDiscussionSection from "./DetailDiscussion/MainDiscussionSection";
 
-const DetailDiscussion = ({ dataProduct }) => {
+const DetailDiscussion = ({ dataProduct, effectMainTriggered }) => {
   const [listDiscussion, setListDiscussion] = useState([]);
 
   const [effectTriggered, setEffectTriggered] = useState(false);
@@ -29,11 +19,11 @@ const DetailDiscussion = ({ dataProduct }) => {
 
   useEffect(() => {
     fetchData();
-  }, [effectTriggered, dataProduct]);
+  }, [effectTriggered, dataProduct, effectMainTriggered]);
 
-  useEffect(() => {
-    fetchData();
-  }, [effectTriggered]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [effectTriggered]);
 
   const fetchData = async () => {
     var headers = {
@@ -42,13 +32,13 @@ const DetailDiscussion = ({ dataProduct }) => {
 
     var data = {
       params: {
-        productId: dataProduct.id,
+        productId: dataProduct?.id,
       },
     };
     await apiGet(GET_PRODUCT_DISCUSSION, data, headers, true)
       .then((res) => {
         setListDiscussion(res.data);
-        // console.log(res.data);
+        console.log("GET_PRODUCT_DISCUSSION");
       })
       .catch((error) => {
         showError(error.error_message);
@@ -63,7 +53,7 @@ const DetailDiscussion = ({ dataProduct }) => {
     >
       {/* Input Comment Footer */}
       <DiscussionTextInput
-        productId={dataProduct.id}
+        productId={dataProduct?.id}
         placeholder={"Hãy để lại gì đó"}
         handleEffect={handleEffect}
       />

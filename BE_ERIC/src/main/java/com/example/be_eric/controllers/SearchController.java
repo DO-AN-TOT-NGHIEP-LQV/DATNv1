@@ -49,6 +49,7 @@ public class SearchController {
     public ResponseEntity<?> searchPostByImage(@RequestPart("fileSearchImg") MultipartFile fileSearchImg)
     {
 
+
         try {
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
@@ -63,8 +64,8 @@ public class SearchController {
             };
             body.add("fileSearchImg", resource);
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-//            String url = "http://103.197.185.34/ai/api/product/searchByImg";
-            String url = "http://127.0.0.1:5000/ai/api/product/searchByImg";
+            String url = "http://103.197.185.34/ai/api/product/searchByImg";
+//            String url = "http://127.0.0.1:5000/ai/api/product/searchByImg";
 
 
             ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
@@ -160,7 +161,7 @@ public class SearchController {
             @RequestParam(required = false) int page) {
 
         try{   // Co phan trang
-            Pageable pageable = PageRequest.of(page, 30);
+            Pageable pageable = PageRequest.of(page, 50);
             Page<Product> productsListPage = productService.searchAndFilterProducts(keyword, types, brands, minPrice, maxPrice , pageable);
             List<Product> productsList = productsListPage.getContent();
             return ResponseEntity.ok().body(productsList);
@@ -174,9 +175,9 @@ public class SearchController {
 
     @GetMapping(value = "/search/products/SearchByText")
     public ResponseEntity searchProductByText(@RequestParam(name = "searchText",required = false, defaultValue = "") String searchText, @RequestParam("page") int page) {
-
+        System.out.println("45refsdfsdf");
 //        Sort sort = Sort.by(Sort.Direction.DESC, "created_at"); // Sắp xếp theo ngày tạo (giảm dần)
-        Pageable pageable = PageRequest.of(page, 30, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page, 50, Sort.by("createdAt").descending());
         Page<Product> productsListPage = productService.searchByText(searchText, pageable);
         List<Product> productsList = productsListPage.getContent();
         return ResponseEntity.ok().body(productsList);
@@ -199,7 +200,7 @@ public class SearchController {
 
     @GetMapping(value = "/search/products/shopId")
     public ResponseEntity searchProductByShop(@RequestParam("shopId") Long shopId, @RequestParam( name = "keyword", required = false, defaultValue = "") String keyword) {
-        try{
+        try{ System.out.println("45refsdfsdf");
             List<ShopProductDetailDTO> productsList = productService.findProductOfShopIdAndKeyword(shopId, keyword);
             return ResponseEntity.ok().body(productsList);
         }
@@ -215,7 +216,7 @@ public class SearchController {
     public ResponseEntity getShopsOfProducts(@RequestParam("productId") Long productId )
     {
         try {
-
+            System.out.println("45refsdfsdf");
             Product product =  productService.getById( productId );
             if (product == null){
                 throw  new Exception( "Sản phẩm này không còn tồn tại");
@@ -235,7 +236,7 @@ public class SearchController {
     //    Get all product for admin manager
     @GetMapping(value = "/search/products/getAll")
     public ResponseEntity searchAllProduct( @RequestParam( name = "keyword", required = false, defaultValue = "") String keyword) {
-
+        System.out.println("45refsdfsdf");
 
         try{
             List<Product> productsList = productService.findAllProductByKeyword( keyword);
@@ -252,12 +253,15 @@ public class SearchController {
     @GetMapping(value = "/search/products/getDetail")
     public ResponseEntity searchGetProductDetail(@RequestParam("productId") Long productId) {
         try {
+
             Product product =  productService.getById( productId );
             if (product == null){
                 throw  new Exception( "Sản phẩm này không còn tồn tại");
             }
-            System.out.println(product.getId());
             return ResponseEntity.ok().body(product);
+
+
+//            return ResponseEntity.ok().build();
         }
         catch (Exception e) {
             System.out.println(e.getMessage());

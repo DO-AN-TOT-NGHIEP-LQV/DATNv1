@@ -24,6 +24,7 @@ import { useSelector } from "react-redux";
 import { hasAdminRole, hasSalerRole } from "../ultils/helperFunction";
 import { Color } from "../constans";
 import ShopCreateProduct from "../screens/Shop/ShopCreateProduct";
+import ShopUpdateProductScreen from "../screens/Shop/ShopUpdateProductScreen";
 
 export default function (Stack) {
   return <Stack.Screen name="MainTab" component={MainTabs} />;
@@ -46,9 +47,9 @@ const MainTabs = () => {
           null,
         ],
 
-        initialParams: {
-          defaultScreen: route.name === "SearchTab" ? "SearchText" : null, // Tên màn hình mặc định của Tab A
-        },
+        // initialParams: {
+        // defaultScreen: route.name === "SearchTab" ? "SearchText" : null, // Tên màn hình mặc định của Tab A
+        // },
       })}
     >
       <BottomTab.Screen
@@ -285,7 +286,7 @@ const SalerManagerStackNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="ShopMainScreen"
+      // initialRouteName="ShopMainScreen"
     >
       <SalerManagerNavigator.Screen
         name="ShopMainScreen"
@@ -299,6 +300,11 @@ const SalerManagerStackNavigator = () => {
       <SalerManagerNavigator.Screen
         name="ShopCreateProduct"
         component={ShopCreateProduct}
+      />
+
+      <SalerManagerNavigator.Screen
+        name="ShopUpdateProductScreen"
+        component={ShopUpdateProductScreen}
       />
     </SalerManagerNavigator.Navigator>
   );

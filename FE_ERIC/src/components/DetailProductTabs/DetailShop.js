@@ -21,68 +21,79 @@ import { GET_SHOP_BY_PRODUCT_ID } from "../../config/urls";
 import LottieLoading from "../LottieLoading";
 import { FONTS, SIZES } from "../../constans/Theme";
 
-const DetailShop = ({ dataProduct, productId }) => {
-  const [dataDetailShop, setDataDetailShop] = useState();
+const DetailShop = ({ dataProduct, effectMainTriggered }) => {
   const [listShop, setListShop] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchData();
+    setRefreshing(false);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      var headers = {
-        "Content-Type": "application/json",
-      };
+    fetchData();
+  }, [dataProduct, effectMainTriggered]);
 
-      var data = {
-        params: {
-          productId: productId,
-        },
-      };
-      await apiGet(GET_SHOP_BY_PRODUCT_ID, data, headers, false)
-        .then((res) => {
-          console.log("GET_SHOP_BY_PRODUCT_ID");
-          setListShop(res.data);
-        })
-        .catch((error) => {
-          console.log(error);
-          showError(error.error_message);
-        });
-
-      setLoading(false);
+  const fetchData = async () => {
+    setLoading(true);
+    var headers = {
+      "Content-Type": "application/json",
     };
 
-    fetchData();
-  }, [productId]);
+    var data = {
+      params: {
+        productId: dataProduct?.id,
+      },
+    };
+    await apiGet(GET_SHOP_BY_PRODUCT_ID, data, headers, false)
+      .then((res) => {
+        console.log("GET_SHOP_BY_PRODUCT_ID");
+        setListShop(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        showError(error.error_message);
+      });
+
+    setLoading(false);
+  };
 
   function renderListShop() {
     return (
-      <FlatList
-        data={listShop}
-        keyExtractor={(item) => `item-${item.shop.id}`}
-        showsVerticalScrollIndicator={false}
-        style={{ marginTop: 10 }}
-        renderItem={({ item, index }) => {
-          return (
-            <HorizontalShopCard
-              containerStyle={{
-                height: 80,
-                alignItems: "center",
-                marginHorizontal: SIZES.font,
-                marginBottom: SIZES.radius,
-              }}
-              imageStyle={{
-                // marginTop: 10,
-                margin: 5,
-                height: 60,
-                width: 60,
-                borderRadius: 20,
-              }}
-              item={item}
-              onPress={() => {}}
-            />
-          );
-        }}
-      ></FlatList>
+      <View style={{}}>
+        <FlatList
+          data={listShop}
+          keyExtractor={(item) => `item-${item.shop.id}`}
+          showsVerticalScrollIndicator={false}
+          style={{ marginTop: 10 }}
+          // onRefresh={handleRefresh}
+          // refreshing={refreshing}
+          renderItem={({ item, index }) => {
+            return (
+              <HorizontalShopCard
+                containerStyle={{
+                  height: 80,
+                  alignItems: "center",
+                  marginHorizontal: SIZES.font,
+                  marginBottom: SIZES.radius,
+                }}
+                imageStyle={{
+                  // marginTop: 10,
+                  margin: 5,
+                  height: 60,
+                  width: 60,
+                  borderRadius: 20,
+                }}
+                item={item}
+                onPress={() => {}}
+              />
+            );
+          }}
+        ></FlatList>
+      </View>
     );
   }
 

@@ -23,6 +23,7 @@ import { shop_main_promo, shop_manager_promo } from "../../constans/raw";
 import ItemPromo from "../../components/SalerManager/ItemPromo";
 import openWebLink from "../../hookFuntion/openWebLink";
 import { useNavigation } from "@react-navigation/native";
+import { ManagerGif } from "../../public/assets/gif";
 
 const ShopMainScreen = () => {
   const detailUser = useSelector((state) => state.auth.detailUser);
@@ -51,10 +52,10 @@ const ShopMainScreen = () => {
         // console.log(res.data);
         console.log(shopDetail.id);
       } else {
-        showError("Can'n get Id of shop");
+        showError("Không thể lấy Id của shop");
       }
     } catch (error) {
-      console.log(error.error_message || "Fail get detail your shop");
+      console.log(error.error_message || "Lấy dữ liệu thất bại");
     }
   };
 
@@ -233,6 +234,18 @@ const ShopMainScreen = () => {
     <View style={styles.mainContainer}>
       {renderHeader()}
       {renderPromo()}
+      <View
+        style={{ position: "absolute", bottom: -15, right: 0, zIndex: -10 }}
+      >
+        <Image
+          source={ManagerGif}
+          style={{
+            width: 200,
+            height: 200,
+          }}
+          resizeMode="contain"
+        />
+      </View>
     </View>
   );
 };

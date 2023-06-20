@@ -82,7 +82,7 @@ const AdminMainScreen = () => {
         >
           <View style={{ alignItems: "center", justifyContent: "center" }}>
             <Text style={{ color: Colors.black, ...FONTS.h3, marginTop: 10 }}>
-              Shop của bạn
+              Admin
             </Text>
           </View>
 
@@ -109,12 +109,12 @@ const AdminMainScreen = () => {
                 }}
               />
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.styleContainerButtonRole}
                 onPress={() => openWebLink()}
               >
                 <Text style={{ ...styles.styleTextButtonRole }}>Link</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </TouchableOpacity>
 
             <View
@@ -135,7 +135,7 @@ const AdminMainScreen = () => {
                   lineHeight: 20,
                 }}
               >
-                {shopDetail?.sName || "Chưa có tên"}
+                {shopDetail?.sName || "Eric Shop"}
                 {/* {"dddddddđChsds;lsd;âddasdsdưa có tên"} */}
               </Text>
 
@@ -149,7 +149,7 @@ const AdminMainScreen = () => {
                 }}
                 numberOfLines={3}
               >
-                Địa chỉ: {shopDetail?.sAddress1 || "Chưa có địa chỉ"}
+                {/* Địa chỉ: {shopDetail?.sAddress1 || "Chưa có địa chỉ"} */}
               </Text>
             </View>
           </ImageBackground>

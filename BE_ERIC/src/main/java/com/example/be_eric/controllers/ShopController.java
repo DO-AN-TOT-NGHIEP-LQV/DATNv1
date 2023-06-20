@@ -118,6 +118,83 @@ public class ShopController {
         }
     }
 
+
+
+    @PatchMapping(value = "/sale/shop/updateProductVentor",
+            consumes = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<?> updateProductVentor(@RequestBody ShopProductDTO shopProductDTO)
+    {
+        try{
+            Long productId =  shopProductDTO.getProductId();
+            Long shopId = shopProductDTO.getShopId();
+            double price = shopProductDTO.getPrice() ;
+            int quantity = shopProductDTO.getQuantity() ;
+            String link = shopProductDTO.getLink();
+
+            Product product = productService.getById(productId);
+            Shop shop = shopService.getById(shopId);
+
+            if( product == null || shop== null ){
+                throw  new Exception("Sản phẩm hoặc cửa hàng này không còn tồn tại");
+            }
+
+            ShopProduct shopProduct = shopService.findByProduct_IdAndShop_Id(productId, shopId);
+
+            if( shopProduct != null)
+            {
+//                ShopProduct shopProduct = new ShopProduct(shop, product, price, quantity, link );
+//                shopService.saveShopProduct(shopProduct);
+                shopProduct.setPrice( price );
+                shopProduct.setQuantity(quantity);
+                shopProduct.setLink(link);
+
+                ShopProduct updatedProduct =  shopService.saveShopProduct(shopProduct);
+                return ResponseEntity.ok().body(updatedProduct);
+            }
+            else{
+                throw  new Exception("Sản phẩm này không tồn tại trong cửa hàng");
+            }
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    @DeleteMapping(value = "/sale/shop/deleteProductVentor")
+    public ResponseEntity<?> deleteProductVentor(@RequestParam  Long productId, @RequestParam Long shopId)
+    {
+        try{
+
+
+            Product product = productService.getById(productId);
+            Shop shop = shopService.getById(shopId);
+
+            if( product == null || shop== null ){
+                throw  new Exception("Sản phẩm hoặc cửa hàng này không còn tồn tại");
+            }
+
+            ShopProduct shopProduct = shopService.findByProduct_IdAndShop_Id(productId, shopId);
+
+            if( shopProduct != null)
+            {
+                 shopService.deleteShopProduct(shopProduct);
+                return ResponseEntity.ok().build();
+            }
+            else{
+                throw  new Exception("Sản phẩm này không tồn tại trong cửa hàng");
+            }
+        }
+        catch (Exception e){
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+
+
+
+
 //        @PostMapping(value = "/sale/shop/addProductVentor",
 //                consumes = {MediaType.APPLICATION_JSON_VALUE,
 //                    MediaType.MULTIPART_FORM_DATA_VALUE })

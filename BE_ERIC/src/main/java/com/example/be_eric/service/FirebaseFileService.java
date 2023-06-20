@@ -49,7 +49,6 @@ public class FirebaseFileService {
 
     @EventListener
     public void init(ApplicationReadyEvent event) {
-        System.out.println("33333333333333");
         try {
             FileInputStream serviceAccounts =
                 new FileInputStream("src/main/resources/serviceFirebaseKey.json");

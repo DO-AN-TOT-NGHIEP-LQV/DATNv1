@@ -441,6 +441,9 @@ const FilterModal = ({ isVisible, onClose }) => {
             pointerEvents={switchToggle ? "auto" : "none"}
             style={{
               opacity: switchToggle ? 1 : 0.2,
+              // backgroundColor: switchToggle
+              //   ? Color.transparent
+              //   : Color.blackOpacity,
             }}
           >
             <ScrollView
@@ -459,11 +462,13 @@ const FilterModal = ({ isVisible, onClose }) => {
                     markerOffsetY={20}
                     selectedStyle={{
                       backgroundColor: Color.mainColor,
+                      // borderWidth: 1,
                     }}
                     trackStyle={{
                       height: 10,
                       borderRadius: 10,
                       backgroundColor: Color.textLight,
+                      // zIndex: 10,
                     }}
                     minMarkerOverlapDistance={40}
                     isMarkersSeparated={true}
@@ -482,6 +487,7 @@ const FilterModal = ({ isVisible, onClose }) => {
                               color: Color.textDark,
                               fontSize: 10,
                               fontWeight: 400,
+                              // zIndex: 10,
                             }}
                           >
                             {readValue[0]} {postfix}

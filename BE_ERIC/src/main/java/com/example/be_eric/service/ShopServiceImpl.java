@@ -64,13 +64,23 @@ public class ShopServiceImpl implements ShopService {
 
     //////////
     @Override
-    public boolean existsByProduct_IdAndShop_Id(Long productId, Long ShopId) {
-        return shopProductRepository.existsByProduct_IdAndShop_Id(productId, ShopId);
+    public boolean existsByProduct_IdAndShop_Id(Long productId, Long shopId) {
+        return shopProductRepository.existsByProduct_IdAndShop_Id(productId, shopId);
+    }
+
+    @Override
+    public ShopProduct findByProduct_IdAndShop_Id(Long productId, Long shopId) {
+        return shopProductRepository.findByProduct_IdAndShop_Id(productId, shopId);
     }
 
     @Override
     public ShopProduct saveShopProduct(ShopProduct shopProduct) {
         return shopProductRepository.save(shopProduct);
+    }
+
+    @Override
+    public void deleteShopProduct(ShopProduct shopProduct) {
+        shopProductRepository.delete(shopProduct);
     }
 
 

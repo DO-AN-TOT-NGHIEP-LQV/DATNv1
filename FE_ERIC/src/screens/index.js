@@ -1,5 +1,5 @@
-export { default as DiscoverScreen } from "./DiscoverScreen";
-export { default as DetailPostScreem } from "./DetailPostScreem";
+// export { default as DiscoverScreen } from "./DiscoverScreen";
+// export { default as DetailPostScreem } from "./DetailPostScreem";
 
 export { default as HomeScreen } from "./HomeScreen";
 export { default as LoginScreen } from "./LoginScreen";

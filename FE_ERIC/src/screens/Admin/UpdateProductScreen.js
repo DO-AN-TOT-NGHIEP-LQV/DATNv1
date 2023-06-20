@@ -141,7 +141,7 @@ const UpdateProductScreen = ({ route }) => {
       const res = await apiGet(GET_PRODUCT_BY_ID, data, headers, false);
 
       const resProduct = res.data;
-      // console.log(resProduct);
+      console.log("GET_PRODUCT_BY_ID");
 
       updateProductForm({
         id: resProduct.id,
@@ -375,7 +375,7 @@ const UpdateProductScreen = ({ route }) => {
                     <TouchableOpacity
                       onPress={() => {
                         navigation.navigate("DetailProduct", {
-                          dataProduct: product,
+                          productId: product.id,
                           fromManagement: true,
                           previousScreen: "ManagerProductScreen",
                           // shopId: shopId,

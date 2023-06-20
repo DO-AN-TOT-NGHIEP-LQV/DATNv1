@@ -22,7 +22,9 @@ public interface ShopService {
     List<ShopProductDetailDTO> getShopByProductId(Long productId);
 
     boolean existsByProduct_IdAndShop_Id( Long productId, Long ShopId);
+    ShopProduct findByProduct_IdAndShop_Id( Long productId, Long ShopId);
     ShopProduct saveShopProduct(ShopProduct shopProduct);
+    void deleteShopProduct(ShopProduct shopProduct);
 
 
 

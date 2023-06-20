@@ -22,4 +22,6 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
 
 
 
+
+
 }

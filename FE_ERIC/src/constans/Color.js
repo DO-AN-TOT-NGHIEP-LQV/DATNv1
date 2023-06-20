@@ -8,6 +8,7 @@ export default {
   accent: "#7fc",
   blue: "#5555ff",
   white: "#ffff",
+  while2: "#fdfdfd",
   whileOpacity: "rgba(255, 255, 255, 0.5)",
   black: "#000",
   blackOpacity: "#2d2d44",

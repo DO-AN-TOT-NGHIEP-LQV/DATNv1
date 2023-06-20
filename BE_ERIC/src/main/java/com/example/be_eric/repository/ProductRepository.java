@@ -62,9 +62,13 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 //    @Query("SELECT new  com.example.be_eric.DTO.ShopProductDTO(p ,sp) FROM Product p LEFT JOIN p.shopProducts sp  WHERE p.name LIKE %:keyword% AND sp.shop.id = :productId")
 //    List<ShopProductDTO> findProductOfShopIdAndKeyword(@Param("productId") Long productId, @Param("keyword") String keyword);
 
-    @Query("SELECT new  com.example.be_eric.DTO.ShopProductDetailDTO(p, sp) FROM Product p LEFT JOIN p.shopProducts sp  WHERE p.name LIKE %:keyword% AND sp.shop.id = :productId")
+    @Query("SELECT new  com.example.be_eric.DTO.ShopProductDetailDTO(p, sp) FROM Product p LEFT JOIN p.shopProducts sp  WHERE p.name LIKE %:keyword% AND sp.shop.id = :productId ORDER BY sp.createdAt DESC ")
     List<ShopProductDetailDTO> findProductOfShopIdAndKeyword(@Param("productId") Long productId, @Param("keyword") String keyword);
 
+//    @Query("SELECT new  com.example.be_eric.DTO.ShopProductDetailDTO(p, sp) FROM Product p LEFT JOIN p.shopProducts sp  WHERE (p.name LIKE %:keyword% OR CAST(p.id AS string) = :keyword)   AND sp.shop.id = :productId ORDER BY sp.createdAt DESC ")
+//    List<ShopProductDetailDTO> findProductOfShopIdAndKeyword(@Param("productId") Long productId, @Param("keyword") String keyword);
+//
+//
 
     List<Product> findProductsByNameContaining(String keyword);
 

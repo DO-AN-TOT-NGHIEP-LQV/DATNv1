@@ -345,7 +345,6 @@ export const shop_manager_promo = [
   },
 ];
 
-
 export const shop_main_promo = [
   {
     id: 1,
@@ -367,7 +366,7 @@ export const shop_main_promo = [
     id: 3,
     no: 1,
     title: "Thêm sản phẩm mới",
-    description: "Hãy thêm sản phẩm mới vào shop của bạn",
+    description: "Liên kết sản phẩm mới vào shop của bạn",
     thumbnail: promoBg3,
   },
 ];

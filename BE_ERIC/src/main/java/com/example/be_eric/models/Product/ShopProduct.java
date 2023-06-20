@@ -7,9 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
 @AllArgsConstructor
@@ -49,4 +52,11 @@ public class ShopProduct {
         this.quantity = quantity;
         this.link = link;
     }
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    // Thêm thuộc tính updated_at và chú thích @UpdateTimestamp
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }

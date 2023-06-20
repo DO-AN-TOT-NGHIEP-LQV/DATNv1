@@ -8,6 +8,7 @@ import {
   Pressable,
   RefreshControl,
   FlatList,
+  SafeAreaView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Color } from "../../constans";
@@ -15,24 +16,15 @@ import { FONTS, SIZES, shadow, statusbarHeight } from "../../constans/Theme";
 import Header from "../../components/Header";
 import Icons, { icons } from "../../components/Icons";
 import { useNavigation } from "@react-navigation/native";
-import { SwipeListView } from "react-native-swipe-list-view";
 
 import { showError } from "../../ultils/messageFunction";
 import { apiGet } from "../../ultils/utilsApi";
 import { GET_PRODUCT_OF_SHOP } from "../../config/urls";
 import { ShoesFLas } from "../../public/assets";
-import {
-  bg1,
-  bg2,
-  bg3,
-  bg4,
-  bg5,
-  bg6,
-  bg7,
-  bg8,
-  promoBg1,
-} from "../../public/assets/image";
+import { bg1, bg2 } from "../../public/assets/image";
 import { Fragment } from "react";
+import LineDivider from "../../components/LineDivider";
+import { useSelector } from "react-redux";
 
 const ShopManagerProductScreen = ({ route }) => {
   //   const shopId = route.params?.shopId;
@@ -44,27 +36,23 @@ const ShopManagerProductScreen = ({ route }) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
+  const reloadShopManagerScreen = useSelector(
+    (state) => state.reload.reloadShopManagerScreen
+  );
+
   useEffect(() => {
     fetchData();
-    console.log(shopId);
-  }, []);
+  }, [reloadShopManagerScreen]);
 
-  useEffect(() => {
-    navigation
-      .getParent()
-      ?.setOptions({ tabBarStyle: { display: "none" }, tabBarVisible: false });
-    return () =>
-      navigation
-        .getParent()
-        ?.setOptions({ tabBarStyle: undefined, tabBarVisible: undefined });
-  }, [navigation]);
-
-  //   useEffect(() => {
-  //     if (route.params?.refresh) {
-  //       fetchData();
-  //       navigation.setParams({ refresh: false });
-  //     }
-  //   }, [route.params?.refresh]);
+  // useEffect(() => {
+  //   navigation
+  //     .getParent()
+  //     ?.setOptions({ tabBarStyle: { display: "none" }, tabBarVisible: false });
+  //   return () =>
+  //     navigation
+  //       .getParent()
+  //       ?.setOptions({ tabBarStyle: undefined, tabBarVisible: undefined });
+  // }, [navigation]);
 
   const handleRefresh = () => {
     setRefreshing(true);
@@ -86,6 +74,7 @@ const ShopManagerProductScreen = ({ route }) => {
     await apiGet(GET_PRODUCT_OF_SHOP, data, headers, false)
       .then((res) => {
         setListProduct(res.data);
+        console.log("GET_PRODUCT_OF_SHOP");
         console.log(res.data);
       })
       .catch((error) => {
@@ -185,7 +174,7 @@ const ShopManagerProductScreen = ({ route }) => {
 
   function renderProductList() {
     return (
-      <View
+      <SafeAreaView
         style={{
           marginTop: SIZES.base,
           marginHorizontal: SIZES.padding,
@@ -194,14 +183,14 @@ const ShopManagerProductScreen = ({ route }) => {
           borderRadius: SIZES.radius,
           backgroundColor: Color.white,
           ...styles.customContainerStyles,
+          flex: 1,
         }}
       >
-        <Text style={{ ...FONTS.h3, lineHeight: 25 }}>Danh sách sản phẩm</Text>
         <FlatList
-          contentContainerStyle={{ marginTop: SIZES.radius }}
-          scrollEnabled={false}
+          contentContainerStyle={{}}
+          scrollEnabled={true}
           data={listProduct}
-          // keyExtractor={(item) => `${item.productDTO.id}`}
+          keyExtractor={(item) => `${item?.product?.id}`}
           onRefresh={handleRefresh}
           refreshing={refreshing}
           renderItem={({ item, index }) => {
@@ -213,6 +202,12 @@ const ShopManagerProductScreen = ({ route }) => {
                   paddingVertical: SIZES.base,
                   paddingHorizontal: SIZES.base,
                   paddingRight: 0,
+                }}
+                onPress={() => {
+                  navigation.navigate("ShopTab", {
+                    screen: "ShopUpdateProductScreen",
+                    params: { productId: item?.product?.id, productShop: item },
+                  });
                 }}
               >
                 <Image
@@ -235,14 +230,35 @@ const ShopManagerProductScreen = ({ route }) => {
                       ...FONTS.body4,
                       lineHeight: 18,
                       width: "75%",
+                      height: 40,
                     }}
                   >
                     {item?.product?.name}
                   </Text>
-                  <Text style={{}}>
-                    s/l:
-                    {(item?.shopProduct?.quantity || 0).toLocaleString("vi-VN")}
-                  </Text>
+
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      width: "100%",
+                    }}
+                  >
+                    <Text
+                      numberOfLines={1}
+                      style={{
+                        color: Color.blueSd,
+                        ...FONTS.h4,
+                        flex: 1,
+                      }}
+                    >
+                      {(item?.shopProduct?.price || 0).toLocaleString("vi-VN")}
+                    </Text>
+                    <Text numberOfLines={1} style={{ alignSelf: "flex-end" }}>
+                      {(item?.shopProduct?.quantity || 0).toLocaleString(
+                        "vi-VN"
+                      )}
+                      /đôi
+                    </Text>
+                  </View>
                 </View>
                 <View
                   style={{
@@ -251,7 +267,7 @@ const ShopManagerProductScreen = ({ route }) => {
                     alignItems: "center",
                   }}
                 >
-                  <Text
+                  {/* <Text
                     numberOfLines={1}
                     style={{
                       color: Color.blueSd,
@@ -260,7 +276,7 @@ const ShopManagerProductScreen = ({ route }) => {
                     }}
                   >
                     {(item?.shopProduct?.price || 0).toLocaleString("vi-VN")}
-                  </Text>
+                  </Text> */}
                   <Icons icon={icons.AntDesign} name={"right"} size={18} />
                 </View>
               </TouchableOpacity>
@@ -268,18 +284,10 @@ const ShopManagerProductScreen = ({ route }) => {
           }}
           showsVerticalScrollIndicator={false}
           ItemSeparatorComponent={() => {
-            return (
-              <View
-                style={{
-                  width: "100%",
-                  height: 1,
-                  backgroundColor: Color.darkGray2,
-                }}
-              />
-            );
+            return <LineDivider />;
           }}
         />
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -287,6 +295,17 @@ const ShopManagerProductScreen = ({ route }) => {
     <View style={{ flex: 1, backgroundColor: Color.white }}>
       {/* Header */}
       {renderHeader()}
+
+      <Text
+        style={{
+          ...FONTS.h2,
+          lineHeight: 50,
+          // marginVertical: 5,
+          paddingLeft: 20,
+        }}
+      >
+        Danh sách sản phẩm
+      </Text>
 
       {/* Card list */}
       {/* {renderSearch()} */}
