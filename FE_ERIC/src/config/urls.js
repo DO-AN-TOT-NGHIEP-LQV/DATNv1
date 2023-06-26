@@ -71,4 +71,4 @@ export const DELETE_PRODUCT_TO_SHOP = getApiUrl(
 export const GET_VENDOR_PRODUCT = getApiUrl("/sale/shop/getVendorProduct");
 
 // axios.defaults.baseURL = "http://192.168.1.8:8080/api";
-axios.defaults.baseURL = "http://localhost:8080/api";
+axios.defaults.baseURL = "http://172.21.0.84:8080/api";

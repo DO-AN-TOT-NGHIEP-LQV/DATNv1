@@ -74,11 +74,14 @@ def seedData33ImgTest():
             for batch in dataGenerator.flow(x, batch_size=1, shuffle=False):
                 # Trích xuất đặc trưng của ảnh
                 # features = model.predict(batch)[0].flatten()
-                features = model.predict(batch)[0]
+                # features = model.predict(batch)[0]
                 
                 # Chuan hoa vector = chia chia L2 norm (tu google search)
+                # features = features /  np.linalg.norm(features)
+                # features = features.flatten()
+                
+                features = model.predict(batch)[0].flatten()
                 features = features /  np.linalg.norm(features)
-                features = features.flatten()
                 
                 doc_ref = db.collection("Image_Feature_Vector").document( "product_" +   str(stt) +"_"+ str(i))
 

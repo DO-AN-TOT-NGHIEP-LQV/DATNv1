@@ -67,7 +67,7 @@ public class SearchController {
             body.add("fileSearchImg", resource);
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 //            String url = "http://103.197.185.34/ai/api/product/searchByImg";
-            String url = "http://127.0.0.1:5000/ai/api/product/searchByImg";
+            String url = "http://localhost:5000/ai/api/product/searchByImg";
 
 
             ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);

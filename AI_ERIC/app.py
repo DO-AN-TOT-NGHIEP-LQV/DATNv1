@@ -80,10 +80,10 @@ def extract_feature():
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)
         x = preprocess_input(x)
-        # search_vector = model.predict(x)[0].flatten()
-        search_vector = model.predict(x)[0]
+        search_vector = model.predict(x)[0].flatten()
+        # search_vector = model.predict(x)[0]
         search_vector = search_vector /  np.linalg.norm(search_vector)
-        search_vector = search_vector.flatten()
+        # search_vector = search_vector.flatten()
         
         collection_ref = db.collection('Image_Feature_Vector')
         vectors = [] 
@@ -145,9 +145,13 @@ def saveImageToFireStore():
         for batch in dataGenerator.flow(x, batch_size=1, shuffle=False):
             
             # features = model.predict(batch)[0].flatten()
-            features = model.predict(batch)[0]
+            # features = model.predict(batch)[0]
+            # features = features /  np.linalg.norm(features)
+            # features = features.flatten()
+            features = model.predict(batch)[0].flatten()
             features = features /  np.linalg.norm(features)
-            features = features.flatten()
+            # features = features.flatten()
+            
             
             doc_ref = db.collection("Image_Feature_Vector").document(  "product_" + post_id +"_"+ str(i))
             doc_ref.set({
