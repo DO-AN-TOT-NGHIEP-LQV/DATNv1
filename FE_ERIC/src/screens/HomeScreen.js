@@ -10,7 +10,7 @@ import {
   StatusBar,
   FlatList,
 } from "react-native";
-import React, { useLayoutEffect, useState } from "react";
+import React, { Fragment, useLayoutEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { HeroImage, ShoesFLas } from "../public/assets";
@@ -33,7 +33,11 @@ import {
   TypeCard,
 } from "../components/Home";
 import LottieLoading from "../components/LottieLoading";
+import { PriceVND, logoHome } from "../public/assets/icons";
+import { Dimensions } from "react-native";
 
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 const HomeScreen = () => {
   const navigation = useNavigation();
   const tokenData = useSelector((state) => state.auth.tokenData);
@@ -42,394 +46,262 @@ const HomeScreen = () => {
   const currentDate = Moment();
   const formattedDate = currentDate.format("dddd, DD/MM/YYYY");
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, []);
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerShown: false,
+  //   });
+  // }, []);
 
-  const navigatorToScreen = () => {
-    navigation.navigate("DiscoverTab", { screen: "DetailPost" });
-  };
+  // const navigatorToScreen = () => {
+  //   navigation.navigate("DiscoverTab", { screen: "DetailPost" });
+  // };
 
-  const getAllUsses = async () => {
-    try {
-      const res = await actions.getAllUsers();
-    } catch (error) {
-      showError(error.error_message);
-    }
-  };
+  // const getAllUsses = async () => {
+  //   try {
+  //     const res = await actions.getAllUsers();
+  //   } catch (error) {
+  //     showError(error.error_message);
+  //   }
+  // };
 
-  const getDetailUser = async () => {
-    await apiGet(GET_DETAIL_USERS, {}, {}, true)
-      .then((res) => {
-        console.log("GET_DETAIL_USERS");
-        saveDetailUser(res.data);
-      })
-      .catch((error) => {});
-  };
+  // const getDetailUser = async () => {
+  //   await apiGet(GET_DETAIL_USERS, {}, {}, true)
+  //     .then((res) => {
+  //       console.log("GET_DETAIL_USERS");
+  //       saveDetailUser(res.data);
+  //     })
+  //     .catch((error) => {});
+  // };
 
   function renderHeader() {
     return (
-      <View
-        style={{
-          flexDirection: "row",
-          marginTop: 15,
-          paddingHorizontal: 10,
-          position: "absolute",
-          top: 20,
-
-          left: 0,
-          right: 0,
-          bottom: 0,
-        }}
-      >
-        <View style={{ flex: 1 }}>
-          <Text style={{ ...FONTS.h3 }}>
-            Xin chào, {detailData?.username || null}
-          </Text>
-          <Text
-            numberOfLines={1}
-            style={{ ...FONTS.body4, color: Color.textLight }}
-          >
-            {formattedDate}
-          </Text>
-        </View>
-      </View>
-    );
-  }
-
-  function renderListType() {
-    return (
-      <SectionHome title={"Loại"} containerStyle={{ marginTop: 20 }}>
-        <FlatList
-          horizontal
-          data={typeList}
-          keyExtractor={(item) => item?.value}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{
-            marginTop: SIZES.base,
+      <Fragment>
+        {/* Name && date */}
+        <View
+          style={{
+            flexDirection: "row",
+            marginTop: 15,
+            paddingHorizontal: 10,
+            // borderWidth: 2,
           }}
-          renderItem={({ item, index }) => (
-            <TypeCard
-              type={item}
-              containerStyle={{
-                marginLeft: index == 0 ? SIZES.padding : SIZES.base,
-                marginRight: index == typeList.length - 1 ? SIZES.padding : 0,
+        >
+          <View style={{ flex: 1 }}>
+            <Text style={{ ...FONTS.h3 }}>
+              Xin chào, {detailData?.username || null}
+            </Text>
+            <Text
+              numberOfLines={1}
+              style={{ ...FONTS.body4, color: Color.textLight }}
+            >
+              {formattedDate}
+            </Text>
+          </View>
+        </View>
+
+        {/* Hello */}
+        <View
+          style={{
+            borderRadius: 8,
+            color: Color.mainColor,
+            marginLeft: 10,
+            marginBottom: 10,
+          }}
+        >
+          <Text
+            style={{
+              color: "#3c6072",
+              fontSize: 26,
+              marginLeft: -3,
+              alignSelf: "flex-start",
+            }}
+          >
+            Chào mừng đến với
+          </Text>
+          {/* First Section DONE */}
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            {/* <View
+              style={{
+                width: 90,
+                height: 90,
+                borderRadius: 9999,
+                alignItems: "center",
+                justifyContent: "center",
+                // borderWidth: 1,
+                // backgroundColor: Color.blackOpacity,
               }}
-            ></TypeCard>
-          )}
-        ></FlatList>
-      </SectionHome>
+            > */}
+            {/* <Text
+                className="text-[#00BCC9]  font-semibold"
+                style={{ fontSize: 20, lineHeight: 32, color: Color.blueTheme }}
+              >
+                ER
+              </Text> */}
+            <Image
+              source={logoHome}
+              style={{
+                width: 90,
+                height: 90,
+                borderRadius: 9999,
+                borderWidth: 1,
+              }}
+              // resizeMode="cover"
+              resizeMode="contain"
+            />
+            {/* </View> */}
+            <View style={{ flex: 1 }}>
+              <Text className="text-[#00BCC9] text-[30px] font-bold">
+                Shoes ERIC
+              </Text>
+              <Text className="text-[#3C6072]">
+                Hãy để chúng tôi giúp bạn tìm sản phẩm bạn mong muốn
+              </Text>
+            </View>
+          </View>
+        </View>
+      </Fragment>
     );
   }
 
   function renderPopularList() {
+    return <View></View>;
+  }
+
+  function renderTagType() {
     return (
-      <SectionHome title={"Thịnh hành"} containerStyle={{}}>
-        <FlatList
-          data={newListProduct}
-          scrollEnabled={false}
-          keyExtractor={(item) => `popular-${item?.id}`}
-          contentContainerStyle={{ marginHorizontal: 10 }}
-          renderItem={({ item, index }) => {
-            return (
-              <HorizontalProductCard
-                product={item}
+      <SectionHome title={"Loại"} containerStyle={{}}>
+        <View style={styles.selectedTagsContainer}>
+          {typeList.map((tag, index) => (
+            <View key={index} style={{ marginHorizontal: 5, marginTop: 5 }}>
+              <TypeCard
+                type={tag}
+                imageStyle={{
+                  opacity: 0.6,
+                }}
                 containerStyle={{
-                  // marginVertical: 20,
-                  marginTop: index == 0 ? SIZES.radius : SIZES.padding,
+                  height: 30,
+                  width: "100%",
+                  paddingVertical: 0,
+                  paddingHorizontal: 0,
+                  marginRight: 15,
+                  borderRadius: 8,
+                  justifyContent: "center",
+                  alignContent: "center",
+                  alignItems: "center",
+                  // margin: 5,
+                  // borderWidth: 1,
+
+                  // marginLeft: 20,
+                }}
+                textStyle={{
+                  color: Color.black,
+                  fontSize: 14,
+                  ...FONTS.h4,
+                }}
+                onPress={() => {
+                  actions.brandSelectedList([]);
+                  actions.typeSelectedList([tag.value]);
+                  actions.nowRangeMinMaxPrice([0, 80]);
+                  actions.updateApplyFilter(true);
+                  actions.changeFilter();
+                  navigation.navigate("SearchTab", { screen: "SearchText" });
                 }}
               />
-            );
-          }}
-        />
+            </View>
+          ))}
+        </View>
       </SectionHome>
     );
   }
 
   return (
-    // <LottieLoading />
     <SafeAreaView
-      // className="bg-red-100 flex-1 relative "
-
       style={{
-        backgroundColor: Color.mainTheme,
+        backgroundColor: "#fcfcfb", // Color.mainTheme,
+        // backgroundColor: Color.while2, // Color.mainTheme,
         flex: 1,
       }}
     >
       {renderHeader()}
 
-      {/* First Section DONE */}
+      {/* Swiper Section */}
       <View
-        className="flex-row px-3 mt-3 mb-3 items-center space-x-2"
-        style={{ marginTop: 50 }}
-      >
-        <View className="w-12 h-12 bg-black rounded-full items-center justify-center">
-          <Text
-            className="text-[#00BCC9]  font-semibold"
-            style={{ fontSize: 20, lineHeight: 32, color: Color.blueTheme }}
-          >
-            Go
-          </Text>
-        </View>
-        <Text
-          className="text-[#2A2B4B]  font-semibold"
-          style={{
-            fontSize: 20,
-            lineHeight: 32,
-            fontFamily: "Roboto-Bold",
-          }}
-        >
-          Shoes ERIC
-        </Text>
-      </View>
-
-      <View
-        style={{
-          // flex: 1,
-          alignItems: "flex-start",
-          backgroundColor: "transparent",
-          borderRadius: 8,
-          paddingHorizontal: 6,
-          color: Color.mainColor,
-          marginHorizontal: 10,
-          marginBottom: 10,
-        }}
-      >
-        <Text
-          className="text-[#3c6072] text-[36px]"
-          style={{ alignSelf: "flex-start" }}
-        >
-          Chào mừng đến với
-        </Text>
-        <Text className="text-[#00BCC9] text-[30px] font-bold">Shoes ERIC</Text>
-
-        <Text className="text-[#3C6072]">
-          Hãy để chúng tôi giúp bạn tìm sản phẩm mà bạn mong muốn
-        </Text>
-      </View>
-
-      {/* Second Section DONE */}
-      {/* <View
         style={{
           marginHorizontal: 10,
           paddingHorizontal: 10,
-          height: 150,
-          width: "100%",
-          marginTop: 10,
-          // justifyContent: "center",
-          alignSelf: "center",
-          borderRadius: 8,
-          // height: 180,
-          marginTop: 0,
+          ...styles.sliderContainer,
+          borderRadius: 10,
+          // flex: 1,
         }}
       >
-        <View
-          style={{
-            flex: 1,
-            alignItems: "flex-start",
-            // justifyContent: "center",
-            backgroundColor: "transparent",
-            borderRadius: 8,
-            paddingHorizontal: 6,
-            color: Color.mainColor,
-          }}
+        <Swiper
+          autoplay
+          horizontal={false}
+          height={180}
+          activeDotColor={Color.mainColor}
         >
-          <Text
-            className="text-[#3c6072] text-[36px]"
-            style={{ alignSelf: "flex-start" }}
-          >
-            Chào mừng đến với
-          </Text>
-          <Text
-            className="text-[#00BCC9] text-[30px] font-bold"
-            // style={{ color: Color.mainTheme }}
-          >
-            Shoes ERIC
-          </Text>
-
-          <Text className="text-[#3C6072]">
-            Hãy để chúng tôi giúp bạn tìm sản phẩm mà bạn mong muốn
-          </Text>
-        </View>
-      </View> */}
-
-      <ScrollView>
-        {/* Swiper Section */}
-        <View
-          style={{
-            marginHorizontal: 10,
-            paddingHorizontal: 10,
-            ...styles.sliderContainer,
-            marginTop: 0,
-            borderRadius: 10,
-          }}
-        >
-          <Swiper
-            autoplay
-            horizontal={false}
-            height={180}
-            activeDotColor={Color.mainColor}
-          >
-            {/* <ImageBackground
-            source={bg1}
-            style={{
-              flex: 1,
-              backgroundColor: "transparent",
-              // borderRadius: 10,
-              paddingHorizontal: 10,
-              color: Color.mainColor,
-            }}
-            imageStyle={{ borderRadius: 10, opacity: 0.5 }}
-          >
-            <Text
-              className="text-[#3c6072] text-[26px]"
-              style={{ ...FONTS.body2, color: Color.white }}
-            >
-              Chào mừng đến với
-            </Text>
-            <Text
-              className="text-[#00BCC9] text-[30px] font-bold"
-              style={{ color: Color.white }}
-            >
-              Shoes ERIC
-            </Text>
-
-            <Text
-              className="text-[#3C6072]"
-              style={{ color: Color.white, marginTop: 8, ...FONTS.body4 }}
-            >
-              Hãy để chúng tôi giúp bạn tìm sản phẩm mà bạn mong muốn
-            </Text>
-          </ImageBackground>
-
-          <ImageBackground
-            source={bg2}
-            style={{
-              flex: 1,
-              backgroundColor: "transparent",
-              borderRadius: 10,
-              paddingHorizontal: 10,
-              color: Color.mainColor,
-            }}
-            imageStyle={{ borderRadius: 8, opacity: 0.8 }}
-          >
-            <Text
-              className="text-[#3c6072] text-[30px]"
-              style={{ alignSelf: "flex-start" }}
-            >
-              Chào mừng đến với
-            </Text>
-            <Text
-              className="text-[#00BCC9] text-[34px] font-bold"
-              style={{
-                color: Color.mainColor,
-                ...FONTS.h1,
-                fontSize: 34,
-                marginTop: 8,
-              }}
-            >
-              Shoes ERIC
-            </Text>
-
-            <Text
-              className="text-[#3C6072]"
-              style={{ color: Color.white, marginTop: 8, ...FONTS.body4 }}
-            >
-              Hãy để chúng tôi giúp bạn tìm sản phẩm mà bạn mong muốn
-            </Text>
-          </ImageBackground> */}
-
-            <View style={styles.slide}>
-              <Image
-                source={banner1}
-                resizeMode="cover"
-                style={styles.sliderImage}
-              />
-            </View>
-            <View style={styles.slide}>
-              <Image
-                source={banner2}
-                resizeMode="cover"
-                style={styles.sliderImage}
-              />
-            </View>
-            <View style={styles.slide}>
-              <Image
-                source={banner3}
-                resizeMode="cover"
-                style={styles.sliderImage}
-              />
-            </View>
-          </Swiper>
-        </View>
-
-        {/* <LineDivider /> */}
-
-        {renderListType()}
-
-        {renderPopularList()}
-      </ScrollView>
-
-      {/* Circel Section */}
+          <View style={styles.slide}>
+            <Image
+              source={banner1}
+              resizeMode="cover"
+              style={styles.sliderImage}
+            />
+          </View>
+          <View style={styles.slide}>
+            <Image
+              source={banner2}
+              resizeMode="cover"
+              style={styles.sliderImage}
+            />
+          </View>
+          <View style={styles.slide}>
+            <Image
+              source={banner3}
+              resizeMode="cover"
+              style={styles.sliderImage}
+            />
+          </View>
+        </Swiper>
+      </View>
+      {renderTagType()}
       <View
-        className="w-[300px] h-[300px] bg-[#00BCC9]
-         rounded-full absolute bottom-36  -right-1/4"
-        style={{ opacity: 0.1, zIndex: -10 }}
-      ></View>
-      <View
-        className="w-[300px] h-[300px] bg-[#E99265]
-         rounded-full absolute -bottom-20 -left-1/4"
-        style={{ opacity: 0.1, zIndex: -10 }}
-      ></View>
-
-      {/* Circel Section */}
-      {/* <View
-        className="flex-1 relative items-center justify-center"
-        style={{ zIndex: -10 }}
+        style={{
+          flex: 1,
+          justifyContent: "flex-end",
+          backgroundColor: Color.transparent,
+          alignItems: "flex-end",
+          // borderWidth: 1,
+        }}
       >
-        <Animatable.Image
-          animation="fadeIn"
-          easing="ease-in-out"
-          source={ShoesFLas}
-          className="w-80 h-80 object-cover mt-20"
+        {/* <TouchableOpacity
+          style={{
+            width: 100,
+            height: 30,
+            backgroundColor: Color.while2,
+            borderWidth: 1,
+          }}
+        >
+          <Text>dsfasdsa</Text>
+        </TouchableOpacity> */}
+        <Image
+          source={require("../public/assets/gif/man-doing-shoes-shopping.gif")}
+          style={{
+            width: 200,
+            height: 200,
+          }}
+          resizeMode="contain"
         />
+      </View>
 
-        <TouchableOpacity
-          onPress={() => getDetailUser()}
-          // onPress={() => testAxios()}
-          className=" absolute bottom-[100px] w-24 h-24 border-l-2 border-r-2 border-t-4 border-[#00BCC9] rounded-full items-center justify-center"
-        >
-          <Animatable.View
-            className="w-20  h-20 items-center justify-center rounded-full bg-[#00BCC9]"
-            animation={"pulse"}
-            easing="ease-in-out"
-            iterationCount={"infinite"}
-          >
-            <Text className="text-gray-50 text-[34px] font-semibold">GO</Text>
-          </Animatable.View>
-        </TouchableOpacity>
+      {renderPopularList()}
 
-        <TouchableOpacity
-          onPress={() => navigation.navigate("HomeTab", { screen: "Feed" })}
-          // onPress={() => testAxios()}
-          className=" absolute bottom-50 w-24 h-24 border-l-2 border-r-2 border-t-4 border-[#00BCC9] rounded-full items-center justify-center"
-        >
-          <Animatable.View
-            className="w-20  h-20 items-center justify-center rounded-full bg-[#00BCC9]"
-            animation={"pulse"}
-            easing="ease-in-out"
-            iterationCount={"infinite"}
-          >
-            <Text className="text-gray-50 text-[34px] font-semibold">Re</Text>
-          </Animatable.View>
-        </TouchableOpacity>
-      </View> */}
-
-      {/* <ScrollView> */}
-
-      {/* </ScrollView> */}
+      {/* Circel Section */}
+      <View style={styles.circleBlue}></View>
+      <View style={styles.circleYellow}></View>
     </SafeAreaView>
   );
 };
@@ -441,7 +313,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "flex-start",
-    backgroundColor: "transparent",
+    // backgroundColor: "transparent",
     borderRadius: 8,
   },
   sliderImage: {
@@ -454,7 +326,6 @@ const styles = StyleSheet.create({
   sliderContainer: {
     height: 180,
     width: "100%",
-    marginTop: 10,
     justifyContent: "center",
     alignSelf: "center",
     borderRadius: 8,
@@ -464,4 +335,32 @@ const styles = StyleSheet.create({
     paddingHorizontal: SIZES.padding,
   },
   title: { flex: 1, ...FONTS.h2 },
+  selectedTagsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "baseline",
+  },
+  circleBlue: {
+    opacity: 0.1,
+    zIndex: -10,
+    width: 300,
+    height: 300,
+    backgroundColor: "#00BCC9",
+    borderRadius: 999,
+    position: "absolute",
+    bottom: 260,
+    right: "-25%",
+  },
+  circleYellow: {
+    opacity: 0.1,
+    zIndex: -10,
+    width: 200,
+    height: 200,
+    backgroundColor: "#E99265",
+    borderRadius: 999,
+    position: "absolute",
+    bottom: 0,
+    left: "-25%",
+    zIndex: 10,
+  },
 });

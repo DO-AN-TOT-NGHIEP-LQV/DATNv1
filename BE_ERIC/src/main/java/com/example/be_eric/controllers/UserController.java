@@ -81,6 +81,8 @@ public class UserController {
         try {
 
             User newUser = new User(user.getUsername(), user.getEmail(), user.getPassword());
+
+
             userService.saveUser(newUser);
             return ResponseEntity.ok().build();
         } catch (DuplicateValueException e) {
@@ -103,7 +105,7 @@ public class UserController {
             String username = decodedJWT.getSubject();
             User user = userService.getUserByEmail(username);
             if( user == null)
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User does not exist"));
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Người dùng không tồn tại"));
 
 
             boolean isMatch = passwordEncoder.matches( userForm.getCurrentPassword(), user.getPassword());
@@ -111,7 +113,7 @@ public class UserController {
 
             if(isMatch == false)
 //                System.out.println("khong trung");
-                return ResponseEntity.badRequest().body(new ErrorResponse("Password is wrong"));
+                return ResponseEntity.badRequest().body(new ErrorResponse("Sai mật khẩu"));
 
             user.setPassword(userForm.getNewPassword());
 
@@ -119,7 +121,7 @@ public class UserController {
             return ResponseEntity.ok().build();
             else
             return ResponseEntity.badRequest()
-                    .body(new ErrorResponse("An error occurred during the process."));
+                    .body(new ErrorResponse("Có lỗi sảy ra trong tiến trình"));
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -189,7 +191,7 @@ public class UserController {
         try {
             String authorizationHeader = request.getHeader(AUTHORIZATION);
             if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-                return ResponseEntity.badRequest().body(new ErrorResponse("Refresh token is missing"));
+                return ResponseEntity.badRequest().body(new ErrorResponse("Token đã hết hạn"));
             }
 
             String refresh_token = authorizationHeader.substring("Bearer ".length());

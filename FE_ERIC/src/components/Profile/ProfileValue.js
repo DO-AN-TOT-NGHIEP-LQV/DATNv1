@@ -6,22 +6,29 @@ import { FONTS, SIZES } from "../../constans/Theme";
 
 export default function ProfileValue({
   iconName,
+  icon,
   label,
   value,
   onPress,
   iconSize,
   gender,
+  children,
 }) {
   return (
-    <View style={styles.touchableContainer}>
+    <TouchableOpacity style={styles.touchableContainer} onPress={onPress}>
       {/* Icon */}
       <View style={styles.iconStyle}>
-        <Icons
-          size={iconSize || 20}
-          name={iconName}
-          icon={icons.AntDesign}
-          color={Color.mainColor}
-        />
+        {icon ? (
+          icon
+        ) : (
+          <Icons
+            size={iconSize || 20}
+            name={iconName}
+            icon={icons.AntDesign}
+            color={Color.mainColor}
+          />
+        )}
+
         {iconName == "user" && (
           <View
             style={{
@@ -56,22 +63,22 @@ export default function ProfileValue({
           </Text>
         )}
 
-        <Text numberOfLines={2} style={{ ...FONTS.h4 }}>
+        <Text numberOfLines={1} style={{ ...FONTS.h4, color: Color.darkGray }}>
           {value}
         </Text>
       </View>
 
+      {children}
+
       {onPress && (
-        <TouchableOpacity onPress={onPress}>
-          <Icons
-            size={20}
-            name={"right"}
-            icon={icons.AntDesign}
-            color={Color.black}
-          />
-        </TouchableOpacity>
+        <Icons
+          size={20}
+          name={"right"}
+          icon={icons.AntDesign}
+          color={Color.black}
+        />
       )}
-    </View>
+    </TouchableOpacity>
   );
 }
 

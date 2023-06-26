@@ -42,31 +42,28 @@ const ProfileScreen = () => {
 
   const onLogoutAlert = () => {
     Alert.alert(
-      "Logout",
-      "Are you sure, yout want to logout from this device",
+      "Đăng xuất",
+      "Bạn có chắc đăng xuất khỏi thiết bị này",
       [{ text: "Yes", onPress: () => logout() }, { text: "No" }],
       { cancelable: true }
     );
   };
 
   const logout = async () => {
-    console.log("sadoasdaps");
     if (isLoading) {
       return; // Nếu đang xử lý, không làm gì
     }
-    // const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-    // setIsProcessing(true);
     setLoading(true);
 
     await actions.logout();
 
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: "Login" }],
-      })
-    );
+    // navigation.dispatch(
+    //   CommonActions.reset({
+    //     index: 0,
+    //     routes: [{ name: "Đăng n" }],
+    //   })
+    // );
 
     setLoading(false);
 
@@ -246,7 +243,8 @@ const ProfileScreen = () => {
           iconName={"user"}
           gender={gender}
           label={"Họ và tên"}
-          value={`${detailUser?.firstName || ""} ${detailUser?.lastName || ""}`}
+          // value={`${detailUser?.firstName || ""} ${detailUser?.lastName || ""}`}
+          value={`${detailUser?.username || ""}`}
         />
         <LineDivider />
 
@@ -324,16 +322,15 @@ const ProfileScreen = () => {
           <React.Fragment>
             {renderProfileUser()}
             {renderProfileEdit()}
+            <CustomButton
+              isLoading={isLoading}
+              label="Đăng xuất"
+              onPress={onLogoutAlert}
+            />
           </React.Fragment>
         ) : (
           <AuthRequired navigation={navigation} />
         )}
-
-        <CustomButton
-          isLoading={isLoading}
-          label="Logout"
-          onPress={onLogoutAlert}
-        />
       </ScrollView>
 
       {isVisibleModalPassword && (

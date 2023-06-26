@@ -11,26 +11,27 @@ import CustomButton from "./CustomButton/index.js";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-const AuthRequired = ({ styleContainer, styleButton, navigation }) => {
-  // const navigation = useNavigation();
+const AuthRequired = ({
+  styleContainer,
+  styleButton,
+  navigation,
+  nextTabName,
+}) => {
+  const Auth = "AuthTab";
 
   const handleLogin = () => {
-    navigation.navigate("Login");
-    // navigation.navigate("SettingTab", {
-    //   screen: "Login",
-    // });
+    navigation.navigate(Auth, {
+      screen: "LoginScreen",
+    });
   };
 
   const handleRegister = () => {
-    navigation.navigate("Signup");
-
-    // navigation.navigate("SettingTab", {
-    //   // screen: "Signup",
-    // });
+    navigation.navigate(Auth, {
+      screen: "SignupScreen",
+    });
   };
 
   return (
- 
     <View style={{ ...styles.styleContainer, styleContainer }}>
       <Text
         style={{

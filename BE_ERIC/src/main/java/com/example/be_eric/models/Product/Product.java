@@ -14,7 +14,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -36,9 +38,9 @@ public class Product {
     private String description;
 
 //    @NotNull
-    private int quantity;
+//    private int quantity;
 
-    private double  originalPrice = 0;
+//    private double  originalPrice = 0;
 
 //    @NotNull
     private double  price = 0;
@@ -48,7 +50,7 @@ public class Product {
 
     private String brand;
 
-    private String link;
+//    private String link;
 
     private  boolean status = false;
 
@@ -63,41 +65,47 @@ public class Product {
     private List<Image> images =  new ArrayList<>();
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
-//    @JsonIdentityReference(alwaysAsId = true)
-//    @JsonProperty("shop_id")
-    @JsonManagedReference
-    @JoinColumn(name = "shop_id", updatable = false)
-    private Shop shop;
+//    @ManyToOne(fetch = FetchType.LAZY)
+////    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id" )
+////    @JsonIdentityReference(alwaysAsId = true)
+////    @JsonProperty("shop_id")
+//    @JsonManagedReference
+//    @JoinColumn(name = "shop_id", updatable = false)
+//    private Shop shop;
 
-    public Product(Long id, String name, String description, int quantity, double  price, Shop shop) {
+//    @JsonIgnore
+    @JsonManagedReference
+    @OneToMany(mappedBy = "product")
+    private List<ShopProduct> shopProducts = new ArrayList<>();
+
+
+
+    public Product(Long id, String name, String description,  double  price) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.quantity = quantity;
+//        this.quantity = quantity;
         this.price = price;
-        this.shop = shop;
     }
 
-    public Product(Long id, String name, String description, int quantity, String type, String brand, Shop shop) {
+    public Product(Long id, String name, String description,  String type, String brand) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.quantity = quantity;
+//        this.quantity = quantity;
         this.type = type;
         this.brand = brand;
-        this.shop = shop;
     }
 
-    public Product(Long id, String name, String description, int quantity, double  originalPrice , double  price, Shop shop) {
+
+
+    public Product(Long id, String name, String description, String type, String brand, List<Image> images) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.quantity = quantity;
-        this.price = price;
-        this.shop = shop;
-        this.originalPrice = originalPrice;
+        this.type = type;
+        this.brand = brand;
+        this.images = images;
     }
 
     // Thêm thuộc tính created_at và chú thích @CreationTimestamp

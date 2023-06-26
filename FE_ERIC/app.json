@@ -7,11 +7,8 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splashShoeRong.png",
-      "resizeMode": "contain",
-      "imageResizeMode": "contain",
-      "height": 200,
-      "width": 200
+      "image": "./assets/splash.png",
+              "resizeMode": "contain"
     },
     "assetBundlePatterns": [
       "**/*"

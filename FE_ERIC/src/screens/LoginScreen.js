@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -17,21 +17,37 @@ import CustomButton from "../components/CustomButton/index.js";
 import { useNavigation } from "@react-navigation/native";
 import { Color } from "../constans";
 import validator from "../ultils/validations";
+import { TouchableNativeFeedback } from "react-native";
+import { Button } from "react-native-paper";
 
 const LoginScreen = ({}) => {
   const [state, setState] = useState({
     isLoading: false,
-    username: "4@gmail.com",
-    password: "4",
+    username: "",
+    password: "",
     isSecure: true,
   });
   const { isLoading, username, password, isSecure } = state;
 
   const navigation = useNavigation();
 
+  useEffect(() => {
+    navigation.getParent()?.setOptions({
+      tabBarStyle: { display: "none" },
+      tabBarVisible: false,
+    });
+
+    return () => {
+      navigation
+        .getParent()
+        ?.setOptions({ tabBarStyle: undefined, tabBarVisible: undefined });
+    };
+  }, [navigation]);
+
   const updateState = (data) => setState(() => ({ ...state, ...data }));
 
   const isValidData = () => {
+    console.log(username);
     const error = validatorLogin({
       username,
       password,
@@ -53,12 +69,15 @@ const LoginScreen = ({}) => {
         bodyFormData.append("password", password);
 
         const res = await actions.login(bodyFormData);
-        showSuccess("Login successfully...!!!!");
+        showSuccess("Đăng nhập thành công");
+
         updateState({ isLoading: false });
         await actions.setIsLogin(true);
-        navigation.navigate("HomeTab", {
-          screen: "Signup",
-        });
+
+        // navigation.navigate("AuthTab", {
+        //   screen: "SignupScreen",
+        // });
+        navigation.navigate("HomeTab");
       } catch (error) {
         showError(error.error_message);
         await actions.setIsLogin(false);
@@ -66,6 +85,7 @@ const LoginScreen = ({}) => {
       }
     }
   };
+
   return (
     <ImageBackground style={styles.image} blurRadius={10}>
       <View
@@ -103,8 +123,6 @@ const LoginScreen = ({}) => {
             label="Password"
             placeholder="enter your password"
             value={password}
-            // isSecure={true}
-            // secureTextEntry={isSecure}
             onChangeText={(password) => updateState({ password })}
             icon={
               <Ionicons
@@ -118,7 +136,7 @@ const LoginScreen = ({}) => {
             fieldButtonFunction={() => {}}
           />
           <CustomButton
-            label={"Login"}
+            label={"Đăng nhập"}
             onPress={onLogin}
             isLoading={isLoading}
             isDisable={isLoading}
@@ -127,7 +145,14 @@ const LoginScreen = ({}) => {
 
           <View className="mt-[1px] justify-center flex-row">
             <Text>Chưa có tài khoảng?</Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
+            <TouchableOpacity
+              onPress={() => {
+                // navigation.navigate("ProfileTab", { screen: "SignupScreen" })
+                navigation.navigate("AuthTab", {
+                  screen: "SignupScreen",
+                });
+              }}
+            >
               <Text className=" font-[700] text-[#AD40AF]"> Đăng ký</Text>
             </TouchableOpacity>
           </View>

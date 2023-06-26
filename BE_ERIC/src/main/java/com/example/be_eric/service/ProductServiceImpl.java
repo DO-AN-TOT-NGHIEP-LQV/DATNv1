@@ -1,18 +1,16 @@
 package com.example.be_eric.service;
 
+import com.example.be_eric.DTO.ShopProductDetailDTO;
 import com.example.be_eric.models.Image;
 import com.example.be_eric.models.Product.Product;
-import com.example.be_eric.models.Shop;
 import com.example.be_eric.repository.ProductRepository;
 import com.example.be_eric.repository.ProductSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,9 +95,12 @@ public class ProductServiceImpl implements  ProductService{
 
     @Override
     public List<Product> findProductsByShopIdAndKeyword(Long shopId, String keyword) {
+        return productRepo.findProductsByShopIdAndKeyword( keyword);
+    }
 
-        return productRepo.findProductsByShopIdAndKeyword(shopId, keyword);
-
+    @Override
+    public List<Product> findAllProductByKeyword(String keyword) {
+        return productRepo.findProductsByNameContaining(keyword);
     }
 
     @Override
@@ -114,7 +115,7 @@ public class ProductServiceImpl implements  ProductService{
 
     @Override
     public Product getProductByIdOfaShop(Long shopId , Long productId) {
-        return productRepo.findProductByShopIdAndId(shopId, productId);
+        return productRepo.findProductByShopIdAndId( productId);
     }
 
     @Override
@@ -129,11 +130,16 @@ public class ProductServiceImpl implements  ProductService{
               }
           }
 
-          productRepo.setProductFeatured(idProduct,  idShop, isFeature );
+          productRepo.setProductFeatured(idProduct, isFeature );
       }catch (Exception e){
           throw  e;
       }
 
+    }
+
+    @Override
+    public List<ShopProductDetailDTO> findProductOfShopIdAndKeyword(Long productId, String keyword) {
+        return productRepo.findProductOfShopIdAndKeyword( productId, keyword  );
     }
 
 }

@@ -5,53 +5,59 @@ import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 import { TriggeringView } from "react-native-image-header-scroll-view";
 import { FONTS, SIZES, spacing } from "../../constans/Theme";
-import { apiGet } from "../../ultils/utilsApi";
-import { GET_PRODUCT_BY_ID } from "../../config/urls";
 import { showError } from "../../ultils/messageFunction";
 import LottieLoading from "../LottieLoading";
 import { Button } from "react-native-paper";
 import { useCallback } from "react";
 import { typeList } from "../../constans/raw";
 import { TypeCard } from "../Home";
+import CustomButton from "../CustomButton/index.js";
+import Icons, { icons } from "../Icons";
+import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
+import { hasSalerRole } from "../../ultils/helperFunction";
 
-const DetailProduct = ({ dataProduct, productId }) => {
+const DetailProduct = ({ dataProduct }) => {
   // xem them
+  const navigation = useNavigation();
 
-  const [product, setProduct] = useState(null);
+  const [product, setProduct] = useState(dataProduct);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      var headers = {
-        "Content-Type": "application/json",
-      };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     var headers = {
+  //       "Content-Type": "application/json",
+  //     };
 
-      var data = {
-        params: {
-          productId: productId,
-        },
-      };
-      await apiGet(GET_PRODUCT_BY_ID, data, headers, false)
-        .then((res) => {
-          console.log("GET_PRODUCT_BY_ID");
-          setProduct(res.data);
-        })
-        .catch((error) => {
-          showError(error.error_message);
-        });
+  //     var data = {
+  //       params: {
+  //         productId: productId,
+  //       },
+  //     };
+  //     await apiGet(GET_PRODUCT_BY_ID, data, headers, false)
+  //       .then((res) => {
+  //         console.log("GET_PRODUCT_BY_ID");
+  //         setProduct(res.data);
+  //       })
+  //       .catch((error) => {
+  //         showError(error.error_message);
+  //       });
 
-      setLoading(false);
-    };
+  //     setLoading(false);
+  //   };
 
-    fetchData();
-  }, [productId]);
+  //   fetchData();
+  // }, [productId]);
 
   const [showMore, setTextShownMore] = useState(false);
   const [lengthMore, setLengthMore] = useState(false);
   const toggleNumberOfLines = () => {
     setTextShownMore(!showMore);
   };
+
+  const detailUser = useSelector((state) => state.auth.detailUser);
 
   const onTextLayout = useCallback((e) => {
     setLengthMore(e.nativeEvent.lines.length >= 5); //to check the text is more than 4 lines or not
@@ -67,11 +73,55 @@ const DetailProduct = ({ dataProduct, productId }) => {
     />
   ) : (
     <Fragment>
-      <View style={styles.section}>
-        <Text style={styles.title}>
-          {product?.name}
-          <Text style={styles.name}></Text>
+      <View style={{ ...styles.section, flexDirection: "row", paddingTop: 20 }}>
+        <Text
+          numberOfLines={10}
+          style={{
+            ...styles.title,
+            flex: 1,
+          }}
+        >
+          {`${product?.name} `}
         </Text>
+
+        {detailUser?.roles && hasSalerRole(detailUser?.roles) && (
+          <TouchableOpacity
+            style={{
+              borderWidth: 1,
+              borderColor: Color.mainColor,
+              borderRadius: 4,
+              alignSelf: "flex-start",
+              borderRadius: 5,
+            }}
+            onPress={() => {
+              navigation.navigate("SearchTab", {
+                screen: "ShopCreateProduct",
+                params: { productId: product?.id },
+              });
+            }}
+          >
+            <Text
+              numberOfLines={1}
+              style={{ color: Color.mainColor, fontSize: 10, padding: 10 }}
+            >
+              Liên kết sản phẩm
+            </Text>
+
+            <Icons
+              icon={icons.Feather}
+              name={"link"}
+              size={14}
+              color={Color.mainColor}
+              style={{
+                backgroundColor: Color.darkGray2,
+                borderRadius: 50,
+                position: "absolute",
+                top: -7,
+                right: -7,
+              }}
+            />
+          </TouchableOpacity>
+        )}
       </View>
 
       <View
@@ -140,23 +190,6 @@ const DetailProduct = ({ dataProduct, productId }) => {
             />
           </View>
         </View>
-
-        {/* 
-        <Text numberOfLines={1}>
-          <Text numberOfLines={1} style={styles.priceSmall}>
-            đ
-          </Text>
-          <Text numberOfLines={1} style={styles.priceBig}>
-            {(product?.price || 0).toLocaleString("vi-VN")}
-          </Text>
-
-          {(product.originalPrice !== null ||
-            product.originalPrice !== undefined) && (
-            <Text numberOfLines={1} style={styles.originalPrice}>
-              đ{product.originalPrice}
-            </Text>
-          )}
-        </Text> */}
       </View>
 
       <View style={[styles.section]}>
@@ -196,8 +229,6 @@ export default DetailProduct;
 const styles = StyleSheet.create({
   section: {
     padding: 20,
-    // borderBottomWidth: 1,
-    // borderBottomColor: Color.textLight,
     backgroundColor: "white",
     borderTopWidth: 1,
     borderTopColor: Color.textLight,
@@ -215,5 +246,18 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: "bold",
+  },
+
+  customButtonGoTo: {
+    width: 90,
+    alignSelf: "flex-start",
+    backgroundColor: Color.white,
+    borderRadius: 0,
+    borderWidth: 1,
+    borderColor: Color.mainColor,
+  },
+  customTextStyleGoTo: {
+    fontSize: 12,
+    color: Color.mainColor,
   },
 });

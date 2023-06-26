@@ -44,6 +44,7 @@ export async function apiReq(
         rej({
           error_message: "Hãy đăng nhập lại",
         });
+        return;
       }
     }
 

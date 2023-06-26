@@ -36,14 +36,14 @@ const styles = StyleSheet.create({
     marginTop: 5,
     backgroundColor: Color.mainColor,
   },
-  btnStyle: {
-    height: 48,
-    backgroundColor: "blue",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    paddingHorizontal: 16,
-  },
+  // btnStyle: {
+  //   height: 48,
+  //   backgroundColor: "blue",
+  //   alignItems: "center",
+  //   justifyContent: "center",
+  //   borderRadius: 10,
+  //   paddingHorizontal: 16,
+  // },
   textStyle: {
     alignItems: "center",
     color: "white",

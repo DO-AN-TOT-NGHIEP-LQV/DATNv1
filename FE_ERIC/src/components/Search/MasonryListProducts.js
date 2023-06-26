@@ -3,21 +3,21 @@ import React from "react";
 import MasonryList from "@react-native-seoul/masonry-list";
 import Color from "../../constans/Color";
 import Icons, { icons } from "../Icons";
-import { v4 as uuidv4 } from "uuid";
-import { FONTS } from "../../constans/Theme";
-import { useState } from "react";
-import { useEffect } from "react";
 import { useNavigation, CommonActions } from "@react-navigation/native";
+import { FlatList } from "react-native";
+import { Dimensions } from "react-native";
+import { SafeAreaView } from "react-native";
+
+const itemWidth = Dimensions.get("window").width / 2 - 10;
 
 const MasonryListProducts = ({ data, previousScreen }) => {
   return (
-    <MasonryList
-      data={data}
-      keyExtractor={(item) => item.id}
-      numColumns={2}
-      imageContainerStyle={{ borderRadius: 8 }}
+    <FlatList
+      scrollEnabled={false}
+      columnWrapperStyle={style.columnWrapperStyle}
       showsVerticalScrollIndicator={false}
-      containerStyle={{ backgroundColor: Color.mainTheme }}
+      numColumns={2}
+      data={data}
       renderItem={({ item }) => (
         <CardItem data={item} previousScreen={previousScreen} />
       )}
@@ -36,26 +36,23 @@ const CardItem = ({ data, previousScreen }) => {
             navigation.navigate("DetailProduct", {
               dataProduct: data,
               previousScreen: previousScreen,
-              productId: data.id,
+              productId: data?.id,
             });
           }}
           style={{
             borderRadius: 3,
             width: "100%",
             height: 100,
-            // paddingVertical: 5,
             paddingTop: 5,
             paddingBottom: 0,
           }}
         >
           <Image
-            source={{ uri: data.images[0].url || null }}
+            source={{ uri: data?.images[0].url || null }}
             className="w-full h-full object-cover"
             resizeMode="contain"
             style={{
-              // borderWidth: 1,
               borderRadius: 3,
-              // borderColor: Color.textLight,
             }}
           />
         </TouchableOpacity>
@@ -72,7 +69,7 @@ const CardItem = ({ data, previousScreen }) => {
               fontFamily: "Roboto-Bold",
             }}
           >
-            {`${data.name}`}
+            {`${data?.name}`}
           </Text>
           <Text
             numberOfLines={2}
@@ -84,7 +81,7 @@ const CardItem = ({ data, previousScreen }) => {
               fontFamily: "Roboto-Regular",
             }}
           >
-            {`${data.content || data.description}`}
+            {`${data?.content || data?.description}`}
           </Text>
         </View>
 
@@ -99,15 +96,8 @@ const CardItem = ({ data, previousScreen }) => {
               đ
             </Text>
             <Text numberOfLines={1} style={style.priceBig}>
-              {(data.price || 0).toLocaleString("vi-VN")}
+              {(data?.price || 0).toLocaleString("vi-VN")}
             </Text>
-
-            {(data.originalPrice !== null ||
-              data.originalPrice !== undefined) && (
-              <Text numberOfLines={1} style={style.originalPrice}>
-                đ{data.originalPrice}
-              </Text>
-            )}
           </Text>
         </View>
 
@@ -115,7 +105,7 @@ const CardItem = ({ data, previousScreen }) => {
         <View style={style.detailView}>
           {/* Name && address */}
           <TouchableOpacity style={{ flex: 1 }}>
-            <Text
+            {/* <Text
               numberOfLines={1}
               ellipsizeMode="tail"
               style={{
@@ -123,23 +113,25 @@ const CardItem = ({ data, previousScreen }) => {
                 fontWeight: "500",
               }}
             >
-              [{data.shop.sName}]
-            </Text>
+              [{data?.shop?.sName}]
+            </Text> */}
 
             <Text
               numberOfLines={1}
-              style={{
-                fontSize: 8,
-                fontWeight: "300",
-              }}
+              style={
+                {
+                  // fontSize: 14,
+                  // fontWeight: "300",
+                }
+              }
             >
-              <Icons icon={icons.Feather} name="map-pin" size={10} />
-              {data.shop.sAddress1}
+              <Icons icon={icons.Feather} name="map-pin" size={14} />
+              {data?.shopProducts.length} nơi bán
             </Text>
           </TouchableOpacity>
 
           {/* Like, Rate, Count */}
-          <View style={{ flex: 1 }}>
+          {/* <View style={{ flex: 1 }}>
             <Text
               numberOfLines={1}
               style={{
@@ -147,7 +139,7 @@ const CardItem = ({ data, previousScreen }) => {
                 fontWeight: "normal",
               }}
             >
-              {/* [{data.shop.sName}] */}
+              [{data?.shop?.sName}]
             </Text>
             <Text
               numberOfLines={1}
@@ -157,9 +149,9 @@ const CardItem = ({ data, previousScreen }) => {
               }}
             >
               <Icons icon={icons.AntDesign} name="hearto" size={10} />
-              {/* {data.shop.sAddress1} */}
+              {data?.shop?.sAddress1}
             </Text>
-          </View>
+          </View> */}
         </View>
       </View>
     </View>
@@ -177,26 +169,20 @@ const style = StyleSheet.create({
     fontSize: 14,
     fontWeight: "300",
     color: Color.blueMain,
-
-    // color: Color.blueSd,
-    // color: Color.blueTheme,
   },
   priceBig: {
-    // color: Color.red,
-    // color: Color.red,
     color: Color.blueMain,
     color: Color.blueSd,
-
     fontFamily: "Roboto-Bold",
     fontSize: 16,
     fontWeight: "normal",
   },
-  originalPrice: {
-    fontWeight: "300",
-    color: Color.textLight,
-    fontSize: 10,
-    textDecorationLine: "line-through",
-  },
+  // originalPrice: {
+  //   fontWeight: "300",
+  //   color: Color.textLight,
+  //   fontSize: 10,
+  //   textDecorationLine: "line-through",
+  // },
   detailView: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -204,11 +190,45 @@ const style = StyleSheet.create({
     alignContent: "center",
   },
   cardItemView: {
+    borderWidth: 1,
     borderColor: Color.textLight,
     // borderWidth: 1,
     height: Math.round(200),
     backgroundColor: Color.white,
     paddingHorizontal: 5,
     margin: 2,
+    width: itemWidth,
+  },
+  columnWrapperStyle: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 5,
   },
 });
+
+// <MasonryList
+//   data={data}
+//   keyExtractor={(item) => item.id}
+//   numColumns={2}
+//   imageContainerStyle={{ borderRadius: 8 }}
+//   showsVerticalScrollIndicator={false}
+//   containerStyle={{ backgroundColor: Color.mainTheme }}
+//   renderItem={({ item }) => (
+//     <CardItem data={item} previousScreen={previousScreen} />
+//   )}
+// />
+
+// <FlatList
+//   data={data}
+//   keyExtractor={(item) => item.id}
+//   renderItem={({ item }) => (
+//     <CardItem data={item} previousScreen={previousScreen} />
+//   )}
+//   numColumns={2}
+//   contentContainerStyle={{
+//     backgroundColor: Color.mainTheme,
+//     borderWidth: 1,
+//     paddingHorizontal: 5,
+//   }}
+// />

@@ -49,7 +49,6 @@ public class FirebaseFileService {
 
     @EventListener
     public void init(ApplicationReadyEvent event) {
-        System.out.println("33333333333333");
         try {
             FileInputStream serviceAccounts =
                 new FileInputStream("src/main/resources/serviceFirebaseKey.json");
@@ -69,7 +68,7 @@ public class FirebaseFileService {
         BlobId blobId = null;
         try {
 //            String imageName = "shop_" + product.getShop().getId() + "_p_" + product.getId() + "_name_" + generateFileName(fileImage.getOriginalFilename());
-            String imageName = "shop_" + product.getShop().getId() + "_p_" + product.getId() + "_name_" + generateFileName(fileImage.getOriginalFilename());
+            String imageName =   "p_" + product.getId() + "_name_" + generateFileName(fileImage.getOriginalFilename());
             String folderName = "ImageProduct";
             String filePath = folderName + "/" + imageName;
             System.out.println(imageName);
@@ -83,7 +82,7 @@ public class FirebaseFileService {
 
             String fileUrl = "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/" + URLEncoder.encode(filePath, "UTF-8") + "?alt=media";
 
-            Image image = imageService.saveImage(new Image( imageName, fileUrl, false));
+            Image image = imageService.saveImage(new Image( imageName, fileUrl, true));
             System.out.println("Bat dau luu product");
             System.out.println("add hinh anh vao");
             productService.save(product);
@@ -106,7 +105,8 @@ public class FirebaseFileService {
             body.add("product_id", product.getId());
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-            String url = "http://103.197.185.34/ai/api/product/addNewImg";
+//            String url = "http://103.197.185.34/ai/api/product/addNewImg";
+            String url = "http://127.0.0.1:5000/ai/api/product/addNewImg";
             ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
             HttpStatus statusCode = response.getStatusCode();
             int statusCodeValue = statusCode.value();

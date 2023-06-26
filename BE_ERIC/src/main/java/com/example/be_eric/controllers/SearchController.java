@@ -1,5 +1,6 @@
 package com.example.be_eric.controllers;
 
+import com.example.be_eric.DTO.ShopProductDetailDTO;
 import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.service.ProductService;
 import com.example.be_eric.service.ShopService;
@@ -23,7 +24,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -47,6 +50,7 @@ public class SearchController {
                          MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseEntity<?> searchPostByImage(@RequestPart("fileSearchImg") MultipartFile fileSearchImg)
     {
+
 
         try {
             RestTemplate restTemplate = new RestTemplate();
@@ -93,62 +97,6 @@ public class SearchController {
     }
 
 
-//    @PostMapping(value = "/search/searchByImage",
-//              consumes = {MediaType.APPLICATION_JSON_VALUE,
-//                         MediaType.MULTIPART_FORM_DATA_VALUE })
-//    public ResponseEntity<?> searchPostByImage(@RequestPart("fileSearchImg") MultipartFile fileSearchImg){
-//        try {
-//            List<Product> responeList = productService.getAll();
-//            return ResponseEntity.ok().body(responeList);
-//        } catch (Exception e) {
-//            System.out.println(e);
-//            return ResponseEntity.badRequest().body(e);
-//        }
-//    }
-
-//    @GetMapping(value = "/search/posts/SearchByText")
-//    public ResponseEntity searchPostByText(@RequestParam("searchText") String searchText, @RequestParam("page") int page) {
-//        Pageable pageable = PageRequest.of(page, 30);
-//        Page<Post> postListPage = postService.searchByText(searchText, pageable);
-//        List<Post> postList = postListPage.getContent();
-//        return ResponseEntity.ok().body(postList);
-//    }
-
-
-//    @GetMapping(value = "/search/all/SearchByText")
-//    public ResponseEntity searchAllByText(@RequestParam("searchText") String searchText, @RequestParam("page") int page) {
-//        Pageable pageable = PageRequest.of(page, 10);
-//        Page<Product> productsListPage = productService.searchByText(searchText, pageable);
-//        List<Product> productsList = productsListPage.getContent();
-//
-//        Page<Post> postListPage = postService.searchByText(searchText, pageable);
-//        List<Post> postList = postListPage.getContent();
-//
-//        List<Object> responeList = new ArrayList<>();
-//        responeList.addAll(productsList);
-//        responeList.addAll(postList);
-//
-//        return ResponseEntity.ok().body(responeList);
-//    }
-
-
-//    @GetMapping(value = "/search/GetAllShop")
-//    public ResponseEntity searchGetAllShop() {
-//        Pageable pageable = PageRequest.of(page, 10);
-//        Page<Product> productsListPage = productService.searchByText(searchText, pageable);
-//        List<Product> productsList = productsListPage.getContent();
-//
-//        Page<Post> postListPage = postService.searchByText(searchText, pageable);
-//        List<Post> postList = postListPage.getContent();
-//
-//        List<Object> responeList = new ArrayList<>();
-//        responeList.addAll(productsList);
-//        responeList.addAll(postList);
-//
-//        return ResponseEntity.ok().body(responeList);
-//    }
-
-
     @GetMapping(value = "/search/products/searchAndFilterProducts")   // Co phan trang
     public ResponseEntity searchAndFilterProducts(
             @RequestParam(required = false,  defaultValue = "") String keyword,
@@ -159,7 +107,7 @@ public class SearchController {
             @RequestParam(required = false) int page) {
 
         try{   // Co phan trang
-            Pageable pageable = PageRequest.of(page, 30);
+            Pageable pageable = PageRequest.of(page, 50);
             Page<Product> productsListPage = productService.searchAndFilterProducts(keyword, types, brands, minPrice, maxPrice , pageable);
             List<Product> productsList = productsListPage.getContent();
             return ResponseEntity.ok().body(productsList);
@@ -173,25 +121,119 @@ public class SearchController {
 
     @GetMapping(value = "/search/products/SearchByText")
     public ResponseEntity searchProductByText(@RequestParam(name = "searchText",required = false, defaultValue = "") String searchText, @RequestParam("page") int page) {
-
+        System.out.println("45refsdfsdf");
 //        Sort sort = Sort.by(Sort.Direction.DESC, "created_at"); // Sắp xếp theo ngày tạo (giảm dần)
-        Pageable pageable = PageRequest.of(page, 30, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(page, 50, Sort.by("createdAt").descending());
         Page<Product> productsListPage = productService.searchByText(searchText, pageable);
         List<Product> productsList = productsListPage.getContent();
         return ResponseEntity.ok().body(productsList);
     }
 
 
+//    @GetMapping(value = "/search/products/shopId")
+//    public ResponseEntity searchProductByShop(@RequestParam("shopId") Long shopId, @RequestParam( name = "keyword", required = false, defaultValue = "") String keyword) {
+//        try{
+//            List<Product> productsList = productService.findProductsByShopIdAndKeyword(shopId, keyword);
+//            return ResponseEntity.ok().body(productsList);
+//        }
+//         catch (Exception e){
+//             System.out.println(e.getMessage());
+//            return ResponseEntity.badRequest()
+//                    .body(new ErrorResponse(e.getMessage()));
+//        }
+//    }
+
+
     @GetMapping(value = "/search/products/shopId")
     public ResponseEntity searchProductByShop(@RequestParam("shopId") Long shopId, @RequestParam( name = "keyword", required = false, defaultValue = "") String keyword) {
-
-
         try{
-            List<Product> productsList = productService.findProductsByShopIdAndKeyword(shopId, keyword);
+            List<ShopProductDetailDTO> productsList = productService.findProductOfShopIdAndKeyword(shopId, keyword);
             return ResponseEntity.ok().body(productsList);
         }
-         catch (Exception e){
-             System.out.println(e.getMessage());
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    // Get product get all shop have a product
+    @GetMapping(value = "/search/products/getShops", name = "GET")
+    public ResponseEntity getShopsOfProducts(@RequestParam("productId") Long productId )
+    {
+        try {
+            System.out.println("45refsdfsdf");
+            Product product =  productService.getById( productId );
+            if (product == null){
+                throw  new Exception( "Sản phẩm này không còn tồn tại");
+            }
+            List<ShopProductDetailDTO> dtoList  = shopService.getShopByProductId(productId);
+            return ResponseEntity.ok().body(dtoList);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    //    Get all product for admin manager
+    @GetMapping(value = "/search/products/getAll")
+    public ResponseEntity searchAllProduct( @RequestParam( name = "keyword", required = false, defaultValue = "") String keyword) {
+
+        try{
+            List<Product> productsList = productService.findAllProductByKeyword( keyword);
+            return ResponseEntity.ok().body(productsList);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+    // get detail product for screen detail anh update
+    @GetMapping(value = "/search/products/getDetail")
+    public ResponseEntity searchGetProductDetail(@RequestParam("productId") Long productId) {
+        try {
+
+            Product product =  productService.getById( productId );
+            if (product == null){
+                throw  new Exception( "Sản phẩm này không còn tồn tại");
+            }
+            return ResponseEntity.ok().body(product);
+
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
+
+
+    @GetMapping(value = "/search/products/checkVendorProduct/{shopId}/{productId}")
+    public ResponseEntity searchVentorProduct(
+            @PathVariable(required = true) Long shopId,
+            @PathVariable(required = true) Long productId) {
+        try {
+
+            Product product =  productService.getById( productId );
+            if (product == null){
+                throw  new Exception( "Sản phẩm này không còn tồn tại");
+            }
+
+            boolean checkExist = shopService.existsByProduct_IdAndShop_Id(productId, shopId);
+
+            Map<String, Object> responseData = new HashMap<>();
+            responseData.put("product", product);
+            responseData.put("isExist", checkExist);
+
+            return ResponseEntity.ok().body(responseData);
+
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.badRequest()
                     .body(new ErrorResponse(e.getMessage()));
         }

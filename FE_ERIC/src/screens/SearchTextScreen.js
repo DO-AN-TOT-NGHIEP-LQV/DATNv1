@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  Image,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   View,
-  FlatList,
   Dimensions,
   TouchableOpacity,
   TextInput,
@@ -27,10 +24,6 @@ import FilterModal from "../components/Search/FilterModal";
 import { SIZES, spacing, statusbarHeight } from "../constans/Theme";
 import Icons, { icons } from "../components/Icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
-
-// const width = Dimensions.get("window").width / 2 - 30;
-// const windowWidth = Dimensions.get("window").width;
-// const windowHeight = Dimensions.get("window").height;
 
 const SearchTextScreen = () => {
   const navigation = useNavigation();
@@ -260,7 +253,8 @@ const SearchTextScreen = () => {
 
   useEffect(() => {
     setPageProduct(0);
-    setListSearch([]);
+    // setListSearch([]);
+    firstRenderData();
   }, [isChangeFilter]);
   ///////////////
 

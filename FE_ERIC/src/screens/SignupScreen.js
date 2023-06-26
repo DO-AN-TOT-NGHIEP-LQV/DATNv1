@@ -5,14 +5,14 @@ import { LoginImg } from "../public/assets";
 import { showMessage } from "react-native-flash-message";
 import { showError, showSuccess } from "../ultils/messageFunction";
 import CustomButton from "../components/CustomButton/index.js";
-import validator from "../ultils/validations";
+import validator, { validatorRegrister } from "../ultils/validations";
 import actions from "../redux/actions";
 import { Color } from "../constans";
 
 export default function SignupScreen({ navigation }) {
   const [state, setState] = useState({
     isLoading: false,
-    username: "@gmail.com",
+    username: "",
     email: "@gmail.com",
     password: "",
   });
@@ -20,7 +20,7 @@ export default function SignupScreen({ navigation }) {
   const updateState = (data) => setState(() => ({ ...state, ...data }));
 
   const isValidData = (username, email, password) => {
-    const error = validator({
+    const error = validatorRegrister({
       username,
       email,
       password,
@@ -33,8 +33,8 @@ export default function SignupScreen({ navigation }) {
   };
 
   const onSignup = async () => {
-    // const checkValid = isValidData(username, email, password);
-    if (true) {
+    const checkValid = isValidData(username, email, password);
+    if (checkValid) {
       updateState({ isLoading: true });
 
       try {
@@ -43,7 +43,7 @@ export default function SignupScreen({ navigation }) {
           email,
           password,
         });
-        showSuccess("Successful account registration");
+        showSuccess("Tạo tài khoảng thành công");
         updateState({ isLoading: false });
         navigation.goBack();
       } catch (error) {
@@ -82,7 +82,7 @@ export default function SignupScreen({ navigation }) {
           </View>
 
           <CustomButton
-            label={"Register"}
+            label={"Đăng ký"}
             onPress={onSignup}
             isLoading={isLoading}
           />

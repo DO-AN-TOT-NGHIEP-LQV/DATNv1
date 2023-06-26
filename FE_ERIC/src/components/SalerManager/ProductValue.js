@@ -10,9 +10,12 @@ export default function ProductValue({
   onPress,
   children,
   isChosen = false,
+
+  icon,
 }) {
   return (
     <TouchableOpacity style={styles.touchableContainer} onPress={onPress}>
+      {icon}
       <View style={{ flex: 1, marginLeft: SIZES.radius }}>
         {label && (
           <Text
@@ -53,5 +56,15 @@ const styles = StyleSheet.create({
   numOfText: {
     color: Color.textLight,
     ...FONTS.body4,
+  },
+
+  iconStyle: {
+    width: 40,
+    height: 40,
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 20,
+    backgroundColor: Color.mainTheme,
   },
 });

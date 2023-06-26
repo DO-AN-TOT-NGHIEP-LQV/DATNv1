@@ -13,7 +13,7 @@ import {
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { bg1, bg2 } from "../../public/assets/image";
 import Colors from "../../constans/Color";
-import { SIZES, FONTS } from "../../constans/Theme";
+import { SIZES, FONTS, statusbarHeight } from "../../constans/Theme";
 import { useSelector } from "react-redux";
 import { apiGet } from "../../ultils/utilsApi";
 import { GET_DETAIL_SHOP } from "../../config/urls";
@@ -30,32 +30,32 @@ const AdminMainScreen = () => {
 
   const navigation = useNavigation();
 
-  useEffect(() => {
-    firstLoad();
-  }, []);
+  // useEffect(() => {
+  //   firstLoad();
+  // }, []);
 
-  const firstLoad = async () => {
-    try {
-      var headers = {
-        "Content-Type": "application/json",
-      };
+  // const firstLoad = async () => {
+  //   try {
+  //     var headers = {
+  //       "Content-Type": "application/json",
+  //     };
 
-      const shopId = detailUser?.shop_id || undefined;
-      if (detailUser && detailUser?.shop_id != null) {
-        let url = `${GET_DETAIL_SHOP}?`;
-        if (shopId !== undefined) {
-          url += `shopId=${shopId}`;
-        }
-        const res = await apiGet(url, {}, headers, false);
-        setShopDetail(res.data);
-        console.log(res.data);
-      } else {
-        showError("Can'n get Id of shop");
-      }
-    } catch (error) {
-      console.log(error.error_message || "Fail get detail your shop");
-    }
-  };
+  //     const shopId = detailUser?.shop_id || undefined;
+  //     if (detailUser && detailUser?.shop_id != null) {
+  //       let url = `${GET_DETAIL_SHOP}?`;
+  //       if (shopId !== undefined) {
+  //         url += `shopId=${shopId}`;
+  //       }
+  //       const res = await apiGet(url, {}, headers, false);
+  //       setShopDetail(res.data);
+  //       console.log(res.data);
+  //     } else {
+  //       showError("Can'n get Id of shop");
+  //     }
+  //   } catch (error) {
+  //     console.log(error.error_message || "Fail get detail your shop");
+  //   }
+  // };
 
   function renderHeader() {
     return (
@@ -64,6 +64,7 @@ const AdminMainScreen = () => {
           width: "100%",
           height: 200,
           ...styles.shadow,
+          ...statusbarHeight,
         }}
       >
         <ImageBackground
@@ -81,14 +82,12 @@ const AdminMainScreen = () => {
         >
           <View style={{ alignItems: "center", justifyContent: "center" }}>
             <Text style={{ color: Colors.black, ...FONTS.h3, marginTop: 10 }}>
-              Shop của bạn
+              Admin
             </Text>
           </View>
+
           <ImageBackground style={styles.imgBg}>
             <TouchableOpacity
-              onPress={() => {
-                firstLoad();
-              }}
               style={{
                 width: 80,
                 height: 80,
@@ -110,12 +109,12 @@ const AdminMainScreen = () => {
                 }}
               />
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={styles.styleContainerButtonRole}
                 onPress={() => openWebLink()}
               >
                 <Text style={{ ...styles.styleTextButtonRole }}>Link</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </TouchableOpacity>
 
             <View
@@ -136,7 +135,7 @@ const AdminMainScreen = () => {
                   lineHeight: 20,
                 }}
               >
-                {shopDetail?.sName || "Chưa có tên"}
+                {shopDetail?.sName || "Eric Shop"}
                 {/* {"dddddddđChsds;lsd;âddasdsdưa có tên"} */}
               </Text>
 
@@ -150,7 +149,7 @@ const AdminMainScreen = () => {
                 }}
                 numberOfLines={3}
               >
-                Địa chỉ: {shopDetail?.sAddress1 || "Chưa có địa chỉ"}
+                {/* Địa chỉ: {shopDetail?.sAddress1 || "Chưa có địa chỉ"} */}
               </Text>
             </View>
           </ImageBackground>
@@ -163,15 +162,21 @@ const AdminMainScreen = () => {
     const [promoTags, setPromoTags] = useState(shop_manager_promo);
 
     const navigateCreateProductScreen = () => {
-      navigation.navigate("SalerTab", { screen: "CreateProductScreen" });
+      navigation.navigate("CreateProductScreen", {
+        // shopId: shopDetail.id,
+      });
     };
 
     const navigateProfileShopScreen = () => {
-      navigation.navigate("SalerTab", { screen: "ProfileShopScreen" });
+      navigation.navigate("ProfileShopScreen", {
+        // shopId: shopDetail.id,
+      });
     };
 
     const navigateManagerProduct = () => {
-      navigation.navigate("SalerTab", { screen: "ManagerProductScreen" });
+      navigation.navigate("ManagerProductScreen", {
+        // shopId: shopDetail.id,
+      });
     };
 
     return (
@@ -221,7 +226,7 @@ const AdminMainScreen = () => {
   return (
     <View style={styles.mainContainer}>
       {renderHeader()}
-      {/* {renderPromo()} */}
+      {renderPromo()}
     </View>
   );
 };
