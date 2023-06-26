@@ -47,12 +47,11 @@ import { useSelector } from "react-redux";
 import { ProfileEdit, ProfileValue } from "../../components/Profile";
 import { Calculator, PriceVND } from "../../public/assets/icons";
 import LottieLoading from "../../components/LottieLoading";
-import { PanGestureHandler } from "react-native-gesture-handler";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const ShopCreateProduct = ({ route }) => {
+const ShopSearchProductVentor = ({ route }) => {
   const productId = route.params?.productId;
   const previousScreen = route.params?.previousScreen;
 
@@ -62,19 +61,19 @@ const ShopCreateProduct = ({ route }) => {
 
   const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   navigation.getParent()?.setOptions({
-  //     tabBarStyle: { display: "none" },
-  //     tabBarVisible: false,
-  //   });
+  useEffect(() => {
+    navigation.getParent()?.setOptions({
+      tabBarStyle: { display: "none" },
+      tabBarVisible: false,
+    });
 
-  //   return () => {
-  //     navigation
-  //       .getParent()
-  //       ?.setOptions({ tabBarStyle: undefined, tabBarVisible: undefined });
-  //     setProduct(null);
-  //   };
-  // }, [navigation]);
+    return () => {
+      navigation
+        .getParent()
+        ?.setOptions({ tabBarStyle: undefined, tabBarVisible: undefined });
+      setProduct(null);
+    };
+  }, [navigation]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -251,9 +250,9 @@ const ShopCreateProduct = ({ route }) => {
                 borderRadius: SIZES.radius,
                 backgroundColor: Color.whileOpacity,
               }}
-              onPress={
-                () => navigation.goBack()
-                // navigation.navigate("ShopTab", { screen: "ShopMainScreen" })
+              onPress={() =>
+                // navigation.goBack()
+                navigation.navigate("ShopTab", { screen: "ShopMainScreen" })
               }
             >
               <View style={styles.headerLeft}>
@@ -285,24 +284,24 @@ const ShopCreateProduct = ({ route }) => {
         //     Liên kết sản phẩm
         //   </Text>
         // }
-        rightComponent={
-          isExistInShop ? (
-            <View
-            // loading={loading}
-            // label="Hoàn tất"
-            // styleContainer={{ height: 35 }}
-            // textStyle={{ lineHeight: 18 }}
-            />
-          ) : (
-            <CustomButton
-              loading={loading}
-              label="Hoàn tất"
-              onPress={() => addProductVentor()}
-              // styleContainer={{ height: 35 }}
-              textStyle={{ lineHeight: 18 }}
-            />
-          )
-        }
+        // rightComponent={
+        //   isExistInShop ? (
+        //     <View
+        //     // loading={loading}
+        //     // label="Hoàn tất"
+        //     // styleContainer={{ height: 35 }}
+        //     // textStyle={{ lineHeight: 18 }}
+        //     />
+        //   ) : (
+        //     <CustomButton
+        //       loading={loading}
+        //       label="Hoàn tất"
+        //       onPress={() => addProductVentor()}
+        //       // styleContainer={{ height: 35 }}
+        //       textStyle={{ lineHeight: 18 }}
+        //     />
+        //   )
+        // }
       ></Header>
     );
   }
@@ -550,9 +549,28 @@ const ShopCreateProduct = ({ route }) => {
                   alignContent: "center",
                   alignItems: "center",
                 }}
-                onPress={() =>
-                  navigation.navigate("SearchTab", { screen: "SearchText" })
-                }
+                onPress={() => {
+                  //     navigation.dispatch(
+                  //       CommonActions.reset({
+                  //         index: 0,
+                  //         routes: [
+                  //           {
+                  //             name: "SearchTab",
+                  //             state: {
+                  //               routes: [
+                  //                 {
+                  //                   name: "SearchText",
+                  //                 },
+                  //               ],
+                  //             },
+                  //           },
+                  //         ],
+                  //       })
+                  //     );
+                  //   }
+
+                  navigation.navigate("SearchTab", { screen: "SearchText" });
+                }}
               >
                 <Icons
                   icon={icons.AntDesign}
@@ -663,168 +681,157 @@ const ShopCreateProduct = ({ route }) => {
   }
 
   return (
-    <PanGestureHandler
-      onGestureEvent={() => {
-        return null;
-        // navigation.navigate("ShopTab", { screen: "ShopMainScreen" })
+    <SafeAreaView
+      style={{
+        flex: 1,
+        backgroundColor: Color.mainTheme,
       }}
-      activeOffsetX={[-100, 100]} // Khoảng cách ngang để kích hoạt tương tác swipe (giới hạn)
-      failOffsetX={[-100, 100]} // Khoảng cách ngang để không cho phép tương tác swipe (ngăn chặn)
     >
-      <SafeAreaView
-        style={{
-          flex: 1,
-          backgroundColor: Color.mainTheme,
-        }}
-      >
-        {loading && (
-          <>
-            <Progress.Bar
-              progress={0.9}
-              indeterminate={true}
-              width={windowWidth}
-              borderColor={Color.blueMain}
-              color={Color.blueMain}
-              height={4}
-              style={{
-                position: "absolute",
-                top: spacing.statusbarHeight,
-                zIndex: 10,
-              }}
-              borderRadius={0}
-              borderWidth={0}
-            />
-            <View
-              style={{
-                position: "absolute",
-                top: spacing.statusbarHeight + 3,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 1,
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
-              }}
-            >
-              <ActivityIndicator size="large" color="white" />
-              <Text style={{ color: Color.white, alignItems: "center" }}>
-                Quá trình này có thể mất vài phút, xin hãy giữ kết nối
-              </Text>
-            </View>
-          </>
-        )}
-
-        {/* {Header} */}
-        {renderHeader()}
-
-        {isExistInShop && (
-          <TouchableOpacity
+      {loading && (
+        <>
+          <Progress.Bar
+            progress={0.9}
+            indeterminate={true}
+            width={windowWidth}
+            borderColor={Color.blueMain}
+            color={Color.blueMain}
+            height={4}
             style={{
-              marginHorizontal: 10,
-              marginVertical: 10,
+              position: "absolute",
+              top: spacing.statusbarHeight,
+              zIndex: 10,
+            }}
+            borderRadius={0}
+            borderWidth={0}
+          />
+          <View
+            style={{
+              position: "absolute",
+              top: spacing.statusbarHeight + 3,
+              left: 0,
+              right: 0,
+              bottom: 0,
               justifyContent: "center",
               alignItems: "center",
-              alignContent: "center",
-              borderRadius: SIZES.radius,
-              height: 70,
-              borderStyle: "dashed",
-              borderWidth: 2,
-              borderColor: Color.mainColor,
-            }}
-            onPress={() => {
-              // console.log(productId);
-              // console.log(shopId);
-
-              // navigation.navigate("ShopTab", {
-              //   screen: "ShopUpdateProductScreen",
-              //   params: { productId: productId },
-              // });
-              // navigation.
-
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 0,
-                  routes: [
-                    {
-                      name: "ShopTab",
-                      state: {
-                        routes: [
-                          {
-                            name: "ShopManagerProductScreen",
-                            params: { shopId: shopId },
-                          },
-                        ],
-                      },
-                    },
-                  ],
-                })
-              );
+              zIndex: 1,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
             }}
           >
-            <Text style={{ color: Color.black }}>
-              Sản phẩm này đã có trong cửa hàng của bạn
+            <ActivityIndicator size="large" color="white" />
+            <Text style={{ color: Color.white, alignItems: "center" }}>
+              Quá trình này có thể mất vài phút, xin hãy giữ kết nối
             </Text>
-          </TouchableOpacity>
-        )}
+          </View>
+        </>
+      )}
 
-        {firstLoading ? (
-          <LottieLoading />
-        ) : (
-          <Fragment>
-            {renderProductChose()}
-            {renderInputFormVendor()}
-          </Fragment>
-        )}
+      {/* {Header} */}
+      {renderHeader()}
 
-        {priceModal && (
-          <ModalInputNumber
-            isVisible={priceModal}
-            label={"Giá sản phẩm"}
-            onClose={() => {
-              updateIsShowModal({ priceModal: false });
-            }}
-            value={price}
-            onPress={(value) => updateProductShopForm({ price: value })}
-            isInteger={false}
-          />
-        )}
+      {isExistInShop && (
+        <TouchableOpacity
+          style={{
+            marginHorizontal: 10,
+            marginVertical: 10,
+            justifyContent: "center",
+            alignItems: "center",
+            alignContent: "center",
+            borderRadius: SIZES.radius,
+            height: 70,
+            borderStyle: "dashed",
+            borderWidth: 2,
+            borderColor: Color.mainColor,
+          }}
+          onPress={() => {
+            // console.log(productId);
+            // console.log(shopId);
 
-        {linkModal && (
-          <ModalInputText
-            isVisible={linkModal}
-            label={"Link sản phẩm"}
-            onClose={() => {
-              updateIsShowModal({ linkModal: false });
-            }} // value={link || "https://shopee.vn/ruby_store.88"}
-            value={link || "https://"}
-            maxLength={500}
-            onPress={(link) => {
-              updateProductShopForm({ link: link });
-            }}
-          />
-        )}
+            navigation.navigate("ShopTab", {
+              screen: "ShopUpdateProductScreen",
+              params: { productId: productId },
+            });
+            // navigation.
 
-        {quantityModal && (
-          <ModalInputNumber
-            isVisible={quantityModal}
-            label={"Số lượng"}
-            onClose={() => {
-              updateIsShowModal({ quantityModal: false });
-            }}
-            value={quantity}
-            onPress={(quantity) =>
-              updateProductShopForm({ quantity: quantity })
-            }
-            isInteger={true}
-          />
-        )}
-      </SafeAreaView>
-    </PanGestureHandler>
+            // navigation.dispatch(
+            //   CommonActions.reset({
+            //     index: 0,
+            //     routes: [
+            //       {
+            //         name: "ShopTab",
+            //         state: {
+            //           routes: [
+            //             {
+            //               name: "ShopManagerProductScreen",
+            //               params: { shopId: shopId },
+            //             },
+            //           ],
+            //         },
+            //       },
+            //     ],
+            //   })
+            // );
+          }}
+        >
+          <Text style={{ color: Color.black }}>
+            Sản phẩm này đã có trong cửa hàng của bạn
+          </Text>
+        </TouchableOpacity>
+      )}
+
+      {firstLoading ? (
+        <LottieLoading />
+      ) : (
+        <Fragment>
+          {renderProductChose()}
+          {renderInputFormVendor()}
+        </Fragment>
+      )}
+
+      {priceModal && (
+        <ModalInputNumber
+          isVisible={priceModal}
+          label={"Giá sản phẩm"}
+          onClose={() => {
+            updateIsShowModal({ priceModal: false });
+          }}
+          value={price}
+          onPress={(value) => updateProductShopForm({ price: value })}
+          isInteger={false}
+        />
+      )}
+
+      {linkModal && (
+        <ModalInputText
+          isVisible={linkModal}
+          label={"Link sản phẩm"}
+          onClose={() => {
+            updateIsShowModal({ linkModal: false });
+          }} // value={link || "https://shopee.vn/ruby_store.88"}
+          value={link || "https://"}
+          maxLength={500}
+          onPress={(link) => {
+            updateProductShopForm({ link: link });
+          }}
+        />
+      )}
+
+      {quantityModal && (
+        <ModalInputNumber
+          isVisible={quantityModal}
+          label={"Số lượng"}
+          onClose={() => {
+            updateIsShowModal({ quantityModal: false });
+          }}
+          value={quantity}
+          onPress={(quantity) => updateProductShopForm({ quantity: quantity })}
+          isInteger={true}
+        />
+      )}
+    </SafeAreaView>
   );
 };
 
-export default ShopCreateProduct;
+export default ShopSearchProductVentor;
 
 const styles = StyleSheet.create({
   headerLeft: {

@@ -108,6 +108,7 @@ import { StatusBar, View, Text } from "react-native";
 import { MenuProvider } from "react-native-popup-menu";
 import AppLoading from "expo-app-loading";
 import * as SplashScreen from "expo-splash-screen";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { useFonts } from "expo-font";
 import { Color, Theme } from "./src/constans";
@@ -168,30 +169,35 @@ export default function App() {
   }
 
   return (
-    <>
-      {/* <StatusBar
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
+        <MenuProvider>
+          <Routes />
+        </MenuProvider>
+      </Provider>
+    </GestureHandlerRootView>
+  );
+}
+
+{
+  /* <StatusBar
         barStyle="dark-content"
         backgroundColor={Color.mainTheme}
         translucent={true}
-      /> */}
-      {/* <View>
+      /> */
+}
+{
+  /* <View>
         <Text style={{ fontFamily: "Roboto-Bold" }}>
           Hello, Expo with Custom Font!
         </Text>
-      </View> */}
-      <View style={{ flex: 1 }}>
-        <Provider store={store}>
-          <MenuProvider>
-            <Routes />
-          </MenuProvider>
-        </Provider>
-      </View>
+      </View> */
+}
 
-      {/* <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
+{
+  /* <View style={{ flex: 1, marginTop: StatusBar.currentHeight || 0 }}>
         <Provider store={store}>
           <Routes />
         </Provider>
-      </View> */}
-    </>
-  );
+      </View> */
 }

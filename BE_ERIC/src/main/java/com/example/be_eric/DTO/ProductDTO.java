@@ -13,11 +13,11 @@ public class ProductDTO {
     private String name;
     private String description;
 
-    private double  originalPrice = 0;
+//    private double  originalPrice = 0;
     private double  price = 0;
 
-    private String link;
-    private int quantity;
+//    private String link;
+//    private int quantity;
 
     private String type;
     private String brand;

@@ -20,6 +20,9 @@ export const SEARCH_AND_FILTER_PRODUCTS = getApiUrl(
   "/search/products/searchAndFilterProducts"
 );
 export const GET_PRODUCT_BY_ID = getApiUrl("/search/products/getDetail");
+export const CHECK_VENDOR_PRODUCT = getApiUrl(
+  "/search/products/checkVendorProduct"
+);
 // export const GET_PRODUCT_BY_ID = getApiUrl("");
 
 export const GET_PRODUCT_OF_SHOP = getApiUrl("/search/products/shopId");
@@ -65,6 +68,7 @@ export const DELETE_PRODUCT_TO_SHOP = getApiUrl(
   "/sale/shop/deleteProductVentor"
 );
 
-axios.defaults.baseURL = "http://192.168.1.8:8080/api";
+export const GET_VENDOR_PRODUCT = getApiUrl("/sale/shop/getVendorProduct");
 
-// axios.defaults.baseURL = "https://21e7-59-153-247-95.ngrok-free.app/api";
+// axios.defaults.baseURL = "http://192.168.1.8:8080/api";
+axios.defaults.baseURL = "http://localhost:8080/api";

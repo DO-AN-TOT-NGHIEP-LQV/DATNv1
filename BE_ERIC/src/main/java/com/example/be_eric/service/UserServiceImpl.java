@@ -53,7 +53,7 @@ public class UserServiceImpl implements  UserService, UserDetailsService {
 
     @Override
     public User saveUser(User user)  {
-        if( !userRepo.existsByUsername(user.getUsername())){
+        if( !userRepo.existsByEmail(user.getEmail() )){
             log.info("Save new user {} to the database", user.getUsername());
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             Role role = roleRepo.findByName("ROLE_USER");
@@ -61,7 +61,7 @@ public class UserServiceImpl implements  UserService, UserDetailsService {
             return userRepo.save(user);
         }
         else {
-            throw new DuplicateValueException("Username already exists.");
+            throw new DuplicateValueException("Email này đã được đăng ký");
         }
     }
 

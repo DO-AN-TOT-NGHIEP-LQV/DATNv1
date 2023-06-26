@@ -45,6 +45,18 @@ public class Shop {
     private User user;
 
 
+    @OneToOne
+    private Image image;
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+
 //    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true )
 //    @JsonBackReference
 //    @OnDelete(action = OnDeleteAction.CASCADE)
@@ -66,6 +78,8 @@ public class Shop {
         this.sAddress1 = sAddress1;
         this.user = user;
     }
+
+
     public Shop(String sName, String sNumber, String sAddress1, String sLogo, User user) {
         this.sName = sName;
         this.sNumber = sNumber;
@@ -73,6 +87,18 @@ public class Shop {
         this.user = user;
         this.sLogo = sLogo;
     }
+
+
+    public Shop(String sName, String sNumber, String sAddress1, String sLogo, Image image, User user) {
+        this.sName = sName;
+        this.sNumber = sNumber;
+        this.sAddress1 = sAddress1;
+        this.user = user;
+        this.sLogo = sLogo;
+        this.image = image;
+    }
+
+
 
     public Long getId() {
         return id;

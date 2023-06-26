@@ -2,6 +2,7 @@ package com.example.be_eric.controllers;
 
 
 import com.example.be_eric.DTO.ShopProductDTO;
+import com.example.be_eric.DTO.ShopProductDetailDTO;
 import com.example.be_eric.models.Product.Product;
 import com.example.be_eric.models.Product.ShopProduct;
 import com.example.be_eric.models.Shop;
@@ -16,7 +17,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -119,7 +122,6 @@ public class ShopController {
     }
 
 
-
     @PatchMapping(value = "/sale/shop/updateProductVentor",
             consumes = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<?> updateProductVentor(@RequestBody ShopProductDTO shopProductDTO)
@@ -161,6 +163,7 @@ public class ShopController {
         }
     }
 
+
     @DeleteMapping(value = "/sale/shop/deleteProductVentor")
     public ResponseEntity<?> deleteProductVentor(@RequestParam  Long productId, @RequestParam Long shopId)
     {
@@ -192,48 +195,24 @@ public class ShopController {
     }
 
 
+    @GetMapping(value = "/sale/shop/getVendorProduct/{shopId}/{productId}")
+    public ResponseEntity searchVendorProduct(
+            @PathVariable(required = true) Long shopId,
+            @PathVariable(required = true) Long productId) {
+        try {
+
+            ShopProductDetailDTO shopProduct = shopService.findProductVendor(productId, shopId);
+
+            return ResponseEntity.ok().body(shopProduct);
+
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
+        }
+    }
 
 
 
-//        @PostMapping(value = "/sale/shop/addProductVentor",
-//                consumes = {MediaType.APPLICATION_JSON_VALUE,
-//                    MediaType.MULTIPART_FORM_DATA_VALUE })
-//    public ResponseEntity<?> addProductVentor(@RequestBody ShopProduct shopProduct)
-//    {
-//
-//        System.out.println(shopProduct.getPrice());
-//        return null;
-//    }
-
-
-//    @GetMapping(value = "/sale/shop/getPost",
-//            consumes = {MediaType.APPLICATION_JSON_VALUE,
-//                    MediaType.MULTIPART_FORM_DATA_VALUE })
-//    public ResponseEntity<?> getPost()
-//    {
-//        try {
-//
-//            Post responeList = postService.getPostById(1L);
-//            return ResponseEntity.ok().body(responeList);
-//        } catch (Exception e) {
-//            System.out.println(e);
-//            return ResponseEntity.badRequest().body(e);
-//        }
-//    }
-
-
-//    @GetMapping(value = "/sale/shop/getCountProductOfShop",
-//            consumes = {MediaType.APPLICATION_JSON_VALUE,
-//                    MediaType.MULTIPART_FORM_DATA_VALUE })
-//    public ResponseEntity<?> getCountProductOfShop()
-//    {
-//        try {
-//
-//            Post responeList = postService.getPostById(1L);
-//            return ResponseEntity.ok().body(responeList);
-//        } catch (Exception e) {
-//            System.out.println(e);
-//            return ResponseEntity.badRequest().body(e);
-//        }
-//    }
 }

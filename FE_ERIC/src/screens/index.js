@@ -10,16 +10,20 @@ export { default as SearchImageScreen } from "./SearchImageScreen";
 export { default as ProfileScreen } from "./ProfileScreen";
 
 // Saler Manager
+// Admin
 export { default as AdminMainScreen } from "./Admin/AdminMainScreen";
 export { default as CreateProductScreen } from "./Admin/CreateProductScreen";
 export { default as UpdateProductScreen } from "./Admin/UpdateProductScreen";
 export { default as ManagerProductScreen } from "./Admin/ManagerProductScreen";
 export { default as ProfileShopScreen } from "./Admin/ProfileShopScreen";
 
-// Admin
-
+// Saler Manager
 export { default as ShopMainScreen } from "./Shop/ShopMainScreen";
 export { default as ShopManagerProductScreen } from "./Shop/ShopManagerProductScreen";
+export { default as ShopSearchProductVentor } from "./Shop/ShopSearchProductVentor";
+export { default as ShopProfileScreen } from "./Shop/ShopProfileScreen";
+export { default as ShopCreateProduct } from "./Shop/ShopCreateProduct";
+export { default as ShopUpdateProductScreen } from "./Shop/ShopUpdateProductScreen";
 // export { default as ShopMainScreen } from "./Shop/ShopMainScreen";
 
 // export { default as Feeds } from "./Feeds";

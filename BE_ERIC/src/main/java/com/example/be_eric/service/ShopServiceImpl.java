@@ -83,5 +83,10 @@ public class ShopServiceImpl implements ShopService {
         shopProductRepository.delete(shopProduct);
     }
 
+    @Override
+    public ShopProductDetailDTO findProductVendor(Long productId, Long shopId) {
+        return shopProductRepository.findProductVendor(productId, shopId);
+    }
+
 
 }

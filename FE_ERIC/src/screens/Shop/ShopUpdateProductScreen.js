@@ -37,11 +37,10 @@ import {
   CREATE_NEW_PRODUCT,
   DELETE_PRODUCT_TO_SHOP,
   GET_PRODUCT_BY_ID,
+  GET_VENDOR_PRODUCT,
   UPDATE_PRODUCT_TO_SHOP,
 } from "../../config/urls";
 import { validatorAddShopProduct } from "../../ultils/validations";
-import { error } from "is_js";
-import { getFileExtension } from "../../ultils/helperFunction";
 import { apiDelete, apiGet, apiPatch, apiPost } from "../../ultils/utilsApi";
 import Header from "../../components/Header";
 import { useSelector } from "react-redux";
@@ -55,12 +54,11 @@ const windowHeight = Dimensions.get("window").height;
 
 const ShopUpdateProductScreen = ({ route }) => {
   const productId = route.params?.productId;
-  const productShop = route.params?.productShop;
-  const previousScreen = route.params?.previousScreen;
 
   const detailUser = useSelector((state) => state.auth.detailUser);
   const shopId = detailUser?.shop_id || undefined;
-  const [product, setProduct] = useState(null);
+
+  const [productShop, setProductShop] = useState(null);
 
   const navigation = useNavigation();
 
@@ -106,17 +104,69 @@ const ShopUpdateProductScreen = ({ route }) => {
     setShowModal(() => ({ ...isShowModal, ...data }));
 
   const fetchData = async () => {
-    updateProductShopForm({
-      productId: productId,
-      price: productShop?.shopProduct?.price,
-      link: productShop?.shopProduct?.link,
-      quantity: productShop?.shopProduct?.quantity,
-    });
+    var headers = {
+      "Content-Type": "application/json",
+    };
+
+    let url = GET_VENDOR_PRODUCT + `/${shopId}/${productId}`;
+    await apiGet(url, {}, headers, true)
+      .then((res) => {
+        setProductShop(res.data);
+
+        console.log(GET_VENDOR_PRODUCT);
+
+        updateProductShopForm({
+          productId: productId,
+          price: res.data?.shopProduct?.price,
+          link: res.data?.shopProduct?.link,
+          quantity: res.data?.shopProduct?.quantity,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+        showError(error.error_message);
+      });
+
+    // try {
+    //   const res = await apiGet(url, {}, headers, true);
+    //   await setProductShop(res.data);
+    //   console.log(res.data);
+    // } catch (error) {
+    //   showError(error.error_message);
+    //   console.log(error);
+    // }
+
+    // updateProductShopForm({
+    //   productId: productId,
+    //   price: productShop?.shopProduct?.price,
+    //   link: productShop?.shopProduct?.link,
+    //   quantity: productShop?.shopProduct?.quantity,
+    // });
   };
 
   useEffect(() => {
     fetchData();
+
+    // updateProductShopForm({
+    //   productId: productId,
+    //   price: productShop?.shopProduct?.price,
+    //   link: productShop?.shopProduct?.link,
+    //   quantity: productShop?.shopProduct?.quantity,
+    // });
   }, [productId]);
+
+  useEffect(() => {
+    return () => {
+      setProductShop(null);
+      setProductShopForm({
+        productId: productId,
+        shopId: shopId,
+        price: 0,
+        link: "",
+        quantity: 0,
+      });
+    };
+  }, []);
 
   function renderHeader() {
     const isValidData = () => {
@@ -323,6 +373,11 @@ const ShopUpdateProductScreen = ({ route }) => {
         showSuccess("Xóa thành công");
         actions.reloadShopManagerScreen();
 
+        // navigation.navigate("ShopTab", {
+        //   screen: "ShopManagerProductScreen",
+        //   params: { shopId: shopId },
+        // });
+        // navigation.goBack();
         navigation.navigate("ShopTab", {
           screen: "ShopManagerProductScreen",
           params: { shopId: shopId },
@@ -412,11 +467,15 @@ const ShopUpdateProductScreen = ({ route }) => {
                         {productShop?.product?.name}
                       </Text>
                     </Text>
-                    <Text
-                      style={{ ...FONTS.h3, color: Color.blueSd }}
-                      numberOfLines={1}
-                    >
-                      {productShop?.product?.price}
+
+                    <Text numberOfLines={1} style={{ ...FONTS.h4 }}>
+                      {`Giá gốc: `}{" "}
+                      <Text
+                        style={{ ...FONTS.h3, color: Color.blueSd }}
+                        numberOfLines={1}
+                      >
+                        {productShop?.product?.price}
+                      </Text>
                     </Text>
 
                     <View

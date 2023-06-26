@@ -75,10 +75,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-                response.setHeader("error", "Username_or_Password_wrong");
+                response.setHeader("error", "Email hoặc mật khẩu không đúng");
                 response.setStatus(FORBIDDEN.value());
                 Map<String,String> error = new HashMap<>();
-                error.put("error_message", "Username or Password wrong");
+                error.put("error_message", "Email hoặc mật khẩu không đúng");
                 response.setContentType(APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
     }

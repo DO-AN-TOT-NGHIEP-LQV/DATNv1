@@ -1,4 +1,3 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   HomeScreen,
   CreatePostScreen,
@@ -14,24 +13,27 @@ import {
   AdminMainScreen,
   UpdateProductScreen,
   ShopManagerProductScreen,
+  ProfileScreen,
 } from "../screens/index";
-import ProfileScreen from "../screens/ProfileScreen";
+// import ProfileScreen from "../screens/ProfileScreen";
 import { StyleSheet } from "react-native";
 import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CustomTabBarIcon from "../components/CustomTabBarIcon";
 import { useSelector } from "react-redux";
 import { hasAdminRole, hasSalerRole } from "../ultils/helperFunction";
 import { Color } from "../constans";
 import ShopCreateProduct from "../screens/Shop/ShopCreateProduct";
 import ShopUpdateProductScreen from "../screens/Shop/ShopUpdateProductScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 export default function (Stack) {
   return <Stack.Screen name="MainTab" component={MainTabs} />;
 }
 
 const BottomTab = createBottomTabNavigator();
-const MainTabs = () => {
+
+function MainTabs() {
   const detailUser = useSelector((state) => state.auth.detailUser);
 
   return (
@@ -39,6 +41,9 @@ const MainTabs = () => {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarShowLabel: false,
+        gestureEnabled: false,
+        gestureDirection: "horizontal",
+
         tabBarStyle: [
           {
             ...styles.tabBarStyle,
@@ -48,13 +53,13 @@ const MainTabs = () => {
         ],
 
         // initialParams: {
-        // defaultScreen: route.name === "SearchTab" ? "SearchText" : null, // Tên màn hình mặc định của Tab A
+        //   defaultScreen: route.name === "SearchTab" ? "SearchText" : null, // Tên màn hình mặc định của Tab A
         // },
       })}
     >
       <BottomTab.Screen
         name="HomeTab"
-        component={HomeStackNavigator}
+        component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
             <CustomTabBarIcon
@@ -86,7 +91,7 @@ const MainTabs = () => {
 
       <BottomTab.Screen
         name="SettingTab"
-        component={SettingStackNavigator}
+        component={ProfileScreen}
         options={{
           tabBarIcon: ({ color, size, focused }) => (
             <CustomTabBarIcon
@@ -118,8 +123,7 @@ const MainTabs = () => {
         />
       )}
 
-      {/* {detailUser?.roles && hasAdminRole(detailUser?.roles) && ( */}
-      {true && (
+      {detailUser?.roles && hasAdminRole(detailUser?.roles) && (
         <BottomTab.Screen
           name="AdminTab"
           component={AdminManagerStackNavigator}
@@ -139,7 +143,7 @@ const MainTabs = () => {
 
       {/* Differin Screen */}
       {/* Login */}
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="Login"
         component={LoginScreen}
         options={{
@@ -154,7 +158,7 @@ const MainTabs = () => {
           tabBarStyle: { display: "none" },
           tabBarButton: () => null,
         }}
-      />
+      /> */}
 
       {/* Search and Detail  */}
       <BottomTab.Screen
@@ -166,7 +170,7 @@ const MainTabs = () => {
         }}
       />
 
-      {/* Mangager Saler Screen */}
+      {/* MANAGER ADMIN SCREEN */}
       <BottomTab.Screen
         name="CreateProductScreen"
         component={CreateProductScreen}
@@ -201,17 +205,16 @@ const MainTabs = () => {
       />
     </BottomTab.Navigator>
   );
-};
+}
 
-const HomeNavigator = createNativeStackNavigator();
-const HomeStackNavigator = () => {
-  return (
-    <HomeNavigator.Navigator screenOptions={{ headerShown: false }}>
-      <HomeNavigator.Screen name="Home" component={HomeScreen} />
-      {/* <HomeNavigator.Screen name="Feed" component={Feeds} /> */}
-    </HomeNavigator.Navigator>
-  );
-};
+// const HomeNavigator = createNativeStackNavigator();
+// const HomeStackNavigator = () => {
+//   return (
+//     <HomeNavigator.Navigator screenOptions={{ headerShown: false }}>
+//       <HomeNavigator.Screen name="Home" component={HomeScreen} />
+//     </HomeNavigator.Navigator>
+//   );
+// };
 
 const SearchNavigator = createNativeStackNavigator();
 const SearchStackNavigator = () => {
@@ -223,61 +226,51 @@ const SearchStackNavigator = () => {
       <SearchNavigator.Screen
         name="SearchImage"
         component={SearchImageScreen}
-        // options={{ tabBarStyle: { display: "none" } }}
+        tabBarOptions={{
+          style: {
+            display: "none", // Ẩn toàn bộ thanh bottom navigation bar
+          },
+          keyboardHidesTabBar: true, // Ẩn thanh bottom navigation bar khi bàn phím được mở
+        }}
       />
       <SearchNavigator.Screen
         name="SearchText"
         component={SearchTextScreen}
-        // options={{ tabBarStyle: { display: "none" } }}
+        tabBarOptions={{
+          style: {
+            display: "none", // Ẩn toàn bộ thanh bottom navigation bar
+          },
+          keyboardHidesTabBar: true, // Ẩn thanh bottom navigation bar khi bàn phím được mở
+        }}
       />
-
-      {/* <SearchNavigator.Screen name="Search" component={SearchScreen} /> */}
-      {/* <HomeNavigator.Screen
-        name="DetailProduct"
-        component={DetailProductScreen}
-      /> */}
     </SearchNavigator.Navigator>
   );
 };
 
-// const DiscoverNavigator = createNativeStackNavigator();
-// const DiscoverStackNavigator = () => {
+// const CreatePostNavigator = createNativeStackNavigator();
+// const CreatePostStackNavigator = () => {
 //   return (
-//     <DiscoverNavigator.Navigator screenOptions={{ headerShown: false }}>
-//       <DiscoverNavigator.Screen name="Discover" component={DiscoverScreen} />
+//     <CreatePostNavigator.Navigator screenOptions={{ headerShown: false }}>
 //       <DiscoverNavigator.Screen
-//         name="DetailPost"
-//         component={DetailPostScreem}
-//         // options={{ tabBarStyle: { display: "flex" } }}
+//         name="CreatePost"
+//         component={CreatePostScreen}
 //       />
-//     </DiscoverNavigator.Navigator>
+//       {/* <DiscoverNavigator.Screen name="DetailPost" component={DetailPostScreem} /> */}
+//     </CreatePostNavigator.Navigator>
 //   );
 // };
 
-const CreatePostNavigator = createNativeStackNavigator();
-const CreatePostStackNavigator = () => {
-  return (
-    <CreatePostNavigator.Navigator screenOptions={{ headerShown: false }}>
-      <DiscoverNavigator.Screen
-        name="CreatePost"
-        component={CreatePostScreen}
-      />
-      {/* <DiscoverNavigator.Screen name="DetailPost" component={DetailPostScreem} /> */}
-    </CreatePostNavigator.Navigator>
-  );
-};
-
-const SettingNavigator = createNativeStackNavigator();
-const SettingStackNavigator = () => {
-  return (
-    <SettingNavigator.Navigator
-      screenOptions={{ headerShown: false }}
-      initialRouteName="ProfileScreen"
-    >
-      <SettingNavigator.Screen name="ProfileScreen" component={ProfileScreen} />
-    </SettingNavigator.Navigator>
-  );
-};
+// const SettingNavigator = createNativeStackNavigator();
+// const SettingStackNavigator = () => {
+//   return (
+//     <SettingNavigator.Navigator
+//       screenOptions={{ headerShown: false }}
+//       initialRouteName="ProfileScreen"
+//     >
+//       <SettingNavigator.Screen name="ProfileScreen" component={ProfileScreen} />
+//     </SettingNavigator.Navigator>
+//   );
+// };
 
 const SalerManagerNavigator = createNativeStackNavigator();
 const SalerManagerStackNavigator = () => {
@@ -286,7 +279,7 @@ const SalerManagerStackNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}
-      // initialRouteName="ShopMainScreen"
+      initialRouteName="ShopMainScreen"
     >
       <SalerManagerNavigator.Screen
         name="ShopMainScreen"

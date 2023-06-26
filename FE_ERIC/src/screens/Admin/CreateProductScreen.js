@@ -51,24 +51,20 @@ const CreateProductScreen = ({ route }) => {
   const [name, setName] = useState("FFX-007034");
   const [description, setDescription] = useState("Mieu ta so lươc");
   const [price, setPrice] = useState(100000);
-  const [link, setLink] = useState("https://shopee.vn/ruby_store.88");
+  // const [link, setLink] = useState("https://shopee.vn/ruby_store.88");
   const [type, setType] = useState("Sandals");
-  const [quantity, setQuantity] = useState(0);
+  // const [quantity, setQuantity] = useState(0);
   const [brand, setBrand] = useState("Ad");
 
   const [nameModal, setNameModal] = useState(false);
   const [descriptionModal, setDescriptionModal] = useState(false);
   const [priceModal, setPriceModal] = useState(false);
-  const [linkModal, setLinkModal] = useState(false);
+  // const [linkModal, setLinkModal] = useState(false);
   const [typeModal, setTypeModal] = useState(false);
-  const [quantityModal, setQuantityModal] = useState(false);
+  // const [quantityModal, setQuantityModal] = useState(false);
   const [brandModal, setBrandModal] = useState(false);
 
   useEffect(() => {
-    // if (!shopId) {
-    //   showError("Khong tim thay id Shop");
-    //   navigation.goBack();
-    // }
     return () => {
       setPickedImagePath("");
     };
@@ -79,10 +75,10 @@ const CreateProductScreen = ({ route }) => {
       name,
       description,
       price,
-      quantity,
+      // quantity,
       type,
       brand,
-      link,
+      // link,
       pickedImagePath,
     };
     const isValidData = () => {
@@ -120,7 +116,7 @@ const CreateProductScreen = ({ route }) => {
           await apiPost(CREATE_NEW_PRODUCT, formData, headers, true)
             .then((res) => {
               setLoading(false);
-              showSuccess("Success!");
+              showSuccess("Thành công!");
             })
             .catch((error) => {
               showError(error.error_message);
@@ -321,7 +317,7 @@ const CreateProductScreen = ({ route }) => {
           />
           <LineDivider />
 
-          <ProductValue
+          {/* <ProductValue
             label={"Link sản phẩm"}
             value={link}
             onPress={() => {
@@ -340,7 +336,7 @@ const CreateProductScreen = ({ route }) => {
               textStyle={{ color: Color.mainColor }}
             />
           </ProductValue>
-          <LineDivider />
+          <LineDivider /> */}
 
           <ProductValue
             label={"Kiểu dáng"}
@@ -351,14 +347,14 @@ const CreateProductScreen = ({ route }) => {
           />
           <LineDivider />
 
-          <ProductValue
+          {/* <ProductValue
             label={"Số lượng"}
             value={quantity}
             onPress={() => {
               setQuantityModal(true);
             }}
           />
-          <LineDivider />
+          <LineDivider /> */}
 
           <ProductValue
             label={"Nhãn hàng"}
@@ -500,7 +496,7 @@ const CreateProductScreen = ({ route }) => {
         />
       )}
 
-      {linkModal && (
+      {/* {linkModal && (
         <ModalInputText
           isVisible={linkModal}
           label={"Link sản phẩm"}
@@ -512,7 +508,7 @@ const CreateProductScreen = ({ route }) => {
             setLink(link);
           }}
         />
-      )}
+      )} */}
 
       {typeModal && (
         <InputModal
@@ -533,7 +529,7 @@ const CreateProductScreen = ({ route }) => {
         </InputModal>
       )}
 
-      {quantityModal && (
+      {/* {quantityModal && (
         <ModalInputNumber
           isVisible={quantityModal}
           label={"Số lượng"}
@@ -542,7 +538,7 @@ const CreateProductScreen = ({ route }) => {
           onPress={(quantity) => setQuantity(quantity)}
           isInteger={true}
         />
-      )}
+      )} */}
 
       {brandModal && (
         <ModalInputBrand

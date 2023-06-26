@@ -25,9 +25,10 @@ import { bg1, bg2 } from "../../public/assets/image";
 import { Fragment } from "react";
 import LineDivider from "../../components/LineDivider";
 import { useSelector } from "react-redux";
+import { PanGestureHandler } from "react-native-gesture-handler";
+import * as Animatable from "react-native-animatable";
 
 const ShopManagerProductScreen = ({ route }) => {
-  //   const shopId = route.params?.shopId;
   const { shopId } = route.params;
   const navigation = useNavigation();
 
@@ -75,7 +76,7 @@ const ShopManagerProductScreen = ({ route }) => {
       .then((res) => {
         setListProduct(res.data);
         console.log("GET_PRODUCT_OF_SHOP");
-        console.log(res.data);
+        // console.log(res.data);
       })
       .catch((error) => {
         showError(error.error_message);
@@ -100,8 +101,8 @@ const ShopManagerProductScreen = ({ route }) => {
               backgroundColor: Color.whileOpacity,
             }}
             onPress={() => {
-              //   navigation.navigate("AdminMainScreen");
-              navigation.goBack();
+              navigation.navigate("ShopTab", { screen: "ShopMainScreen" });
+              // navigation.goBack();
             }}
           >
             <View
@@ -195,79 +196,94 @@ const ShopManagerProductScreen = ({ route }) => {
           refreshing={refreshing}
           renderItem={({ item, index }) => {
             return (
-              <TouchableOpacity
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingVertical: SIZES.base,
-                  paddingHorizontal: SIZES.base,
-                  paddingRight: 0,
-                }}
-                onPress={() => {
-                  navigation.navigate("ShopTab", {
-                    screen: "ShopUpdateProductScreen",
-                    params: { productId: item?.product?.id, productShop: item },
-                  });
-                }}
+              <Animatable.View
+                // animation={"fadeInUp"}
+                animation={"zoomInRight"}
+                duration={1000}
+                delay={index * 100}
               >
-                <Image
-                  source={{ uri: item?.product?.images[0]?.url }}
+                <TouchableOpacity
                   style={{
-                    width: 50,
-                    height: 50,
-                    resizeMode: "contain",
-                    borderRadius: 5,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingVertical: SIZES.base,
+                    paddingHorizontal: SIZES.base,
+                    paddingRight: 0,
                   }}
-                />
-                <View style={{ flex: 1, marginLeft: SIZES.radius }}>
-                  <Text numberOfLines={1} style={{ ...FONTS.h4, width: "75%" }}>
-                    Id: {item?.product?.id}
-                  </Text>
-                  <Text
-                    numberOfLines={2}
+                  onPress={() => {
+                    navigation.navigate("ShopTab", {
+                      screen: "ShopUpdateProductScreen",
+                      params: {
+                        productId: item?.product?.id,
+                        // productShop: item,
+                        // shopId: item?.product?.id,
+                      },
+                    });
+                  }}
+                >
+                  <Image
+                    source={{ uri: item?.product?.images[0]?.url }}
                     style={{
-                      color: Color.textLight,
-                      ...FONTS.body4,
-                      lineHeight: 18,
-                      width: "75%",
-                      height: 40,
+                      width: 50,
+                      height: 50,
+                      resizeMode: "contain",
+                      borderRadius: 5,
                     }}
-                  >
-                    {item?.product?.name}
-                  </Text>
+                  />
+                  <View style={{ flex: 1, marginLeft: SIZES.radius }}>
+                    <Text
+                      numberOfLines={1}
+                      style={{ ...FONTS.h4, width: "75%" }}
+                    >
+                      Id: {item?.product?.id}
+                    </Text>
+                    <Text
+                      numberOfLines={2}
+                      style={{
+                        color: Color.textLight,
+                        ...FONTS.body4,
+                        lineHeight: 18,
+                        width: "75%",
+                        height: 40,
+                      }}
+                    >
+                      {item?.product?.name}
+                    </Text>
 
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        width: "100%",
+                      }}
+                    >
+                      <Text
+                        numberOfLines={1}
+                        style={{
+                          color: Color.blueSd,
+                          ...FONTS.h4,
+                          flex: 1,
+                        }}
+                      >
+                        {(item?.shopProduct?.price || 0).toLocaleString(
+                          "vi-VN"
+                        )}
+                      </Text>
+                      <Text numberOfLines={1} style={{ alignSelf: "flex-end" }}>
+                        {(item?.shopProduct?.quantity || 0).toLocaleString(
+                          "vi-VN"
+                        )}
+                        /đôi
+                      </Text>
+                    </View>
+                  </View>
                   <View
                     style={{
                       flexDirection: "row",
-                      width: "100%",
+                      height: "100%",
+                      alignItems: "center",
                     }}
                   >
-                    <Text
-                      numberOfLines={1}
-                      style={{
-                        color: Color.blueSd,
-                        ...FONTS.h4,
-                        flex: 1,
-                      }}
-                    >
-                      {(item?.shopProduct?.price || 0).toLocaleString("vi-VN")}
-                    </Text>
-                    <Text numberOfLines={1} style={{ alignSelf: "flex-end" }}>
-                      {(item?.shopProduct?.quantity || 0).toLocaleString(
-                        "vi-VN"
-                      )}
-                      /đôi
-                    </Text>
-                  </View>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    height: "100%",
-                    alignItems: "center",
-                  }}
-                >
-                  {/* <Text
+                    {/* <Text
                     numberOfLines={1}
                     style={{
                       color: Color.blueSd,
@@ -277,42 +293,53 @@ const ShopManagerProductScreen = ({ route }) => {
                   >
                     {(item?.shopProduct?.price || 0).toLocaleString("vi-VN")}
                   </Text> */}
-                  <Icons icon={icons.AntDesign} name={"right"} size={18} />
-                </View>
-              </TouchableOpacity>
+                    <Icons icon={icons.AntDesign} name={"right"} size={18} />
+                  </View>
+                </TouchableOpacity>
+                <LineDivider />
+              </Animatable.View>
             );
           }}
-          showsVerticalScrollIndicator={false}
-          ItemSeparatorComponent={() => {
-            return <LineDivider />;
-          }}
+          // showsVerticalScrollIndicator={false}
+          // ItemSeparatorComponent={() => {
+          //   return <LineDivider />;
+          // }}
         />
       </SafeAreaView>
     );
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: Color.white }}>
-      {/* Header */}
-      {renderHeader()}
+    <PanGestureHandler
+      onGestureEvent={() => {
+        console.log("Ádasdsa");
+        navigation.navigate("ShopTab", { screen: "ShopMainScreen" });
+      }}
+      activeOffsetX={[-9999, 9999]} // Khoảng cách ngang lớn hơn kích thước màn hình để không kích hoạt swipe
+      failOffsetX={[-9999, 9999]}
+    >
+      <View style={{ flex: 1, backgroundColor: Color.white }}>
+        {/* Header */}
+        {renderHeader()}
 
-      <Text
-        style={{
-          ...FONTS.h2,
-          lineHeight: 50,
-          // marginVertical: 5,
-          paddingLeft: 20,
-        }}
-      >
-        Danh sách sản phẩm
-      </Text>
+        <Text
+          style={{
+            ...FONTS.h2,
+            lineHeight: 50,
+            // marginVertical: 5,
+            paddingLeft: 20,
+          }}
+        >
+          Danh sách sản phẩm
+        </Text>
 
-      {/* Card list */}
-      {/* {renderSearch()} */}
+        {/* Card list */}
+        {/* {renderSearch()} */}
 
-      {/* footer */}
-      {renderProductList()}
-    </View>
+        {/* footer */}
+        {renderProductList()}
+      </View>
+    </PanGestureHandler>
   );
 };
 

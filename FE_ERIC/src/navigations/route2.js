@@ -1,5 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MainStack from "./MainStack";
 import AuthStack from "./AuthStack";
 import { useSelector } from "react-redux";
@@ -16,29 +18,26 @@ import {
   SearchTextScreen,
   ShopMainScreen,
   ShopManagerProductScreen,
-  ShopSearchProductVentor,
   SignupScreen,
   UpdateProductScreen,
-  ShopCreateProduct,
-  ShopUpdateProductScreen,
-  ShopProfileScreen,
 } from "../screens";
 import { statusbarHeight } from "../constans/Theme";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import CustomTabBarIcon from "../components/CustomTabBarIcon";
 import { Color } from "../constans";
 import { Keyboard } from "react-native";
-// import ShopUpdateProductScreen from "../screens/Shop/ShopUpdateProductScreen";
+import ShopCreateProduct from "../screens/Shop/ShopCreateProduct";
+import ShopUpdateProductScreen from "../screens/Shop/ShopUpdateProductScreen";
 import { hasAdminRole, hasSalerRole } from "../ultils/helperFunction";
-
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import { createStackNavigator } from "@react-navigation/stack";
 
 const Stack = createNativeStackNavigator();
 const BottomTab = createBottomTabNavigator();
 
 const Routes = () => {
+  // const tokenData = useSelector((state) => state.auth.tokenData);
+  // const detailUser = useSelector((state) => state.auth.detailUser);
+  // const loginRequired = useSelector((state) => state.auth.loginRequired);
+
   const flashMessageRef = useRef(null);
 
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -67,11 +66,12 @@ const Routes = () => {
 
   return (
     <NavigationContainer>
-      <BottomTab.Navigator
+      <Stack.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
           tabBarShowLabel: false,
           gestureEnabled: false,
+          // gestureDirection: "horizontal",
           tabBarStyle: [
             {
               ...styles.tabBarStyle,
@@ -84,7 +84,7 @@ const Routes = () => {
       >
         <BottomTab.Screen
           name="HomeTab"
-          component={HomeStack}
+          component={HomeScreen}
           options={{
             tabBarIcon: ({ color, size, focused }) => (
               <CustomTabBarIcon
@@ -122,22 +122,6 @@ const Routes = () => {
             ),
           }}
         />
-
-        {/* <BottomTab.Screen
-          name="AdminTab"
-          component={AdminManagerStackNavigator}
-          options={{
-            tabBarIcon: ({ color, size, focused }) => (
-              <CustomTabBarIcon
-                nameIcon={"appstore-o"}
-                textLabel={"ADMIN"}
-                color={color}
-                size={size}
-                focused={focused}
-              />
-            ),
-          }}
-        /> */}
 
         {detailUser?.roles && hasAdminRole(detailUser?.roles) && (
           <BottomTab.Screen
@@ -220,14 +204,14 @@ const Routes = () => {
         /> */}
 
         {/* Main product */}
-        {/* <BottomTab.Screen
+        <BottomTab.Screen
           name="CreateProductScreen"
           component={CreateProductScreen}
           options={{
             tabBarStyle: { display: "none" },
             tabBarButton: () => null,
           }}
-        /> */}
+        />
 
         <BottomTab.Screen
           name="ManagerProductScreen"
@@ -246,15 +230,7 @@ const Routes = () => {
             tabBarButton: () => null,
           }}
         />
-        <BottomTab.Screen
-          name="ShopCreateProduct"
-          component={ShopCreateProduct}
-          options={{
-            tabBarStyle: { display: "none" },
-            tabBarButton: () => null,
-          }}
-        />
-      </BottomTab.Navigator>
+      </Stack.Navigator>
 
       <FlashMessage
         refs={flashMessageRef}
@@ -267,64 +243,43 @@ const Routes = () => {
 
 export default Routes;
 
-const HomeStack = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false, gestureEnabled: false }}
-    >
-      <Stack.Screen name="Home" component={HomeScreen} />
-    </Stack.Navigator>
-  );
-};
-
-// const AuthNavigator = createNativeStackNavigator();
+const AuthNavigator = createNativeStackNavigator();
 const AuthStackNavigator = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    <AuthNavigator.Navigator
+      screenOptions={{ headerShown: false }}
       initialRouteName="LoginScreen"
     >
-      <Stack.Screen
+      <AuthNavigator.Screen
         name="LoginScreen"
         component={LoginScreen}
         options={{
           tabBarStyle: { display: "none" },
           tabBarButton: () => null,
           tabBarVisible: false,
-          gestureEnabled: false,
         }}
       />
-      <Stack.Screen
+      <AuthNavigator.Screen
         name="SignupScreen"
         component={SignupScreen}
         options={{
-          gestureEnabled: false,
           tabBarStyle: { display: "none" },
           tabBarButton: () => null,
           tabBarVisible: false,
         }}
       />
-    </Stack.Navigator>
+    </AuthNavigator.Navigator>
   );
 };
 
 const SettingNavigator = createNativeStackNavigator();
 const SettingStackNavigator = () => {
   return (
-    <Stack.Navigator
+    <SettingNavigator.Navigator
       screenOptions={{ headerShown: false }}
       initialRouteName="ProfileScreen"
     >
-      <Stack.Screen
-        name="ProfileScreen"
-        component={ProfileScreen}
-        options={{
-          gestureEnabled: false,
-          tabBarStyle: { display: "none" },
-          tabBarButton: () => null,
-          tabBarVisible: false,
-        }}
-      />
+      <SettingNavigator.Screen name="ProfileScreen" component={ProfileScreen} />
       {/* <SettingNavigator.Screen
         name="Auth"
         component={AuthStackNavigator}
@@ -333,64 +288,74 @@ const SettingStackNavigator = () => {
         //   tabBarButton: () => null,
         // }}
       /> */}
-    </Stack.Navigator>
+    </SettingNavigator.Navigator>
   );
 };
 
 const SearchNavigator = createNativeStackNavigator();
 const SearchStackNavigator = () => {
   return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false, gestureEnabled: false }}
+    <SearchNavigator.Navigator
+      screenOptions={{ headerShown: false }}
       initialRouteName="SearchText"
     >
-      <Stack.Screen
+      <SearchNavigator.Screen
         name="SearchImage"
         component={SearchImageScreen}
         tabBarOptions={{
           style: {
-            display: "none",
+            display: "none", // Ẩn toàn bộ thanh bottom navigation bar
           },
-          keyboardHidesTabBar: true,
+          keyboardHidesTabBar: true, // Ẩn thanh bottom navigation bar khi bàn phím được mở
         }}
       />
-      <Stack.Screen
+      <SearchNavigator.Screen
         name="SearchText"
         component={SearchTextScreen}
         tabBarOptions={{
           style: {
-            display: "none",
+            display: "none", // Ẩn toàn bộ thanh bottom navigation bar
           },
-          keyboardHidesTabBar: true,
+          keyboardHidesTabBar: true, // Ẩn thanh bottom navigation bar khi bàn phím được mở
         }}
       />
 
-      <Stack.Screen
+      <SearchNavigator.Screen
         name="DetailProduct"
         component={DetailProductScreen}
         tabBarOptions={{
           style: {
-            display: "none",
+            display: "none", // Ẩn toàn bộ thanh bottom navigation bar
           },
-          keyboardHidesTabBar: true,
+          keyboardHidesTabBar: true, // Ẩn thanh bottom navigation bar khi bàn phím được mở
         }}
       />
 
-      <Stack.Screen name="ShopCreateProduct" component={ShopCreateProduct} />
-    </Stack.Navigator>
+      {/* <SearchNavigator.Screen
+        name="Auth"
+        component={AuthStackNavigator}
+        options={{
+          tabBarStyle: { display: "none" },
+          tabBarButton: () => null,
+        }}
+      /> */}
+    </SearchNavigator.Navigator>
   );
 };
 
-// const AdminSalerManagerNavigator = createNativeStackNavigator();
+const AdminSalerManagerNavigator = createNativeStackNavigator();
 const AdminManagerStackNavigator = () => {
   return (
-    <Stack.Navigator
+    <AdminSalerManagerNavigator.Navigator
       screenOptions={{ headerShown: false }}
       initialRouteName="AdminMainScreen"
     >
-      <Stack.Screen name="AdminMainScreen" component={AdminMainScreen} />
+      <AdminSalerManagerNavigator.Screen
+        name="AdminMainScreen"
+        component={AdminMainScreen}
+      />
 
-      <Stack.Screen
+      <AdminSalerManagerNavigator.Screen
         name="CreateProductScreen"
         component={CreateProductScreen}
         tabBarOptions={{
@@ -401,7 +366,7 @@ const AdminManagerStackNavigator = () => {
         }}
       />
 
-      <Stack.Screen
+      <AdminSalerManagerNavigator.Screen
         name="ManagerProductScreen"
         component={ManagerProductScreen}
         tabBarOptions={{
@@ -412,7 +377,7 @@ const AdminManagerStackNavigator = () => {
         }}
       />
 
-      <Stack.Screen
+      <AdminSalerManagerNavigator.Screen
         name="DetailProduct"
         component={DetailProductScreen}
         tabBarOptions={{
@@ -423,7 +388,7 @@ const AdminManagerStackNavigator = () => {
         }}
       />
 
-      <Stack.Screen
+      <AdminSalerManagerNavigator.Screen
         name="UpdateProductScreen"
         component={UpdateProductScreen}
         tabBarOptions={{
@@ -433,43 +398,38 @@ const AdminManagerStackNavigator = () => {
           keyboardHidesTabBar: true,
         }}
       />
-    </Stack.Navigator>
+    </AdminSalerManagerNavigator.Navigator>
   );
 };
 
 const SalerManagerNavigator = createNativeStackNavigator();
 const SalerManagerStackNavigator = () => {
   return (
-    <Stack.Navigator
+    <SalerManagerNavigator.Navigator
       screenOptions={{
         headerShown: false,
-        gestureEnabled: false,
       }}
       initialRouteName="ShopMainScreen"
     >
-      <Stack.Screen
+      <SalerManagerNavigator.Screen
         name="ShopMainScreen"
         component={ShopMainScreen}
         // options={{ tabBarVisible: true }}
       />
-      <Stack.Screen
+      <SalerManagerNavigator.Screen
         name="ShopManagerProductScreen"
         component={ShopManagerProductScreen}
       />
-      {/* <Stack.Screen name="ShopCreateProduct" component={ShopCreateProduct} /> */}
-
-      <Stack.Screen
-        name="ShopSearchProductVentor"
-        component={ShopSearchProductVentor}
+      <SalerManagerNavigator.Screen
+        name="ShopCreateProduct"
+        component={ShopCreateProduct}
       />
 
-      <Stack.Screen
+      <SalerManagerNavigator.Screen
         name="ShopUpdateProductScreen"
         component={ShopUpdateProductScreen}
       />
-
-      <Stack.Screen name="ShopProfileScreen" component={ShopProfileScreen} />
-    </Stack.Navigator>
+    </SalerManagerNavigator.Navigator>
   );
 };
 

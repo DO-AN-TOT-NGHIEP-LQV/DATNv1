@@ -262,6 +262,7 @@ const FilterModal = ({ isVisible, onClose }) => {
                         width: "80%",
                         borderRadius: 5,
                         height: 45,
+                        backgroundColor: Color.whileOpacity,
                       }}
                       placeholder="Nhập vào nhãn hiệu bạn muốn tìm"
                       onSubmitEditing={handleNewTagSubmit}

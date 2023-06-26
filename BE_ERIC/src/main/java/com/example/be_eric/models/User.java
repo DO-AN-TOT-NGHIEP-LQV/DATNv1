@@ -23,8 +23,8 @@ public class User {
     @GeneratedValue( strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String firstName;
-    private String lastName;
+//    private String firstName;
+//    private String lastName;
 
     @NotBlank
     @Column(name = "username", unique = true, nullable = false)
@@ -110,21 +110,32 @@ public class User {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    @OneToOne
+    private Image image;
+
+    public Image getImage() {
+        return image;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setImage(Image image) {
+        this.image = image;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+//    public String getFirstName() {
+//        return firstName;
+//    }
+//
+//    public void setFirstName(String firstName) {
+//        this.firstName = firstName;
+//    }
+//
+//    public String getLastName() {
+//        return lastName;
+//    }
+//
+//    public void setLastName(String lastName) {
+//        this.lastName = lastName;
+//    }
 
     public String getUsername() {
         return username;

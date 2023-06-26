@@ -111,6 +111,19 @@ const DetailProductScreen = ({ route }) => {
     };
   }, [productId, effectMainTriggered]);
 
+  useEffect(() => {
+    navigation.getParent()?.setOptions({
+      tabBarStyle: { display: "none" },
+      tabBarVisible: false,
+    });
+
+    return () => {
+      navigation
+        .getParent()
+        ?.setOptions({ tabBarStyle: undefined, tabBarVisible: undefined });
+    };
+  }, [navigation]);
+
   const [scrollX, setScrollX] = useState(new Animated.Value(0));
 
   const onTabPress = useCallback((tabIndex) => {
@@ -269,7 +282,10 @@ const DetailProductScreen = ({ route }) => {
                         effectMainTriggered={effectMainTriggered}
                       />
                     ) : (
-                      <AuthRequired />
+                      <AuthRequired
+                        navigation={navigation}
+                        nextTabName={"ProfileTab"}
+                      />
                     ))}
                 </ScrollView>
               );

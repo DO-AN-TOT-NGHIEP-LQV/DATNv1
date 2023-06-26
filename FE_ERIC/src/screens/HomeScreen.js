@@ -202,6 +202,14 @@ const HomeScreen = () => {
                   fontSize: 14,
                   ...FONTS.h4,
                 }}
+                onPress={() => {
+                  actions.brandSelectedList([]);
+                  actions.typeSelectedList([tag.value]);
+                  actions.nowRangeMinMaxPrice([0, 80]);
+                  actions.updateApplyFilter(true);
+                  actions.changeFilter();
+                  navigation.navigate("SearchTab", { screen: "SearchText" });
+                }}
               />
             </View>
           ))}
@@ -213,7 +221,8 @@ const HomeScreen = () => {
   return (
     <SafeAreaView
       style={{
-        backgroundColor: "#fdfdfd", // Color.mainTheme,
+        backgroundColor: "#fcfcfb", // Color.mainTheme,
+        // backgroundColor: Color.while2, // Color.mainTheme,
         flex: 1,
       }}
     >
@@ -263,10 +272,21 @@ const HomeScreen = () => {
         style={{
           flex: 1,
           justifyContent: "flex-end",
-          backgroundColor: "#fdfdfd", // Color.white,
+          backgroundColor: Color.transparent,
           alignItems: "flex-end",
+          // borderWidth: 1,
         }}
       >
+        {/* <TouchableOpacity
+          style={{
+            width: 100,
+            height: 30,
+            backgroundColor: Color.while2,
+            borderWidth: 1,
+          }}
+        >
+          <Text>dsfasdsa</Text>
+        </TouchableOpacity> */}
         <Image
           source={require("../public/assets/gif/man-doing-shoes-shopping.gif")}
           style={{
@@ -293,7 +313,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "flex-start",
-    backgroundColor: "transparent",
+    // backgroundColor: "transparent",
     borderRadius: 8,
   },
   sliderImage: {

@@ -35,11 +35,59 @@ export function checkStringEmpty(val) {
 export function validatorLogin(data) {
   const { username, email, password } = data;
 
+  // if (username !== undefined) {
+  //   let emptyValidationText = checkEmpty(username, "Vui lòng nhập email");
+  //   if (emptyValidationText !== "") {
+  //     return emptyValidationText;
+  //   } else {
+  //     let minLengthValidation = checkMinLength(username, 0, "username");
+  //     if (minLengthValidation !== "") {
+  //       return minLengthValidation;
+  //     }
+  //   }
+  // }
+
   if (username !== undefined) {
-    let emptyValidationText = checkEmpty(
-      username,
-      "Please enter your username"
-    );
+    let emptyValidationText = checkEmpty(username, "Vui lòng nhập email");
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    } else {
+      if (!validator.email(username)) {
+        return "Email không đúng định dạng";
+      }
+    }
+  }
+
+  // if (email !== undefined) {
+  //   let emptyValidationText = checkEmpty(email, "Please enter your email");
+  //   if (emptyValidationText !== "") {
+  //     return emptyValidationText;
+  //   } else {
+  //     let minLengthValidation = checkMinLength(email, 0, "email");
+  //     if (minLengthValidation !== "") {
+  //       return minLengthValidation;
+  //     }
+  //   }
+  // }
+
+  if (password !== undefined) {
+    let emptyValidationText = checkEmpty(password, "Vui lòng nhập mẩt khẩu");
+    if (emptyValidationText !== "") {
+      return emptyValidationText;
+    } else {
+      let minLengthValidation = checkMinLength(password, 0, "password");
+      if (minLengthValidation !== "") {
+        return minLengthValidation;
+      }
+    }
+  }
+}
+
+export function validatorRegrister(data) {
+  const { username, email, password } = data;
+
+  if (username !== undefined) {
+    let emptyValidationText = checkEmpty(username, "Vui lòng nhập username");
     if (emptyValidationText !== "") {
       return emptyValidationText;
     } else {
@@ -51,33 +99,30 @@ export function validatorLogin(data) {
   }
 
   if (email !== undefined) {
-    let emptyValidationText = checkEmpty(email, "Please enter your email");
+    let emptyValidationText = checkEmpty(username, "Vui lòng nhập email");
     if (emptyValidationText !== "") {
       return emptyValidationText;
     } else {
       if (!validator.email(email)) {
-        return "Please enter valid email";
+        return "Email không đúng định dạng";
       }
     }
   }
 
-  if (email !== undefined) {
-    let emptyValidationText = checkEmpty(email, "Please enter your email");
-    if (emptyValidationText !== "") {
-      return emptyValidationText;
-    } else {
-      let minLengthValidation = checkMinLength(email, 0, "email");
-      if (minLengthValidation !== "") {
-        return minLengthValidation;
-      }
-    }
-  }
+  // if (email !== undefined) {
+  //   let emptyValidationText = checkEmpty(email, "Please enter your email");
+  //   if (emptyValidationText !== "") {
+  //     return emptyValidationText;
+  //   } else {
+  //     let minLengthValidation = checkMinLength(email, 0, "email");
+  //     if (minLengthValidation !== "") {
+  //       return minLengthValidation;
+  //     }
+  //   }
+  // }
 
   if (password !== undefined) {
-    let emptyValidationText = checkEmpty(
-      password,
-      "Please enter your password"
-    );
+    let emptyValidationText = checkEmpty(password, "Vui lòng nhập mật khẩu");
     if (emptyValidationText !== "") {
       return emptyValidationText;
     } else {
@@ -164,11 +209,11 @@ export function validatorUpdateProduct(data) {
     name,
     description,
     price,
-    originalPrice,
-    link,
+    // originalPrice,
+    // link,
     type,
     brand,
-    quantity,
+    // quantity,
   } = data;
 
   let resValid = "Hãy nhập tên sản phẩm";
@@ -199,20 +244,20 @@ export function validatorUpdateProduct(data) {
     if (price < 0) return resValid;
   } else return resValid;
 
-  resValid = "Hãy nhập giá gốc sản phẩm";
-  if (originalPrice !== undefined) {
-    if (originalPrice > 50000000)
-      return resValid + "Hãy nhập giá gốc sản phẩm < 50 triệu";
+  // resValid = "Hãy nhập giá gốc sản phẩm";
+  // if (originalPrice !== undefined) {
+  //   if (originalPrice > 50000000)
+  //     return resValid + "Hãy nhập giá gốc sản phẩm < 50 triệu";
 
-    if (originalPrice < 0) return resValid;
-  } else return resValid;
+  //   if (originalPrice < 0) return resValid;
+  // } else return resValid;
 
-  resValid = "Hãy nhập số lượng sản phẩm";
-  if (quantity !== undefined) {
-    if (quantity > 1000000) return resValid + "Hãy nhập giá sản phẩm < triệu";
+  // resValid = "Hãy nhập số lượng sản phẩm";
+  // if (quantity !== undefined) {
+  //   if (quantity > 1000000) return resValid + "Hãy nhập giá sản phẩm < triệu";
 
-    if (quantity < 0) return resValid;
-  } else return resValid;
+  //   if (quantity < 0) return resValid;
+  // } else return resValid;
 
   resValid = "Hãy nhập kiểu dáng";
   if (type !== undefined) {
@@ -230,13 +275,13 @@ export function validatorUpdateProduct(data) {
     }
   } else return resValid;
 
-  resValid = "Hãy nhập link sản phẩm";
-  if (link !== undefined) {
-    let emptyValidationText = checkEmpty(link, resValid);
-    if (emptyValidationText !== "") {
-      return emptyValidationText;
-    }
-  } else return resValid;
+  // resValid = "Hãy nhập link sản phẩm";
+  // if (link !== undefined) {
+  //   let emptyValidationText = checkEmpty(link, resValid);
+  //   if (emptyValidationText !== "") {
+  //     return emptyValidationText;
+  //   }
+  // } else return resValid;
 }
 export function validatorCreateProduct(data) {
   const {
@@ -244,10 +289,10 @@ export function validatorCreateProduct(data) {
     name,
     description,
     price,
-    quantity,
+    // quantity,
     type,
     brand,
-    link,
+    // link,
   } = data;
 
   let resValid = "Hãy nhập tên sản phẩm";
@@ -286,12 +331,12 @@ export function validatorCreateProduct(data) {
     if (price < 0) return resValid;
   } else return resValid;
 
-  resValid = "Hãy nhập số lượng sản phẩm";
-  if (quantity !== undefined) {
-    if (quantity > 1000000) return resValid + "Hãy nhập giá sản phẩm < triệu";
+  // resValid = "Hãy nhập số lượng sản phẩm";
+  // if (quantity !== undefined) {
+  //   if (quantity > 1000000) return resValid + "Hãy nhập giá sản phẩm < triệu";
 
-    if (quantity < 0) return resValid;
-  } else return resValid;
+  //   if (quantity < 0) return resValid;
+  // } else return resValid;
 
   resValid = "Hãy nhập kiểu dáng";
   if (type !== undefined) {
@@ -309,13 +354,13 @@ export function validatorCreateProduct(data) {
     }
   } else return resValid;
 
-  resValid = "Hãy nhập link sản phẩm";
-  if (link !== undefined) {
-    let emptyValidationText = checkEmpty(link, resValid);
-    if (emptyValidationText !== "") {
-      return emptyValidationText;
-    }
-  } else return resValid;
+  // resValid = "Hãy nhập link sản phẩm";
+  // if (link !== undefined) {
+  //   let emptyValidationText = checkEmpty(link, resValid);
+  //   if (emptyValidationText !== "") {
+  //     return emptyValidationText;
+  //   }
+  // } else return resValid;
 }
 
 export function validatorAddShopProduct(data) {

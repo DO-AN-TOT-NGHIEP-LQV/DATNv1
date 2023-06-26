@@ -34,6 +34,12 @@ public class Image {
         this.name = name;
         this.url = url;
     }
+//    public Image(Long id, String name, String url,  Boolean isProductImage) {
+//        this.id = id;
+//        this.name = name;
+//        this.url = url;
+//        this.isProductImage =  isProductImage;
+//    }
 
     public Image( String name, String url, boolean isProductImage) {
         this.name = name;

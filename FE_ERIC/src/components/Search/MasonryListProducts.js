@@ -98,13 +98,6 @@ const CardItem = ({ data, previousScreen }) => {
             <Text numberOfLines={1} style={style.priceBig}>
               {(data?.price || 0).toLocaleString("vi-VN")}
             </Text>
-
-            {/* {(data?.originalPrice !== null ||
-              data?.originalPrice !== undefined) && (
-              <Text numberOfLines={1} style={style.originalPrice}>
-                đ{data?.originalPrice}
-              </Text>
-            )} */}
           </Text>
         </View>
 
@@ -184,12 +177,12 @@ const style = StyleSheet.create({
     fontSize: 16,
     fontWeight: "normal",
   },
-  originalPrice: {
-    fontWeight: "300",
-    color: Color.textLight,
-    fontSize: 10,
-    textDecorationLine: "line-through",
-  },
+  // originalPrice: {
+  //   fontWeight: "300",
+  //   color: Color.textLight,
+  //   fontSize: 10,
+  //   textDecorationLine: "line-through",
+  // },
   detailView: {
     flexDirection: "row",
     justifyContent: "space-between",

@@ -62,9 +62,6 @@ public class DataSeeder implements CommandLineRunner {
         userService.addRoleToUser("Jame", "ROLE_SALER" );
         userService.addRoleToUser("Samiel", "ROLE_SALER" );
 
-        shopService.save(new Shop("Shop2", "0905202332","Quang Nam", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop1.png?alt=media", userService.getUserByEmail("2@gmail.com")));
-        shopService.save(new Shop("Shop5", "0905202332","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop2.png?alt=media", userService.getUserByEmail("4@gmail.com")));
-        shopService.save(new Shop("Shop3", "7709446333","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop3.png?alt=media", userService.getUserByEmail("5@gmail.com")));
 
 //        postService.savePost(new Post(1L, "Sadds", "adasd", userService.getUserByEmail("1@gmail.com")));
 //        postService.savePost(new Post(2L, "sdasd", "3223423", userService.getUserByEmail("3@gmail.com")));
@@ -109,61 +106,61 @@ public class DataSeeder implements CommandLineRunner {
 
 
 
-            productService.save(new Product(1L,"pro2", "gdegrh asdasd asdasd", 50, 100000 ,  66000 ));
-            productService.save(new Product(2L,"pro3", "gdegrh asdasd asdasd", 55, 10000  , 100000 ));
-            productService.save(new Product(3L,"pro4", "gdegrh asdasd asdasd", 54, 0,       72005  ));
-            productService.save(new Product(4L,"pro5", "gdegrh asdasd asdasd", 52,100300,   60000 ));
-            productService.save(new Product(5L,"pro6", "gdegrh asdasd asdasd", 523,130000,  60005 ));
-            productService.save(new Product(7L,"pro7", "gdegrh asdasd asdasd", 53, 0,          6 ));
-            productService.save(new Product(8L,"pro8", "gdegrh asdasd asdasd", 53, 140000, 69999 ));
-            productService.save(new Product(9L,"pro9", "gdegrh asdasd asdasd", 25, 754333, 6.5 ));
-            productService.save(new Product(10L,"pro10", "gdegrh asdasd asdasd", 25, 140000, 100000 ));
-            productService.save(new Product(11L,"pro11", "gdegrh asdasd asdasd", 35, 12333, 6500 ));
-            productService.save(new Product(12L,"pro12", "gdegrh asdasd asdasd", 5, 65222 ));
-            productService.save(new Product(13L,"pro13", "gdegrh asdasd asdasd", 5, 15000, 14000 ));
-            productService.save(new Product(12L,"pro2", "gdegrh asdasd asdasd", 50, 100000 ,  66000 ));
-            productService.save(new Product(13L,"pro4", "gdegrh asdasd asdasd", 54, 0,       72005  ));
-            productService.save(new Product(14L,"pro5", "gdegrh asdasd asdasd", 52,100300,   60000 ));
-            productService.save(new Product(15L,"pro6", "gdegrh asdasd asdasd", 523,130000,  60005 ));
-            productService.save(new Product(16L,"pro7", "gdegrh asdasd asdasd", 53, 0,          6 ));
-            productService.save(new Product(17L,"pro8", "gdegrh asdasd asdasd", 53, 140000, 69999 ));
-            productService.save(new Product(18L,"pro9", "gdegrh asdasd asdasd", 25, 754333, 6.5 ));
-            productService.save(new Product(19L,"pro10", "gdegrh asdasd asdasd", 25, 140000, 100000 ));
-            productService.save(new Product(20L,"pro11", "gdegrh asdasd asdasd", 35, 12333, 6500 ));
+            productService.save(new Product(1L,"SP-02 Oxford Nam da đen", "Oxford Nam da bò đen đế gỗ",   66000 ));
+            productService.save(new Product(2L,"UX_02 ", "Boots nam vintage",   100000 ));
+            productService.save(new Product(3L,"Vanz unisex vàng", "Vanz unisex vàng",      72005  ));
+            productService.save(new Product(4L,"US-2 Sandal nữ", "Giày sandal nữ da màu đất", 100300           ));
+            productService.save(new Product(5L,"Guốc đỏ mũi trơn", "Guốc nữ mũi trơn ", 130000          ));
+            productService.save(new Product(7L,"pro7", "",  0              ));
+            productService.save(new Product(8L,"pro8", "gdegrh asdasd asdasd",  140000         ));
+            productService.save(new Product(9L,"pro9", "gdegrh asdasd asdasd",  754333        ));
+            productService.save(new Product(10L,"pro10", "gdegrh asdasd asdasd",   140000       ));
+            productService.save(new Product(11L,"pro11", "gdegrh asdasd asdasd",   12333        ));
+            productService.save(new Product(12L,"pro12", "gdegrh asdasd asdasd", 65222          ));
+            productService.save(new Product(13L,"pro13", "gdegrh asdasd asdasd",  15000         ));
+            productService.save(new Product(12L,"pro2", "gdegrh asdasd asdasd",   100000         ));
+            productService.save(new Product(13L,"pro4", "gdegrh asdasd asdasd",   0               ));
+            productService.save(new Product(14L,"pro5", "gdegrh asdasd asdasd",  10030           ));
+            productService.save(new Product(15L,"pro6", "gdegrh asdasd asdasd",  130000          ));
+            productService.save(new Product(16L,"pro7", "gdegrh asdasd asdasd",   0              ));
+            productService.save(new Product(17L,"pro8", "gdegrh asdasd asdasd",   140000         ));
+            productService.save(new Product(18L,"pro9", "gdegrh asdasd asdasd",   754333        ));
+            productService.save(new Product(19L,"pro10", "gdegrh asdasd asdasd",   140000         ));
+            productService.save(new Product(20L,"pro11", "gdegrh asdasd asdasd",   12333        ));
             productService.save(new Product(21L,"pro1",
-                  "  h asdasd asdasd,gde", 5, 6));
-        productService.save(new Product(22L,"pro2", "gdegrh asdasd asdasd", 50, 100000 ,  66000));
-        productService.save(new Product(23L,"pro3", "gdegrh asdasd asdasd", 55, 10000  , 100000));
-        productService.save(new Product(24L,"pro4", "gdegrh asdasd asdasd", 54, 0,       72005 ));
-        productService.save(new Product(25L,"pro5", "gdegrh asdasd asdasd", 52,100300,   60000));
-        productService.save(new Product(26L,"pro6", "gdegrh asdasd asdasd", 523,130000,  60005));
-        productService.save(new Product(27L,"pro7", "gdegrh asdasd asdasd", 53, 0,          6));
-        productService.save(new Product(28L,"pro8", "gdegrh asdasd asdasd", 53, 140000, 69999));
-        productService.save(new Product(29L,"pro9", "gdegrh asdasd asdasd", 25, 754333, 6.5));
-        productService.save(new Product(30L,"pro10", "gdegrh asdasd asdasd", 25, 140000, 100000));
-        productService.save(new Product(31L,"pro11", "gdegrh asdasd asdasd", 35, 12333, 6500));
-        productService.save(new Product(32L,"pro12", "gdegrh asdasd asdasd", 5, 65222));
-        productService.save(new Product(33L,"pro13", "gdegrh asdasd asdasd", 5, 15000, 14000));
-        productService.save(new Product(34L,"pro2", "gdegrh asdasd asdasd", 50, 100000 ,  66000));
-        productService.save(new Product(35L,"pro3", "gdegrh asdasd asdasd", 55, 10000  , 100000));
-        productService.save(new Product(36L,"pro4", "gdegrh asdasd asdasd", 54, 0,       72005 ));
-        productService.save(new Product(37L,"pro5", "gdegrh asdasd asdasd", 52,100300,   60000));
-        productService.save(new Product(38L,"pro6", "gdegrh asdasd asdasd", 523,130000,  60005));
-        productService.save(new Product(39L,"pro7", "gdegrh asdasd asdasd", 53, 0,          6));
-        productService.save(new Product(40L,"pro8", "gdegrh asdasd asdasd", 53, 140000, 69999));
-        productService.save(new Product(41L,"pro9", "gdegrh asdasd asdasd", 25, 754333, 6.5));
-        productService.save(new Product(42L,"pro10", "gdegrh asdasd asdasd", 25, 140000, 100000));
-        productService.save(new Product(43L,"pro11", "gdegrh asdasd asdasd", 35, 12333, 6500));
-        productService.save(new Product(44L,"pro12", "gdegrh asdasd asdasd", 5, 65222));
-        productService.save(new Product(45L,"pro13", "gdegrh asdasd asdasd", 5, 15000, 14000));
-        productService.save(new Product(46L,"pro2", "gdegrh asdasd asdasd", 50, 100000 ,  66000));
-        productService.save(new Product(47L,"pro3", "gdegrh asdasd asdasd", 55, 10000  , 100000));
-        productService.save(new Product(48L,"pro4", "gdegrh asdasd asdasd", 54, 0,       72005 ));
-        productService.save(new Product(49L,"pro5", "gdegrh asdasd asdasd", 52,100300,   60000));
-        productService.save(new Product(50L,"pro6", "gdegrh asdasd asdasd", 523,130000,  60005));
-        productService.save(new Product(51L,"pro7", "gdegrh asdasd asdasd", 53, 0,          6));
-        productService.save(new Product(52L,"pro8", "gdegrh asdasd asdasd", 53, 140000, 69999));
-        productService.save(new Product(53L,"pro9", "gdegrh asdasd asdasd", 25, 754333, 6.5));
+                  "  h asdasd asdasd,gde",  6));
+        productService.save(new Product(22L,"pro2", "gdegrh asdasd asdasd"   ,  66000));
+        productService.save(new Product(23L,"pro3", "gdegrh asdasd asdasd"   , 100000));
+        productService.save(new Product(24L,"pro4", "gdegrh asdasd asdasd"  ,       72005 ));
+        productService.save(new Product(25L,"pro5", "gdegrh asdasd asdasd"  ,  60000));
+        productService.save(new Product(26L,"pro6", "gdegrh asdasd asdasd"  ,  60005));
+        productService.save(new Product(27L,"pro7", "gdegrh asdasd asdasd"  ,           6));
+        productService.save(new Product(28L,"pro8", "gdegrh asdasd asdasd"  ,  69999));
+        productService.save(new Product(29L,"pro9", "gdegrh asdasd asdasd"  ,  6.5));
+        productService.save(new Product(30L,"pro10", "gdegrh asdasd asdasd"  , 100000));
+        productService.save(new Product(31L,"pro11", "gdegrh asdasd asdasd"  ,  6500));
+        productService.save(new Product(32L,"pro12", "gdegrh asdasd asdasd"   ,  65222));
+        productService.save(new Product(33L,"pro13", "gdegrh asdasd asdasd"   , 14000));
+        productService.save(new Product(34L,"pro2", "gdegrh asdasd asdasd"  ,   66000));
+        productService.save(new Product(35L,"pro3", "gdegrh asdasd asdasd"  ,  100000));
+        productService.save(new Product(36L,"pro4", "gdegrh asdasd asdasd"  ,        72005 ));
+        productService.save(new Product(37L,"pro5", "gdegrh asdasd asdasd"  ,   60000));
+        productService.save(new Product(38L,"pro6", "gdegrh asdasd asdasd"  ,  60005));
+        productService.save(new Product(39L,"pro7", "gdegrh asdasd asdasd"  ,           6));
+        productService.save(new Product(40L,"pro8", "gdegrh asdasd asdasd"  ,  69999));
+        productService.save(new Product(41L,"pro9", "gdegrh asdasd asdasd"  ,  6.5));
+        productService.save(new Product(42L,"pro10", "gdegrh asdasd asdasd"  ,  100000));
+        productService.save(new Product(43L,"pro11", "gdegrh asdasd asdasd"  ,  6500));
+        productService.save(new Product(44L,"pro12", "gdegrh asdasd asdasd"   , 65222));
+        productService.save(new Product(45L,"pro13", "gdegrh asdasd asdasd"  , 14000));
+        productService.save(new Product(46L,"pro2", "gdegrh asdasd asdasd"  ,   66000));
+        productService.save(new Product(47L,"pro3", "gdegrh asdasd asdasd"  ,  100000));
+        productService.save(new Product(48L,"pro4", "gdegrh asdasd asdasd"  ,      72005 ));
+        productService.save(new Product(49L,"pro5", "gdegrh asdasd asdasd"  ,   60000));
+        productService.save(new Product(50L,"pro6", "gdegrh asdasd asdasd"  ,60005));
+        productService.save(new Product(51L,"pro7", "gdegrh asdasd asdasd"  ,           6));
+        productService.save(new Product(52L,"pro8", "gdegrh asdasd asdasd"  ,  69999));
+        productService.save(new Product(53L,"pro9", "gdegrh asdasd asdasd"  ,  6.5));
 
 
 
@@ -221,7 +218,16 @@ public class DataSeeder implements CommandLineRunner {
         imageService.saveImage(new Image( 52L, "52.jpg", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ImageProduct%2F52.jpg?alt=media"));
         imageService.saveImage(new Image( 53L, "53.jpg", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ImageProduct%2F53.jpg?alt=media"));
 
-        //
+
+        imageService.saveImage(new Image( 54L, "shop1.png", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop1.png?alt=media", false));
+        imageService.saveImage(new Image( 55L, "shop2.png", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop2.png?alt=media", false));
+        imageService.saveImage(new Image( 56L, "shop3.png", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop3.png?alt=media", false));
+
+        shopService.save(new Shop("Shop2", "0905202332","Quang Nam", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop1.png?alt=media", imageService.getImage(54L)  , userService.getUserByEmail("2@gmail.com")));
+        shopService.save(new Shop("Shop5", "0905202332","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop2.png?alt=media",  imageService.getImage(55L)  , userService.getUserByEmail("4@gmail.com")));
+        shopService.save(new Shop("Shop3", "7709446333","Quang Binh", "https://firebasestorage.googleapis.com/v0/b/datnv1-34493.appspot.com/o/ShopImage%2Fshop3.png?alt=media",  imageService.getImage(56L)  , userService.getUserByEmail("5@gmail.com")));
+
+            //
 //        postService.addImageToPost(postService.getPostById(1L), imageService.getImage(1L)  );
 //        postService.addImageToPost(postService.getPostById(2L), imageService.getImage(2L)  );
 //        postService.addImageToPost(postService.getPostById(3L), imageService.getImage(3L)  );

@@ -24,6 +24,7 @@ import ItemPromo from "../../components/SalerManager/ItemPromo";
 import openWebLink from "../../hookFuntion/openWebLink";
 import { useNavigation } from "@react-navigation/native";
 import { ManagerGif } from "../../public/assets/gif";
+import * as Animatable from "react-native-animatable";
 
 const ShopMainScreen = () => {
   const detailUser = useSelector((state) => state.auth.detailUser);
@@ -50,11 +51,13 @@ const ShopMainScreen = () => {
         const res = await apiGet(url, {}, headers, false);
         setShopDetail(res.data);
         // console.log(res.data);
-        console.log(shopDetail.id);
+        console.log(GET_DETAIL_SHOP);
+        // console.log(shopDetail.id);
       } else {
         showError("Không thể lấy Id của shop");
       }
     } catch (error) {
+      console.log(error);
       console.log(error.error_message || "Lấy dữ liệu thất bại");
     }
   };
@@ -174,22 +177,51 @@ const ShopMainScreen = () => {
     };
 
     const navigateCreateProductScreen = () => {
+      // navigation.navigate("ShopTab", {
+      //   screen: "ShopCreateProduct",
+      //   params: { shopId: shopDetail?.id },
+      // });
+
       navigation.navigate("ShopTab", {
-        screen: "ShopCreateProduct",
+        screen: "ShopSearchProductVentor",
         params: { shopId: shopDetail?.id },
       });
     };
 
     const navigateProfileShopScreen = () => {
       navigation.navigate("ShopTab", {
-        screen: "ShopManagerProductScreen",
+        screen: "ShopProfileScreen",
         params: { shopId: shopDetail?.id },
       });
     };
 
     return (
       <Fragment>
-        <View
+        <FlatList
+          scrollEnabled={false}
+          columnWrapperStyle={styles.columnWrapperStyle}
+          showsVerticalScrollIndicator={false}
+          numColumns={2}
+          data={promoTags}
+          renderItem={({ item, index }) => (
+            <Animatable.View
+              // animation={"fadeInUp"}
+              animation={"zoomInUp"}
+              duration={1000}
+              delay={200}
+            >
+              <ItemPromo
+                item={item}
+                onPress={() => {
+                  if (index == 0) navigateManagerProduct();
+                  if (index == 1) navigateProfileShopScreen();
+                  if (index == 2) navigateCreateProductScreen();
+                }}
+              />
+            </Animatable.View>
+          )}
+        />
+        {/* <View
           style={{
             paddingHorizontal: SIZES.padding * 3,
             justifyContent: "space-between",
@@ -225,7 +257,7 @@ const ShopMainScreen = () => {
               }}
             />
           </View>
-        </View>
+        </View> */}
       </Fragment>
     );
   }
@@ -234,7 +266,7 @@ const ShopMainScreen = () => {
     <View style={styles.mainContainer}>
       {renderHeader()}
       {renderPromo()}
-      <View
+      {/* <View
         style={{ position: "absolute", bottom: -15, right: 0, zIndex: -10 }}
       >
         <Image
@@ -243,9 +275,9 @@ const ShopMainScreen = () => {
             width: 200,
             height: 200,
           }}
-          resizeMode="contain"
+          resizeMode="cover"
         />
-      </View>
+      </View> */}
     </View>
   );
 };
@@ -294,6 +326,17 @@ const styles = StyleSheet.create({
     fontSize: 10,
     ...FONTS.h4,
     marginHorizontal: 10,
+  },
+
+  columnWrapperStyle: {
+    // flex: 1,
+    // flexDirection: "row",
+    // marginHorizontal: 20,
+    // paddingHorizontal: 20,
+    justifyContent: "space-between",
+    alignContent: "space-between",
+    marginHorizontal: 25,
+    paddingTop: 15,
   },
 });
 

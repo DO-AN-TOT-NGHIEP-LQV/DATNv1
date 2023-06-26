@@ -139,13 +139,13 @@ public class ProductController {
                 throw new InValidException("Invalid description");
             }
 
-            if (productMap.containsKey("quantity") && productMap.get("quantity") instanceof Integer) {
-                Integer quantityObj = (Integer) productMap.get("quantity");
-                int quantity = quantityObj.intValue();
-                newProduct.setQuantity(quantity);
-            } else {
-                throw new InValidException("Invalid quantity");
-            }
+//            if (productMap.containsKey("quantity") && productMap.get("quantity") instanceof Integer) {
+//                Integer quantityObj = (Integer) productMap.get("quantity");
+//                int quantity = quantityObj.intValue();
+//                newProduct.setQuantity(quantity);
+//            } else {
+//                throw new InValidException("Invalid quantity");
+//            }
 
             if (productMap.containsKey("price") && productMap.get("price") instanceof Number) {
                 Number priceObj = (Number) productMap.get("price");
@@ -155,11 +155,11 @@ public class ProductController {
                 throw new InValidException("Invalid price");
             }
 
-            if (productMap.containsKey("link") && productMap.get("link") != null) {
-                newProduct.setLink((String) productMap.get("link"));
-            } else {
-                throw new InValidException("Invalid link");
-            }
+//            if (productMap.containsKey("link") && productMap.get("link") != null) {
+//                newProduct.setLink((String) productMap.get("link"));
+//            } else {
+//                throw new InValidException("Invalid link");
+//            }
 
 
             if (productMap.containsKey("type") && productMap.get("type") != null) {
@@ -229,23 +229,23 @@ public class ProductController {
     // Xoa nhung id
     // Xoa nhung id hinh anh da train trong firebase
     // Xoa nhung id hinh anh
-    @DeleteMapping (value = "/api/sale/product/delete")
-    public ResponseEntity deleteProduct(@RequestParam("IdDelete") Long IdDelete)
-    {
-        Product product =  productService.getById(IdDelete);
-
-        try {
-            if (product == null){
-                throw  new Exception( "Product id no longer exists");
-            }
-            firebaseFileService.deleteProduct_removeVector(product);
-            return ResponseEntity.ok().build();
-        }
-        catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(new ErrorResponse(e.getMessage()));
-        }
-    }
+//    @DeleteMapping (value = "/api/sale/product/delete")
+//    public ResponseEntity deleteProduct(@RequestParam("IdDelete") Long IdDelete)
+//    {
+//        Product product =  productService.getById(IdDelete);
+//
+//        try {
+//            if (product == null){
+//                throw  new Exception( "Product id no longer exists");
+//            }
+//            firebaseFileService.deleteProduct_removeVector(product);
+//            return ResponseEntity.ok().build();
+//        }
+//        catch (Exception e) {
+//            return ResponseEntity.badRequest()
+//                    .body(new ErrorResponse(e.getMessage()));
+//        }
+//    }
 
 
     @GetMapping(value = "/api/sale/product/getById", name = "GET")
@@ -301,14 +301,13 @@ public class ProductController {
 
             product.setName(updateProduct.getName());
             product.setDescription(updateProduct.getDescription());
-            product.setQuantity(updateProduct.getQuantity());
+//            product.setQuantity(updateProduct.getQuantity());
 
-            product.setLink(updateProduct.getLink());
+//            product.setLink(updateProduct.getLink());
             product.setBrand(updateProduct.getBrand());
             product.setType(updateProduct.getType());
 
             product.setPrice(updateProduct.getPrice());
-            product.setOriginalPrice(updateProduct.getOriginalPrice());
 
             productService.save(product);
 

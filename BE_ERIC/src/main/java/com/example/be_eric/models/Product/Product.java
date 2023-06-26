@@ -38,9 +38,9 @@ public class Product {
     private String description;
 
 //    @NotNull
-    private int quantity;
+//    private int quantity;
 
-    private double  originalPrice = 0;
+//    private double  originalPrice = 0;
 
 //    @NotNull
     private double  price = 0;
@@ -50,7 +50,7 @@ public class Product {
 
     private String brand;
 
-    private String link;
+//    private String link;
 
     private  boolean status = false;
 
@@ -80,31 +80,24 @@ public class Product {
 
 
 
-    public Product(Long id, String name, String description, int quantity, double  price) {
+    public Product(Long id, String name, String description,  double  price) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.quantity = quantity;
+//        this.quantity = quantity;
         this.price = price;
     }
 
-    public Product(Long id, String name, String description, int quantity, String type, String brand) {
+    public Product(Long id, String name, String description,  String type, String brand) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.quantity = quantity;
+//        this.quantity = quantity;
         this.type = type;
         this.brand = brand;
     }
 
-    public Product(Long id, String name, String description, int quantity, double  originalPrice , double  price) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.quantity = quantity;
-        this.price = price;
-        this.originalPrice = originalPrice;
-    }
+
 
     public Product(Long id, String name, String description, String type, String brand, List<Image> images) {
         this.id = id;

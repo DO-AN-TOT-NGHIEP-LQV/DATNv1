@@ -60,10 +60,10 @@ const UpdateProductScreen = ({ route }) => {
     name: "",
     description: "",
     price: 0,
-    originalPrice: 0,
-    link: "",
+    // originalPrice: 0,
+    // link: "",
     type: "",
-    quantity: 0,
+    // quantity: 0,
     brand: "",
   });
 
@@ -72,11 +72,11 @@ const UpdateProductScreen = ({ route }) => {
     name,
     description,
     price,
-    originalPrice,
-    link,
+    // originalPrice,
+    // link,
     type,
     brand,
-    quantity,
+    // quantity,
   } = productForm;
 
   const updateProductForm = (data) =>
@@ -87,10 +87,10 @@ const UpdateProductScreen = ({ route }) => {
     nameModal: false,
     descriptionModal: false,
     priceModal: false,
-    originalPriceModal: false,
-    linkModal: false,
+    // originalPriceModal: false,
+    // linkModal: false,
     typeModal: false,
-    quantityModal: false,
+    // quantityModal: false,
     brandModal: false,
   });
 
@@ -98,10 +98,10 @@ const UpdateProductScreen = ({ route }) => {
     nameModal,
     descriptionModal,
     priceModal,
-    originalPriceModal,
-    linkModal,
+    // originalPriceModal,
+    // linkModal,
     typeModal,
-    quantityModal,
+    // quantityModal,
     brandModal,
   } = isShowModal;
 
@@ -148,10 +148,10 @@ const UpdateProductScreen = ({ route }) => {
         name: resProduct.name,
         description: resProduct.description,
         price: resProduct.price,
-        originalPrice: resProduct.originalPrice,
-        link: resProduct.link,
+        // originalPrice: resProduct.originalPrice,
+        // link: resProduct.link,
         type: resProduct.type,
-        quantity: resProduct.quantity,
+        // quantity: resProduct.quantity,
         brand: resProduct.brand,
       });
 
@@ -584,7 +584,7 @@ const UpdateProductScreen = ({ route }) => {
                 }}
               />
             </View>
-            <View style={{ flex: 1 }}>
+            {/* <View style={{ flex: 1 }}>
               <ProductValue
                 label={"Giá gốc"}
                 value={originalPrice}
@@ -592,11 +592,11 @@ const UpdateProductScreen = ({ route }) => {
                   updateIsShowModal({ originalPriceModal: true });
                 }}
               />
-            </View>
+            </View> */}
           </View>
           <LineDivider />
 
-          <ProductValue
+          {/* <ProductValue
             label={"Link sản phẩm"}
             value={link}
             onPress={() => {
@@ -614,7 +614,7 @@ const UpdateProductScreen = ({ route }) => {
               }}
               textStyle={{ color: Color.mainColor }}
             />
-          </ProductValue>
+          </ProductValue> */}
           <LineDivider />
 
           <ProductValue
@@ -626,14 +626,14 @@ const UpdateProductScreen = ({ route }) => {
           />
           <LineDivider />
 
-          <ProductValue
+          {/* <ProductValue
             label={"Số lượng"}
             value={quantity}
             onPress={() => {
               updateIsShowModal({ quantityModal: true });
             }}
           />
-          <LineDivider />
+          <LineDivider /> */}
 
           <ProductValue
             label={"Nhãn hàng"}
@@ -730,7 +730,7 @@ const UpdateProductScreen = ({ route }) => {
         />
       )}
 
-      {originalPriceModal && (
+      {/* {originalPriceModal && (
         <ModalInputNumber
           isVisible={originalPriceModal}
           label={"Giá gốc của sản phẩm"}
@@ -739,9 +739,9 @@ const UpdateProductScreen = ({ route }) => {
           onPress={(value) => updateProductForm({ originalPrice: value })}
           isInteger={false}
         />
-      )}
+      )} */}
 
-      {linkModal && (
+      {/* {linkModal && (
         <ModalInputText
           isVisible={linkModal}
           label={"Link sản phẩm"}
@@ -751,7 +751,7 @@ const UpdateProductScreen = ({ route }) => {
           maxLength={500}
           onPress={(value) => updateProductForm({ link: value })}
         />
-      )}
+      )} */}
 
       {typeModal && (
         <InputModal
@@ -772,7 +772,7 @@ const UpdateProductScreen = ({ route }) => {
         </InputModal>
       )}
 
-      {quantityModal && (
+      {/* {quantityModal && (
         <ModalInputNumber
           isVisible={quantityModal}
           label={"Số lượng"}
@@ -781,7 +781,7 @@ const UpdateProductScreen = ({ route }) => {
           onPress={(value) => updateProductForm({ quantity: value })}
           isInteger={true}
         />
-      )}
+      )} */}
 
       {brandModal && (
         <ModalInputBrand

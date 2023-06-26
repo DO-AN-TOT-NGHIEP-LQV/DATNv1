@@ -14,6 +14,8 @@ import { TypeCard } from "../Home";
 import CustomButton from "../CustomButton/index.js";
 import Icons, { icons } from "../Icons";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
+import { hasSalerRole } from "../../ultils/helperFunction";
 
 const DetailProduct = ({ dataProduct }) => {
   // xem them
@@ -55,6 +57,8 @@ const DetailProduct = ({ dataProduct }) => {
     setTextShownMore(!showMore);
   };
 
+  const detailUser = useSelector((state) => state.auth.detailUser);
+
   const onTextLayout = useCallback((e) => {
     setLengthMore(e.nativeEvent.lines.length >= 5); //to check the text is more than 4 lines or not
   }, []);
@@ -80,42 +84,44 @@ const DetailProduct = ({ dataProduct }) => {
           {`${product?.name} `}
         </Text>
 
-        <TouchableOpacity
-          style={{
-            borderWidth: 1,
-            borderColor: Color.mainColor,
-            borderRadius: 4,
-            alignSelf: "flex-start",
-            borderRadius: 5,
-          }}
-          onPress={() => {
-            navigation.navigate("ShopTab", {
-              screen: "ShopCreateProduct",
-              params: { productId: product?.id },
-            });
-          }}
-        >
-          <Text
-            numberOfLines={1}
-            style={{ color: Color.mainColor, fontSize: 10, padding: 10 }}
-          >
-            Liên kết sản phẩm
-          </Text>
-
-          <Icons
-            icon={icons.Feather}
-            name={"link"}
-            size={14}
-            color={Color.mainColor}
+        {detailUser?.roles && hasSalerRole(detailUser?.roles) && (
+          <TouchableOpacity
             style={{
-              backgroundColor: Color.darkGray2,
-              borderRadius: 50,
-              position: "absolute",
-              top: -7,
-              right: -7,
+              borderWidth: 1,
+              borderColor: Color.mainColor,
+              borderRadius: 4,
+              alignSelf: "flex-start",
+              borderRadius: 5,
             }}
-          />
-        </TouchableOpacity>
+            onPress={() => {
+              navigation.navigate("SearchTab", {
+                screen: "ShopCreateProduct",
+                params: { productId: product?.id },
+              });
+            }}
+          >
+            <Text
+              numberOfLines={1}
+              style={{ color: Color.mainColor, fontSize: 10, padding: 10 }}
+            >
+              Liên kết sản phẩm
+            </Text>
+
+            <Icons
+              icon={icons.Feather}
+              name={"link"}
+              size={14}
+              color={Color.mainColor}
+              style={{
+                backgroundColor: Color.darkGray2,
+                borderRadius: 50,
+                position: "absolute",
+                top: -7,
+                right: -7,
+              }}
+            />
+          </TouchableOpacity>
+        )}
       </View>
 
       <View

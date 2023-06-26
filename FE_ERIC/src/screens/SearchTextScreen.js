@@ -253,7 +253,8 @@ const SearchTextScreen = () => {
 
   useEffect(() => {
     setPageProduct(0);
-    setListSearch([]);
+    // setListSearch([]);
+    firstRenderData();
   }, [isChangeFilter]);
   ///////////////
 
